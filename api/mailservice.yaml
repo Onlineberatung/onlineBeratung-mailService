@@ -1,0 +1,32 @@
+swagger: '2.0'
+info:
+  description: This information will be replaced by the SpringFox config information
+  version: 0.0.1
+  title: will be replaced
+
+# REST API path definitions #
+paths:    
+  /mails/send:
+    post:
+      tags:
+      - mails-controller
+      summary: Send e-mails via the mail service
+      operationId: sendMails
+      parameters:
+      - in: "body"
+        name: "Mails"
+        required: true
+        schema:
+          $ref: "#/definitions/MailsDTO"
+      responses:
+        200:
+          description: OK - successfull operation
+        400:
+          description: BAD REQUEST - invalid/incomplete request or body object
+        500:
+          description: INTERNAL SERVER ERROR - server encountered unexpected condition
+          
+# Model/object definitions #
+definitions:
+  MailsDTO:
+    type: "object"

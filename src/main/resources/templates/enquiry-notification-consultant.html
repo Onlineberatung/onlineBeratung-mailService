@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+   <meta http-equiv='Content-Type' content='text/html charset=UTF-8'/>
+</head>
+
+<body style="margin: 0; padding: 0; background-color: #FAF6F3; width: 100%; font-family: 'Roboto', 'Arial', sans-serif; overflow-x: hidden;">
+<div align='center'>
+<table width='100%' style='table-layout: fixed; border-collapse: collapse; max-width: 580px; margin: 0 auto;' cellspacing='0' cellpadding='0' border="0">
+   <tr>
+      <td width='5%' style="padding: 0;"><!-- spacer --></td>
+      <td width='90%' style='background-color: #fff; padding: 0; '>
+         <table style="table-layout: fixed; width: 100%" cellspacing='0' cellpadding='0' border="0">
+            <thead style='background-color: #CC1E1C;'>
+               <td width="10%">
+                  <div style="margin: 16px; width: 100%">
+                     <a href=''><img style='width: 46px; height: 60px;' src='cid:caritas-logo.jpg'/></a>
+                  </div>
+               </td>
+               <td style='padding: 0; text-align: center; width: 90%; padding-right: 10%;'>
+                  <!-- logo -->
+
+                  <!-- claim -->
+                  <h1 style='color: #FFFFFF; font-size: 26px; font-weight: bold; line-height: 26px; padding-bottom: 0; margin-bottom: 0;'>Beratung & Hilfe</h1>
+                  <div style='color: #FFFFFF; font-size: 12px; line-height: 19px;'>Online. Anonym. Sicher.</div>
+               </td>
+            </thead>
+
+            <tbody>
+               <tr style="background-color: #CC1E1C;">
+                  <td colspan='2' cellspacing='0' cellpadding='0' style="padding: 10px 0 0; text-align: center;">
+                     <img src="cid:illustration-top.png" style="vertical-align: bottom;">
+                  </td>
+               </tr>
+
+               <tr>
+                  <td colspan='2' cellspacing='0' cellpadding='0' style="padding: 0;  text-align: center;">
+                     <img src="cid:illustration-bottom.png">
+                  </td>
+               </tr>
+
+               <tr>
+                  <td cellspacing='0' cellpadding='0' style="padding: 0;" colspan="2">
+                    <div style="color: #3F373F; margin: 16px; font-size: 16px; line-height: 21px; font-family: 'Open Sans', 'OpenSans', 'Arial', 'sans-serif';">
+                     <b>Liebe(r) <span data-th-text="${name}"></span>,</b>
+                     <br/><br/>
+                       in der Beratungsstelle <span data-th-text="${beratungsstelle}"></span> ist eine neue Erstanfrage eingegangen.
+                       <br/><br/>
+                       Liebe Grüße
+                       <br/>
+                       Ihr Caritas Team
+                    </div>
+                  </td>
+               </tr>
+
+               <tr>
+                  <td colspan='2' style='text-align: center; padding: 0; '>
+                     <div style="margin: 16px 0 42px;">
+                        <a data-th-href="${url}"><img src='cid:button_anfrage_ansehen_1x.png'></a>
+                     </div>
+
+                     <span style='clear: both;'><!-- clear --></span>
+                  </td>
+               </tr>
+            </tbody>
+         </table>
+      </td>
+      <td width='5%' style="padding: 0;"><!-- spacer --></td>
+   </tr>
+</table>
+
+<table style="width: 100%">
+   <tr>
+      <td style='text-align: center; padding: 0;'>
+         <div style="text-align: center; padding-top: 8px;">
+            <a data-th-href="${urlimpressum}" style="color: #8C878C; text-decoration: none; font-size: 14px; line-height: 19px;">Impressum</a>
+            <span style="color: #8C878C; text-decoration: none; font-size: 14px; line-height: 19px;">&nbsp; | &nbsp;</span>
+            <a data-th-href="${urldatenschutz}" style="color: #8C878C; text-decoration: none; font-size: 14px; line-height: 19px;">Datenschutz</a>
+         </div>
+      </td>
+   </tr>
+</table>
+</div>
+</body>
+</html>

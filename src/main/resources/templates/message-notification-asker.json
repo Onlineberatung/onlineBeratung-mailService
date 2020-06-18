@@ -1,0 +1,28 @@
+{
+	"htmlTemplateFilename":"message-notification-asker.html",
+	"subject":"Antwort von ${consultantName}",
+	"templateImages" : [
+		{
+			"filename":"caritas-logo.jpg",
+			"filetype":"image/jpg"
+		},
+		{
+			"filename":"illustration-bottom.png",
+			"filetype":"image/png"
+		},
+		{
+			"filename":"illustration-top.png",
+			"filetype":"image/png"
+		},
+		{
+			"filename":"button_antwort_lesen_1x.png",
+			"filetype":"image/png"
+		}		
+	],
+	"templateDataFields": 
+		[
+			"consultantName",
+			"askerName",
+			"url"
+		]
+}
