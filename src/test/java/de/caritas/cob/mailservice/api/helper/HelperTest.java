@@ -1,6 +1,8 @@
 package de.caritas.cob.mailservice.api.helper;
 
 import static org.junit.Assert.assertEquals;
+
+import de.caritas.cob.mailservice.api.exception.InternalServerErrorException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,4 +51,10 @@ public class HelperTest {
   public void unescapeHtml_Should_ConvertHtmlEntity() {
     assertEquals(TEXT_WITH_UNESCAPED_HTML_ENTITY, helper.unescapeHtml(TEXT_WITH_HTML_ENTITY));
   }
+
+  @Test(expected = InternalServerErrorException.class)
+  public void removeHTMLFromText_Should_ThrowInternalServerErrorException_When_remveTextFromNull() {
+    helper.removeHTMLFromText(null);
+  }
+
 }

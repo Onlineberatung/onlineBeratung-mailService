@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import de.caritas.cob.mailservice.api.model.TemplateDataDTO;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Converter for TemplateDataDTO
@@ -30,7 +31,7 @@ public class TemplateDataConverter {
 
     Map<String, Object> templateData = new HashMap<>();
 
-    if (templateDataDTOList != null && !templateDataDTOList.isEmpty()) {
+    if (!CollectionUtils.isEmpty(templateDataDTOList)) {
       templateData = templateDataDTOList.stream()
           .collect(Collectors.toMap(TemplateDataDTO::getKey, TemplateDataDTO::getValue));
     }

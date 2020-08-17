@@ -3,6 +3,9 @@ package de.caritas.cob.mailservice.api.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import de.caritas.cob.mailservice.api.exception.TemplateServiceException;
+import de.caritas.cob.mailservice.api.mailtemplate.TemplateDescription;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -11,8 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
-import de.caritas.cob.mailservice.api.exception.ServiceException;
-import de.caritas.cob.mailservice.api.mailtemplate.TemplateDescription;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TemplateServiceTest {
@@ -66,7 +67,7 @@ public class TemplateServiceTest {
       templateService.getProcessedHtmlTemplate(TEMPLATE_DESCRIPTION, TEMPLATE_NAME,
           TEMPLATE_DATA_WITH_MISSING_FIELD);
       fail("Expected exception: ServiceException");
-    } catch (ServiceException serviceException) {
+    } catch (TemplateServiceException serviceException) {
       assertTrue("Excepted ServiceException thrown", true);
     }
 

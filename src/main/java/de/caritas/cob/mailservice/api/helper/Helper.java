@@ -1,6 +1,6 @@
 package de.caritas.cob.mailservice.api.helper;
 
-import javax.ws.rs.InternalServerErrorException;
+import de.caritas.cob.mailservice.api.exception.InternalServerErrorException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.jsoup.Jsoup;

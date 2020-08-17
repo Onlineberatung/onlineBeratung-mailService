@@ -3,6 +3,8 @@ package de.caritas.cob.mailservice.api.service;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doThrow;
+
+import de.caritas.cob.mailservice.api.exception.SmtpMailServiceException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +15,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
-import de.caritas.cob.mailservice.api.exception.ServiceException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SmtpMailServiceTest {
@@ -41,7 +42,7 @@ public class SmtpMailServiceTest {
     try {
       mailService.prepareAndSendHtmlMail(RECIPIENT, SUBJECT, TEMPLATE, null);
       fail("Expected exception: ServiceException");
-    } catch (ServiceException serviceException) {
+    } catch (SmtpMailServiceException serviceException) {
       assertTrue("Excepted ServiceException thrown", true);
     }
 
@@ -61,7 +62,7 @@ public class SmtpMailServiceTest {
     try {
       mailService.prepareAndSendHtmlMail(RECIPIENT, SUBJECT, TEMPLATE, null);
       fail("Expected exception: ServiceException");
-    } catch (ServiceException serviceException) {
+    } catch (SmtpMailServiceException serviceException) {
       assertTrue("Excepted ServiceException thrown", true);
     }
 
@@ -73,7 +74,7 @@ public class SmtpMailServiceTest {
     try {
       mailService.prepareAndSendTextMail(RECIPIENT, SUBJECT, BODY);
       fail("Expected exception: ServiceException");
-    } catch (ServiceException serviceException) {
+    } catch (SmtpMailServiceException serviceException) {
       assertTrue("Excepted ServiceException thrown", true);
     }
 
@@ -93,11 +94,10 @@ public class SmtpMailServiceTest {
     try {
       mailService.prepareAndSendTextMail(RECIPIENT, SUBJECT, BODY);
       fail("Expected exception: ServiceException");
-    } catch (ServiceException serviceException) {
+    } catch (SmtpMailServiceException serviceException) {
       assertTrue("Excepted ServiceException thrown", true);
     }
 
   }
-
 
 }

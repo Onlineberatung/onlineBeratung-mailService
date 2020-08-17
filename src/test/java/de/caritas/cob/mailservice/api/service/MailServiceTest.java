@@ -9,7 +9,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
-import de.caritas.cob.mailservice.api.exception.ServiceException;
+import de.caritas.cob.mailservice.api.exception.ExchangeMailServiceException;
+import de.caritas.cob.mailservice.api.exception.SmtpMailServiceException;
+import de.caritas.cob.mailservice.api.exception.TemplateDescriptionServiceException;
+import de.caritas.cob.mailservice.api.exception.TemplateServiceException;
 import de.caritas.cob.mailservice.api.helper.TemplateDataConverter;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateDescription;
 import de.caritas.cob.mailservice.api.model.MailDTO;
@@ -52,7 +55,7 @@ public class MailServiceTest {
 
   @Test
   public void sendErrorMail_Should_SendErrorMail_WhenErrorRecipientIsSetAndUsingExchange()
-      throws SecurityException {
+      throws SecurityException, ExchangeMailServiceException {
     ReflectionTestUtils.setField(mailService, "errorRecipients", ERROR_RECIPIENS);
     ReflectionTestUtils.setField(mailService, FIELD_NAME_USE_SMTP, false);
 
@@ -63,7 +66,7 @@ public class MailServiceTest {
 
   @Test
   public void sendErrorMail_Should_SendErrorMail_WhenErrorRecipientIsSetAndUsingSmtp()
-      throws SecurityException {
+      throws SecurityException, SmtpMailServiceException {
     ReflectionTestUtils.setField(mailService, "errorRecipients", ERROR_RECIPIENS);
     ReflectionTestUtils.setField(mailService, FIELD_NAME_USE_SMTP, true);
 
@@ -74,7 +77,7 @@ public class MailServiceTest {
 
   @Test
   public void sendErrorMail_ShouldNot_SendErrorMail_WhenErrorRecipientIsNotSet()
-      throws SecurityException {
+      throws SecurityException, SmtpMailServiceException {
 
     mailService.sendErrorMail(ERROR_MESSAGE);
     verify(smtpMailService, times(0))
@@ -83,7 +86,7 @@ public class MailServiceTest {
 
   @Test
   public void sendHtmlMails_Should_sendHtmlMails_WhenMailHasAdrressAndUsingExchange()
-      throws SecurityException {
+      throws SecurityException, ExchangeMailServiceException, TemplateDescriptionServiceException, TemplateServiceException {
     ReflectionTestUtils.setField(mailService, "errorRecipients", ERROR_RECIPIENS);
     ReflectionTestUtils.setField(mailService, FIELD_NAME_USE_SMTP, false);
     when(templateDescriptionService.getTemplateDescription(any()))
@@ -104,7 +107,7 @@ public class MailServiceTest {
 
   @Test
   public void sendHtmlMails_Should_sendHtmlMails_WhenUsingSmtp()
-      throws SecurityException {
+      throws SecurityException, SmtpMailServiceException, TemplateDescriptionServiceException, TemplateServiceException {
     ReflectionTestUtils.setField(mailService, FIELD_NAME_USE_SMTP, true);
     when(templateDescriptionService.getTemplateDescription(any()))
         .thenReturn(Optional.of(new TemplateDescription()));
@@ -130,7 +133,7 @@ public class MailServiceTest {
 
   @Test
   public void sendHtmlMails_Should_sendSeveralHtmlMails_WhenMoreThanOneMailIsInMailsDTO()
-      throws SecurityException {
+      throws SecurityException, SmtpMailServiceException, TemplateDescriptionServiceException, TemplateServiceException {
     ReflectionTestUtils.setField(mailService, FIELD_NAME_USE_SMTP, true);
     when(templateDescriptionService.getTemplateDescription(any()))
         .thenReturn(Optional.of(new TemplateDescription()));
@@ -145,12 +148,12 @@ public class MailServiceTest {
   }
 
   @Test
-  public void sendHtmlMails_Should_sendErrorMail_WhenServiceExceptionIsThrown()
-      throws SecurityException {
+  public void sendHtmlMails_Should_sendErrorMail_WhenTemplateDescriptionServiceExceptionIsThrown()
+      throws SecurityException, SmtpMailServiceException, TemplateDescriptionServiceException {
     ReflectionTestUtils.setField(mailService, "errorRecipients", ERROR_RECIPIENS);
     ReflectionTestUtils.setField(mailService, FIELD_NAME_USE_SMTP, true);
     when(templateDescriptionService.getTemplateDescription(any()))
-        .thenThrow(new ServiceException(""));
+        .thenThrow(new TemplateDescriptionServiceException("", new Exception()));
 
     MailsDTO mailsDTO = new MailsDTO(asList(createMailDTO()));
     mailService.sendHtmlMails(mailsDTO);

@@ -1,6 +1,10 @@
 package de.caritas.cob.mailservice.api.service;
 
-import de.caritas.cob.mailservice.api.exception.ServiceException;
+import de.caritas.cob.mailservice.api.exception.ExchangeMailServiceException;
+import de.caritas.cob.mailservice.api.exception.InternalServerErrorException;
+import de.caritas.cob.mailservice.api.exception.SmtpMailServiceException;
+import de.caritas.cob.mailservice.api.exception.TemplateDescriptionServiceException;
+import de.caritas.cob.mailservice.api.exception.TemplateServiceException;
 import de.caritas.cob.mailservice.api.helper.TemplateDataConverter;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateDescription;
 import de.caritas.cob.mailservice.api.model.MailDTO;
@@ -50,7 +54,7 @@ public class MailService {
         } else {
           loadRequiredMailDataAndSendMail(mailDTO, optionalTemplateDescription.get());
         }
-      } catch (ServiceException ex) {
+      } catch (TemplateDescriptionServiceException ex) {
         handleMailSendFailure(mailDTO, ex);
       }
     };
@@ -68,8 +72,13 @@ public class MailService {
     Map<String, Object> templateData =
         templateDataConverter.convertFromTemplateDataDTOList(mail.getTemplateData());
 
-    Optional<String> optionalProcessedHtmlTemplate = templateService
-        .getProcessedHtmlTemplate(templateDescription, mail.getTemplate(), templateData);
+    Optional<String> optionalProcessedHtmlTemplate;
+    try {
+      optionalProcessedHtmlTemplate = templateService
+          .getProcessedHtmlTemplate(templateDescription, mail.getTemplate(), templateData);
+    } catch (TemplateServiceException e) {
+      throw new InternalServerErrorException(e.getMessage());
+    }
 
     String subject = templateService.getProcessedSubject(templateDescription, templateData);
 
@@ -79,16 +88,20 @@ public class MailService {
 
   private void sendHtmlMail(MailDTO mail, TemplateDescription templateDescription,
       String processedHtmlTemplate, String subject) {
-    if (useSMTP) {
-      smtpMailService.prepareAndSendHtmlMail(mail.getEmail(), subject,
-          processedHtmlTemplate, templateDescription.getTemplateImages());
-    } else {
-      exchangeMailService.prepareAndSendHtmlMail(mail.getEmail(), subject,
-          processedHtmlTemplate, templateDescription.getTemplateImages());
+    try {
+      if (useSMTP) {
+        smtpMailService.prepareAndSendHtmlMail(mail.getEmail(), subject,
+            processedHtmlTemplate, templateDescription.getTemplateImages());
+      } else {
+        exchangeMailService.prepareAndSendHtmlMail(mail.getEmail(), subject,
+            processedHtmlTemplate, templateDescription.getTemplateImages());
+      }
+    } catch (SmtpMailServiceException | ExchangeMailServiceException e) {
+      throw new InternalServerErrorException(e.getMessage());
     }
   }
 
-  private void handleMailSendFailure(MailDTO mail, ServiceException ex) {
+  private void handleMailSendFailure(MailDTO mail, Exception ex) {
     String errorMessage = String.format("Mail request for template %s could not be executed.",
         mail.getTemplate());
     LogService.logError(errorMessage, ex);
@@ -104,6 +117,14 @@ public class MailService {
    */
   public void sendErrorMail(String body) {
     if (errorRecipients != null && !errorRecipients.trim().equals(StringUtils.EMPTY)) {
+      sendErrorMailWithChecketRecipients(body);
+    } else {
+      LogService.logWarn("Error mail was not send, because no error recipient is set.");
+    }
+  }
+
+  private void sendErrorMailWithChecketRecipients(String body) {
+    try {
       if (useSMTP) {
         smtpMailService.prepareAndSendTextMail(errorRecipients,
             "Caritas Online Beratung: An error occurred while sending the mail via the mail service.",
@@ -113,8 +134,8 @@ public class MailService {
             "Caritas Online Beratung: An error occurred while sending the mail via the mail service.",
             body);
       }
-    } else {
-      LogService.logWarn("Error mail was not send, because no error recipient is set.");
+    } catch (SmtpMailServiceException | ExchangeMailServiceException e) {
+      throw new InternalServerErrorException(e.getMessage());
     }
   }
 

@@ -1,5 +1,7 @@
 package de.caritas.cob.mailservice.api;
 
+import de.caritas.cob.mailservice.api.exception.InternalServerErrorException;
+import de.caritas.cob.mailservice.api.service.LogService;
 import java.net.UnknownHostException;
 import javax.validation.ConstraintViolationException;
 import org.springframework.core.Ordered;
@@ -23,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
  * vulnerabilities.
  *
  */
-@Slf4j
 @NoArgsConstructor
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -45,7 +46,7 @@ public class ApiResponseEntityExceptionHandler extends ResponseEntityExceptionHa
   @ExceptionHandler({ConstraintViolationException.class})
   public ResponseEntity<Object> handleBadRequest(final RuntimeException ex,
       final WebRequest request) {
-    logWarning(ex);
+    LogService.logWarn(ex);
 
     return handleExceptionInternal(null, null, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
@@ -57,7 +58,7 @@ public class ApiResponseEntityExceptionHandler extends ResponseEntityExceptionHa
   protected ResponseEntity<Object> handleHttpMessageNotReadable(
       final HttpMessageNotReadableException ex, final HttpHeaders headers, final HttpStatus status,
       final WebRequest request) {
-    logWarning(status, ex);
+    LogService.logWarn(status, ex);
 
     return handleExceptionInternal(null, null, headers, status, request);
   }
@@ -69,7 +70,7 @@ public class ApiResponseEntityExceptionHandler extends ResponseEntityExceptionHa
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
       final MethodArgumentNotValidException ex, final HttpHeaders headers, final HttpStatus status,
       final WebRequest request) {
-    logWarning(status, ex);
+    LogService.logWarn(status, ex);
 
     return handleExceptionInternal(null, null, headers, status, request);
   }
@@ -80,7 +81,7 @@ public class ApiResponseEntityExceptionHandler extends ResponseEntityExceptionHa
   @ExceptionHandler({HttpClientErrorException.class})
   protected ResponseEntity<Object> handleHttpClientException(final HttpClientErrorException ex,
       final WebRequest request) {
-    logWarning(ex.getStatusCode(), ex);
+    LogService.logWarn(ex.getStatusCode(), ex);
 
     return handleExceptionInternal(null, null, new HttpHeaders(), ex.getStatusCode(), request);
   }
@@ -93,43 +94,13 @@ public class ApiResponseEntityExceptionHandler extends ResponseEntityExceptionHa
    * @return
    */
   @ExceptionHandler({NullPointerException.class, IllegalArgumentException.class,
-      IllegalStateException.class, UnknownHostException.class})
+      IllegalStateException.class, UnknownHostException.class, InternalServerErrorException.class})
   public ResponseEntity<Object> handleInternal(final RuntimeException ex,
       final WebRequest request) {
-    logError(ex);
+    LogService.logError(ex);
 
     return handleExceptionInternal(null, null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR,
         request);
   }
 
-  /**
-   * Logs an error
-   * 
-   * @param ex
-   */
-  private void logError(final Exception ex) {
-    log.error("MailService API: 500 Internal Server Error: {}",
-        org.apache.commons.lang3.exception.ExceptionUtils.getStackTrace(ex));
-  }
-
-  /**
-   * Logs a warning
-   * 
-   * @param status
-   * @param ex
-   */
-  private void logWarning(final HttpStatus status, final Exception ex) {
-    log.warn("MailService API: {}: {}", status.getReasonPhrase(),
-        org.apache.commons.lang3.exception.ExceptionUtils.getStackTrace(ex));
-  }
-
-  /**
-   * Logs a warning
-   * 
-   * @param ex
-   */
-  private void logWarning(final Exception ex) {
-    log.warn("MailService API: {}",
-        org.apache.commons.lang3.exception.ExceptionUtils.getStackTrace(ex));
-  }
 }

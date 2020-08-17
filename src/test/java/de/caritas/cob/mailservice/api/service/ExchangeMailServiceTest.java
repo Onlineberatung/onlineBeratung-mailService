@@ -3,13 +3,13 @@ package de.caritas.cob.mailservice.api.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import de.caritas.cob.mailservice.api.exception.ExchangeMailServiceException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.junit.MockitoJUnitRunner;
-import de.caritas.cob.mailservice.api.exception.ServiceException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ExchangeMailServiceTest {
@@ -29,14 +29,10 @@ public class ExchangeMailServiceTest {
   public final String EXCHANGE_URL_VALUE = "dummyULR";
   public final String EXCHANGE_VERSION_VALUE = "Exchange2007_SP1";
 
-  @Mock
-  private LogService logService;
-
   private ExchangeMailService mailService;
 
-
   @Before
-  public void setup() throws Exception, SecurityException {
+  public void setup() throws Exception {
     this.mailService = new ExchangeMailService();
     FieldSetter.setField(this.mailService,
         this.mailService.getClass().getDeclaredField(EXCHANGE_USER_FIELD_NAME),
@@ -56,7 +52,7 @@ public class ExchangeMailServiceTest {
     try {
       mailService.prepareAndSendHtmlMail(RECIPIENT, SUBJECT, TEMPLATE, null);
       fail("Expected exception: ServiceException");
-    } catch (ServiceException serviceException) {
+    } catch (ExchangeMailServiceException serviceException) {
       assertTrue("Excepted ServiceException thrown", true);
       assertEquals("No sender mail address set", serviceException.getMessage());
     }
@@ -72,7 +68,7 @@ public class ExchangeMailServiceTest {
     try {
       mailService.prepareAndSendHtmlMail(RECIPIENT, SUBJECT, TEMPLATE, null);
       fail("Expected exception: ServiceException");
-    } catch (ServiceException serviceException) {
+    } catch (ExchangeMailServiceException serviceException) {
       assertTrue("Excepted ServiceException thrown", true);
       assertEquals("Error while sending email", serviceException.getMessage());
     }
@@ -83,7 +79,7 @@ public class ExchangeMailServiceTest {
     try {
       mailService.prepareAndSendTextMail(RECIPIENT, SUBJECT, BODY);
       fail("Expected exception: ServiceException");
-    } catch (ServiceException serviceException) {
+    } catch (ExchangeMailServiceException serviceException) {
       assertTrue("Excepted ServiceException thrown", true);
       assertEquals("No sender mail address set", serviceException.getMessage());
     }
@@ -99,10 +95,26 @@ public class ExchangeMailServiceTest {
     try {
       mailService.prepareAndSendTextMail(RECIPIENT, SUBJECT, BODY);
       fail("Expected exception: ServiceException");
-    } catch (ServiceException serviceException) {
+    } catch (ExchangeMailServiceException serviceException) {
       assertTrue("Excepted ServiceException thrown", true);
       assertEquals("Error while sending email", serviceException.getMessage());
     }
+  }
+
+  @Test(expected = ExchangeMailServiceException.class)
+  public void prepareAndSendTextMail_Should_ThrowExchangeMailServiceException_WhenMailUrlIsInvalid()
+      throws NoSuchFieldException, ExchangeMailServiceException {
+    FieldSetter.setField(this.mailService,
+        this.mailService.getClass().getDeclaredField(EXCHANGE_URL_FIELD_NAME), "Invalid");
+    mailService.prepareAndSendTextMail(RECIPIENT, SUBJECT, BODY);
+  }
+
+  @Test(expected = ExchangeMailServiceException.class)
+  public void prepareAndSendTextMail_Should_ThrowExchangeMailServiceException_WhenParametersAreNull()
+      throws ExchangeMailServiceException, NoSuchFieldException {
+    FieldSetter.setField(mailService, mailService.getClass().getDeclaredField("mailSender"),
+        SENDER);
+    mailService.prepareAndSendTextMail(null, null, null);
   }
 
 }

@@ -1,20 +1,22 @@
 package de.caritas.cob.mailservice.api.service;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
+import de.caritas.cob.mailservice.api.exception.ExchangeMailServiceException;
+import de.caritas.cob.mailservice.api.mailtemplate.TemplateImage;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import de.caritas.cob.mailservice.api.exception.ServiceException;
-import de.caritas.cob.mailservice.api.mailtemplate.TemplateImage;
 import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.enumeration.misc.ExchangeVersion;
 import microsoft.exchange.webservices.data.core.enumeration.property.BodyType;
 import microsoft.exchange.webservices.data.core.service.item.EmailMessage;
 import microsoft.exchange.webservices.data.credential.WebCredentials;
 import microsoft.exchange.webservices.data.property.complex.MessageBody;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Service for sending mails via exchange
@@ -50,36 +52,47 @@ public class ExchangeMailService {
    * @param htmlTemplate The name of the html template
    */
   public void prepareAndSendHtmlMail(String recipient, String subject, String htmlTemplate,
-      List<TemplateImage> templateImages) {
+      List<TemplateImage> templateImages) throws ExchangeMailServiceException {
     this.prepareAndSendMail(recipient, subject, htmlTemplate, templateImages, BodyType.HTML);
   }
 
   /**
    * Preparing and sending an text mail via Exchange
-   * 
+   *
    * @param recipient The mail address of the recipient
    * @param subject The subject of the mail
    * @param body The text to send
    */
-  public void prepareAndSendTextMail(String recipient, String subject, String body) {
+  public void prepareAndSendTextMail(String recipient, String subject, String body)
+      throws ExchangeMailServiceException {
     this.prepareAndSendMail(recipient, subject, body, null, BodyType.Text);
   }
 
-  /**
-   * Preparing and sending an html mail via smtp.
-   * 
-   * @param recipient The mail address of the recipient
-   * @param subject The subject of the mail
-   * @param bodyText The name of the html template
-   * @param bodyType The bodyType you want to send
-   */
-  public void prepareAndSendMail(String recipient, String subject, String bodyText,
-      List<TemplateImage> templateImages, BodyType bodyType) {
+  private void prepareAndSendMail(String recipient, String subject, String bodyText,
+      List<TemplateImage> templateImages, BodyType bodyType) throws ExchangeMailServiceException {
 
     if (mailSender == null) {
-      throw new ServiceException("No sender mail address set");
+      throw new ExchangeMailServiceException("No sender mail address set");
     }
 
+    ExchangeService exchangeService = buildExchangeService();
+    EmailMessage msg = buildEmailMessage(subject, bodyText, bodyType, exchangeService);
+    addEmailAttachmentsIfNecessary(templateImages, msg);
+    setMailRecipient(recipient, msg);
+
+    // Send mail
+    try {
+      msg.send();
+      LogService.logDebug("email sent");
+    } catch (Exception e) {
+      throw new ExchangeMailServiceException("Error while sending email", e);
+    }
+
+    exchangeService.close();
+
+  }
+
+  private ExchangeService buildExchangeService() throws ExchangeMailServiceException {
     ExchangeService exchangeService = new ExchangeService(ExchangeVersion.valueOf(exchangeVersion));
     exchangeService.setCredentials(new WebCredentials(this.exchangeUser, this.exchangePassword));
 
@@ -87,12 +100,17 @@ public class ExchangeMailService {
       exchangeService.setUrl(new URI(this.exchangeUrl));
     } catch (URISyntaxException e) {
       exchangeService.close();
-      throw new ServiceException(
+      throw new ExchangeMailServiceException(
           String.format("Could not set ExchangeMailService URL %s ", this.exchangeUrl), e);
+    } finally {
+      exchangeService.close();
     }
+    return exchangeService;
+  }
 
-    // Message Object
-    EmailMessage msg = null;
+  private EmailMessage buildEmailMessage(String subject, String bodyText, BodyType bodyType,
+      ExchangeService exchangeService) throws ExchangeMailServiceException {
+    EmailMessage msg;
 
     try {
       msg = new EmailMessage(exchangeService);
@@ -103,11 +121,14 @@ public class ExchangeMailService {
       messageBody.setText(bodyText);
       msg.setBody(messageBody);
     } catch (Exception e) {
-      throw new ServiceException("Could not prepare message data (subject / body)", e);
+      throw new ExchangeMailServiceException("Could not prepare message data (subject / body)", e);
     }
+    return msg;
+  }
 
-    // Create Message Attachments if necessary
-    if (templateImages != null && !templateImages.isEmpty()) {
+  private void addEmailAttachmentsIfNecessary(List<TemplateImage> templateImages, EmailMessage msg)
+      throws ExchangeMailServiceException {
+    if (!CollectionUtils.isEmpty(templateImages)) {
       try {
         int attachmentIndex = 0;
         for (TemplateImage templateImage : templateImages) {
@@ -123,13 +144,15 @@ public class ExchangeMailService {
           attachmentIndex++;
         }
       } catch (Exception e) {
-        throw new ServiceException("Error while processing attachments", e);
+        throw new ExchangeMailServiceException("Error while processing attachments", e);
       }
     }
+  }
 
-    // Set Recipient
+  private void setMailRecipient(String recipient, EmailMessage msg)
+      throws ExchangeMailServiceException {
     try {
-      if (fixMailRecipient != null && !fixMailRecipient.equals(StringUtils.EMPTY)) {
+      if (isNotBlank(fixMailRecipient)) {
         // fixMailRecipient is present - send to fixMailRecipient
         msg.getToRecipients().add(fixMailRecipient);
       } else {
@@ -137,19 +160,8 @@ public class ExchangeMailService {
         msg.getToRecipients().add(recipient);
       }
     } catch (Exception e) {
-      throw new ServiceException("Could not set recipient", e);
+      throw new ExchangeMailServiceException("Could not set recipient", e);
     }
-
-    // Send mail
-    try {
-      msg.send();
-      LogService.logDebug("email sent");
-    } catch (Exception e) {
-      throw new ServiceException("Error while sending email", e);
-    }
-
-    exchangeService.close();
-
   }
 
 }

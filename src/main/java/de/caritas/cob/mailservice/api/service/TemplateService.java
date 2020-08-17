@@ -1,6 +1,6 @@
 package de.caritas.cob.mailservice.api.service;
 
-import de.caritas.cob.mailservice.api.exception.ServiceException;
+import de.caritas.cob.mailservice.api.exception.TemplateServiceException;
 import de.caritas.cob.mailservice.api.helper.ThymeleafHelper;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateDescription;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class TemplateService {
    * @return if success, an optional with the html template, otherwise an empty optional
    */
   public Optional<String> getProcessedHtmlTemplate(TemplateDescription templateDescription,
-      String templateName, Map<String, Object> templateData) {
+      String templateName, Map<String, Object> templateData) throws TemplateServiceException {
 
     templateData.put("urlimpressum", imprintUrl);
     templateData.put("urldatenschutz", dataPrivacyUrl);
@@ -41,10 +41,9 @@ public class TemplateService {
     List<String> missingFieldList = getMissingTemplateFields(templateDescription, templateData);
 
     if (!CollectionUtils.isEmpty(missingFieldList)) {
-      throw new ServiceException(String.format(
+      throw new TemplateServiceException(String.format(
           "Mail request for template %s could not be executed due to missing fields for template processing. Missing fields: %s",
-          templateName,
-          String.join(",", missingFieldList)));
+          templateName, String.join(",", missingFieldList)));
     }
 
     return ThymeleafHelper.getProcessedHtml(templateData,
@@ -78,8 +77,7 @@ public class TemplateService {
       templateData = new HashMap<>();
     }
     List<String> missingFieldList = new ArrayList<>();
-    if (mailTemplate.getTemplateDataFields() != null
-        && !mailTemplate.getTemplateDataFields().isEmpty()) {
+    if (!CollectionUtils.isEmpty(mailTemplate.getTemplateDataFields())) {
       for (String fieldName : mailTemplate.getTemplateDataFields()) {
         if (!templateData.containsKey(fieldName)) {
           missingFieldList.add(fieldName);

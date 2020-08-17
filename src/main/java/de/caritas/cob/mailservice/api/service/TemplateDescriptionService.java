@@ -1,5 +1,8 @@
 package de.caritas.cob.mailservice.api.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.caritas.cob.mailservice.api.exception.TemplateDescriptionServiceException;
+import de.caritas.cob.mailservice.api.mailtemplate.TemplateDescription;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -7,9 +10,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import de.caritas.cob.mailservice.api.exception.ServiceException;
-import de.caritas.cob.mailservice.api.mailtemplate.TemplateDescription;
 
 /**
  * Service for mail templates
@@ -26,7 +26,8 @@ public class TemplateDescriptionService {
    * @param templateName the name of the mail template
    * @return the mail template object
    */
-  public Optional<TemplateDescription> getTemplateDescription(String templateName) {
+  public Optional<TemplateDescription> getTemplateDescription(String templateName)
+      throws TemplateDescriptionServiceException {
 
     return Optional.of(loadTemplateDescription(templateName));
 
@@ -38,14 +39,15 @@ public class TemplateDescriptionService {
    * @param templateName the template name
    * @return the template description
    */
-  private TemplateDescription loadTemplateDescription(String templateName) {
+  private TemplateDescription loadTemplateDescription(String templateName)
+      throws TemplateDescriptionServiceException {
     ObjectMapper mapper = new ObjectMapper();
     TemplateDescription templateDescription = null;
     String templateDescriptionJson = loadTemplateDescriptionFile(templateName);
     try {
       templateDescription = mapper.readValue(templateDescriptionJson, TemplateDescription.class);
     } catch (Exception ex) {
-      throw new ServiceException(String.format(
+      throw new TemplateDescriptionServiceException(String.format(
           "Json file with template description could not be parsed, template name: %s",
           templateName), ex);
     }
@@ -58,15 +60,16 @@ public class TemplateDescriptionService {
    * @param templateName
    * @return the content of the template description file
    */
-  private String loadTemplateDescriptionFile(String templateName) {
+  private String loadTemplateDescriptionFile(String templateName)
+      throws TemplateDescriptionServiceException {
     InputStream in =
         TemplateDescriptionService.class.getResourceAsStream(getTemplateFilename(templateName));
 
     try {
       final List<String> fileLines = IOUtils.readLines(in, StandardCharsets.UTF_8.displayName());
-      return fileLines.stream().collect(Collectors.joining());
+      return String.join("", fileLines);
     } catch (Exception ex) {
-      throw new ServiceException(String.format(
+      throw new TemplateDescriptionServiceException(String.format(
           "Json file with template description could not be loaded, template name: %s",
           templateName), ex);
     }
