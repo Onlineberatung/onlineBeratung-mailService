@@ -33,7 +33,7 @@ public class MailServiceTest {
   private static final String EMAIL = "email";
   private final String ERROR_MESSAGE = "error message";
   private final String ERROR_RECIPIENS = "name@domain.de";
-  private final String FIELD_NAME_USE_SMTP = "useSMTP";
+  private final String FIELD_NAME_USE_SMTP = "useSmtp";
 
   @InjectMocks
   private MailService mailService;
