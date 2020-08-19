@@ -3,7 +3,7 @@ package de.caritas.cob.mailservice.api.exception;
 public class ExchangeMailServiceException extends Exception {
 
   /**
-   * Exchange mail service exception
+   * Exchange mail service exception.
    *
    * @param ex
    */
@@ -12,7 +12,7 @@ public class ExchangeMailServiceException extends Exception {
   }
 
   /**
-   * Exchange mail service exception
+   * Exchange mail service exception.
    *
    * @param message
    * @param ex
@@ -22,7 +22,7 @@ public class ExchangeMailServiceException extends Exception {
   }
 
   /**
-   * Exchange mail service exception
+   * Exchange mail service exception.
    *
    * @param message
    */

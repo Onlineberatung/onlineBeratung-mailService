@@ -24,9 +24,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Value("${csrf.header.property}")
   private String csrfHeaderProperty;
 
-  @Value("${web.security.access.restrictions}")
-  private String accessRestrictions;
-
   /**
    * Configure spring security filter chain
    * 

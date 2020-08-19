@@ -48,7 +48,7 @@ public class ExchangeMailServiceTest {
   }
 
   @Test
-  public void prepareAndSendHtmlMail_Should_ThrowServiceException_WhenSenderMailAddressIsNotSet() {
+  public void prepareAndSendHtmlMail_Should_ThrowServiceException_When_SenderMailAddressIsNotSet() {
     try {
       mailService.prepareAndSendHtmlMail(RECIPIENT, SUBJECT, TEMPLATE, null);
       fail("Expected exception: ServiceException");
@@ -59,7 +59,7 @@ public class ExchangeMailServiceTest {
   }
 
   @Test
-  public void prepareAndSendHtmlMail_Should_ThrowServiceException_WhenMailCouldNotBeSend()
+  public void prepareAndSendHtmlMail_Should_ThrowServiceException_When_MailCouldNotBeSend()
       throws NoSuchFieldException, SecurityException {
 
     FieldSetter.setField(mailService, mailService.getClass().getDeclaredField("mailSender"),
@@ -75,7 +75,7 @@ public class ExchangeMailServiceTest {
   }
 
   @Test
-  public void prepareAndSendTextMail_Should_ThrowServiceException_WhenSenderMailAddressIsNotSet() {
+  public void prepareAndSendTextMail_Should_ThrowServiceException_When_SenderMailAddressIsNotSet() {
     try {
       mailService.prepareAndSendTextMail(RECIPIENT, SUBJECT, BODY);
       fail("Expected exception: ServiceException");
@@ -86,7 +86,7 @@ public class ExchangeMailServiceTest {
   }
 
   @Test
-  public void prepareAndSendTextMail_Should_ThrowServiceException_WhenMailCouldNotBeSend()
+  public void prepareAndSendTextMail_Should_ThrowServiceException_When_MailCouldNotBeSend()
       throws NoSuchFieldException, SecurityException {
 
     FieldSetter.setField(mailService, mailService.getClass().getDeclaredField("mailSender"),
@@ -102,7 +102,7 @@ public class ExchangeMailServiceTest {
   }
 
   @Test(expected = ExchangeMailServiceException.class)
-  public void prepareAndSendTextMail_Should_ThrowExchangeMailServiceException_WhenMailUrlIsInvalid()
+  public void prepareAndSendTextMail_Should_ThrowExchangeMailServiceException_When_MailUrlIsInvalid()
       throws NoSuchFieldException, ExchangeMailServiceException {
     FieldSetter.setField(this.mailService,
         this.mailService.getClass().getDeclaredField(EXCHANGE_URL_FIELD_NAME), "Invalid");
@@ -110,7 +110,7 @@ public class ExchangeMailServiceTest {
   }
 
   @Test(expected = ExchangeMailServiceException.class)
-  public void prepareAndSendTextMail_Should_ThrowExchangeMailServiceException_WhenParametersAreNull()
+  public void prepareAndSendTextMail_Should_ThrowExchangeMailServiceException_When_ParametersAreNull()
       throws ExchangeMailServiceException, NoSuchFieldException {
     FieldSetter.setField(mailService, mailService.getClass().getDeclaredField("mailSender"),
         SENDER);

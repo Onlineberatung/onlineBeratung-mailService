@@ -3,7 +3,7 @@ package de.caritas.cob.mailservice.api.exception;
 public class TemplateServiceException extends Exception {
 
   /**
-   * Template service exception
+   * Template service exception.
    *
    * @param message
    */

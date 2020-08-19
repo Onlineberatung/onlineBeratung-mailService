@@ -57,7 +57,7 @@ public class ExchangeMailService {
   }
 
   /**
-   * Preparing and sending an text mail via Exchange
+   * Preparing and sending an text mail via Exchange.
    *
    * @param recipient The mail address of the recipient
    * @param subject The subject of the mail

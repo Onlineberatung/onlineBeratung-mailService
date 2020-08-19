@@ -30,13 +30,15 @@ public class MailService {
   private final @NonNull TemplateDataConverter templateDataConverter;
 
   @Value("${mail.usesmtp}")
-  private boolean useSMTP;
+  private boolean useSmtp;
 
   @Value("${mail.error.recipients}")
   private String errorRecipients;
 
   /**
-   * sends all mails as html
+   * sends all mails as html.
+   *
+   * @param mailsDTO the mails to be send
    */
   public void sendHtmlMails(MailsDTO mailsDTO) {
     if (!CollectionUtils.isEmpty(mailsDTO.getMails())) {
@@ -89,7 +91,7 @@ public class MailService {
   private void sendHtmlMail(MailDTO mail, TemplateDescription templateDescription,
       String processedHtmlTemplate, String subject) {
     try {
-      if (useSMTP) {
+      if (useSmtp) {
         smtpMailService.prepareAndSendHtmlMail(mail.getEmail(), subject,
             processedHtmlTemplate, templateDescription.getTemplateImages());
       } else {
@@ -113,26 +115,25 @@ public class MailService {
   }
 
   /**
-   * sens an error mail
+   * sends an error mail.
+   *
+   * @param body the mail body
    */
   public void sendErrorMail(String body) {
     if (errorRecipients != null && !errorRecipients.trim().equals(StringUtils.EMPTY)) {
-      sendErrorMailWithChecketRecipients(body);
+      sendErrorMailWithCheckedRecipients(body);
     } else {
       LogService.logWarn("Error mail was not send, because no error recipient is set.");
     }
   }
 
-  private void sendErrorMailWithChecketRecipients(String body) {
+  private void sendErrorMailWithCheckedRecipients(String body) {
     try {
-      if (useSMTP) {
-        smtpMailService.prepareAndSendTextMail(errorRecipients,
-            "Caritas Online Beratung: An error occurred while sending the mail via the mail service.",
-            body);
+      String errorMessage = "Caritas Online Beratung: An error occurred while sending the mail via the mail service.";
+      if (useSmtp) {
+        smtpMailService.prepareAndSendTextMail(errorRecipients, errorMessage, body);
       } else {
-        exchangeMailService.prepareAndSendTextMail(errorRecipients,
-            "Caritas Online Beratung: An error occurred while sending the mail via the mail service.",
-            body);
+        exchangeMailService.prepareAndSendTextMail(errorRecipients, errorMessage, body);
       }
     } catch (SmtpMailServiceException | ExchangeMailServiceException e) {
       throw new InternalServerErrorException(e.getMessage());

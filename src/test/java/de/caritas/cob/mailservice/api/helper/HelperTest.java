@@ -13,14 +13,14 @@ public class HelperTest {
 
   private Helper helper;
 
-  private static String TEXT = "Lorem Ipsum";
-  private static String TEXT_WITH_NEWLINE = "Lorem Ipsum\nLorem Ipsum";
-  private static String TEXT_WITH_NEWLINE_AND_HTML_AND_JS =
+  private final static String TEXT = "Lorem Ipsum";
+  private final static String TEXT_WITH_NEWLINE = "Lorem Ipsum\nLorem Ipsum";
+  private final static String TEXT_WITH_NEWLINE_AND_HTML_AND_JS =
       "<b>Lorem Ipsum</b>\nLorem Ipsum<script>alert('1');</script>";
-  private static String TEXT_WITH_HTML = "<strong>Lorem Ipsum</strong>";
-  private static String TEXT_WITH_JS = "Lorem Ipsum<script>alert('1');</script>";
-  private static String TEXT_WITH_HTML_ENTITY = "Hallo &amp;";
-  private static String TEXT_WITH_UNESCAPED_HTML_ENTITY = "Hallo &";
+  private final static String TEXT_WITH_HTML = "<strong>Lorem Ipsum</strong>";
+  private final static String TEXT_WITH_JS = "Lorem Ipsum<script>alert('1');</script>";
+  private final static String TEXT_WITH_HTML_ENTITY = "Hallo &amp;";
+  private final static String TEXT_WITH_UNESCAPED_HTML_ENTITY = "Hallo &";
 
   @Before
   public void setup() {
@@ -38,12 +38,12 @@ public class HelperTest {
   }
 
   @Test
-  public void removeHTMLFromText_ShouldNot_RemoveNewslinesFromText() {
+  public void removeHTMLFromText_ShouldNot_RemoveNewlinesFromText() {
     assertEquals(TEXT_WITH_NEWLINE, helper.removeHTMLFromText(TEXT_WITH_NEWLINE));
   }
 
   @Test
-  public void removeHTMLFromText_Should_RemoveHtmlAndJavascriptFromText_And_ShouldNot_RemoveNewslines() {
+  public void removeHTMLFromText_Should_RemoveHtmlAndJavascriptFromText_And_ShouldNot_RemoveNewlines() {
     assertEquals(TEXT_WITH_NEWLINE, helper.removeHTMLFromText(TEXT_WITH_NEWLINE_AND_HTML_AND_JS));
   }
 
@@ -53,7 +53,7 @@ public class HelperTest {
   }
 
   @Test(expected = InternalServerErrorException.class)
-  public void removeHTMLFromText_Should_ThrowInternalServerErrorException_When_remveTextFromNull() {
+  public void removeHTMLFromText_Should_ThrowInternalServerErrorException_When_removeTextFromNull() {
     helper.removeHTMLFromText(null);
   }
 

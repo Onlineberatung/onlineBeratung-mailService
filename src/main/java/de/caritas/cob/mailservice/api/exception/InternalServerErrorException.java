@@ -1,12 +1,13 @@
 package de.caritas.cob.mailservice.api.exception;
 
 /**
- * Server error exception to return status code 500
+ * Server error exception to return status code 500.
  */
 public class InternalServerErrorException extends RuntimeException {
 
   /**
-   * Internal server error
+   * Internal server error.
+   *
    * @param message
    */
   public InternalServerErrorException(String message) {
@@ -14,7 +15,8 @@ public class InternalServerErrorException extends RuntimeException {
   }
 
   /**
-   * Internal server error
+   * Internal server error.
+   *
    * @param message
    * @param e
    */
