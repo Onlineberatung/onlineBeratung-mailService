@@ -1,5 +1,6 @@
 package de.caritas.cob.mailservice.api.service;
 
+import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import de.caritas.cob.mailservice.api.exception.ExchangeMailServiceException;
@@ -71,29 +72,29 @@ public class ExchangeMailService {
   private void prepareAndSendMail(String recipient, String subject, String bodyText,
       List<TemplateImage> templateImages, BodyType bodyType) throws ExchangeMailServiceException {
 
-    if (mailSender == null) {
+    if (isNull(mailSender)) {
       throw new ExchangeMailServiceException("No sender mail address set");
     }
 
-    ExchangeService exchangeService = buildExchangeService();
+    ExchangeService exchangeService = new ExchangeService(ExchangeVersion.valueOf(exchangeVersion));
+    setupExchangeService(exchangeService);
     EmailMessage msg = buildEmailMessage(subject, bodyText, bodyType, exchangeService);
     addEmailAttachmentsIfNecessary(templateImages, msg);
     setMailRecipient(recipient, msg);
 
-    // Send mail
     try {
       msg.send();
       LogService.logDebug("email sent");
     } catch (Exception e) {
       throw new ExchangeMailServiceException("Error while sending email", e);
+    } finally {
+      exchangeService.close();
     }
-
-    exchangeService.close();
-
   }
 
-  private ExchangeService buildExchangeService() throws ExchangeMailServiceException {
-    ExchangeService exchangeService = new ExchangeService(ExchangeVersion.valueOf(exchangeVersion));
+  private void setupExchangeService(ExchangeService exchangeService)
+      throws ExchangeMailServiceException {
+
     exchangeService.setCredentials(new WebCredentials(this.exchangeUser, this.exchangePassword));
 
     try {
@@ -102,28 +103,23 @@ public class ExchangeMailService {
       exchangeService.close();
       throw new ExchangeMailServiceException(
           String.format("Could not set ExchangeMailService URL %s ", this.exchangeUrl), e);
-    } finally {
-      exchangeService.close();
     }
-    return exchangeService;
   }
 
   private EmailMessage buildEmailMessage(String subject, String bodyText, BodyType bodyType,
       ExchangeService exchangeService) throws ExchangeMailServiceException {
-    EmailMessage msg;
-
     try {
-      msg = new EmailMessage(exchangeService);
+      EmailMessage msg = new EmailMessage(exchangeService);
       msg.setSubject(subject);
 
       MessageBody messageBody = new MessageBody();
       messageBody.setBodyType(bodyType);
       messageBody.setText(bodyText);
       msg.setBody(messageBody);
+      return msg;
     } catch (Exception e) {
       throw new ExchangeMailServiceException("Could not prepare message data (subject / body)", e);
     }
-    return msg;
   }
 
   private void addEmailAttachmentsIfNecessary(List<TemplateImage> templateImages, EmailMessage msg)
