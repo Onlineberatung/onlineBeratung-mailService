@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://github.com/CaritasDeutschland/caritas-onlineBeratung-mailService/compare/v1.1.0...v1.1.1) (2020-10-12)
+
+
+### Bug Fixes
+
+* failed tests ([3ef25da](https://github.com/CaritasDeutschland/caritas-onlineBeratung-mailService/commit/3ef25da459be3637fb3bf29b68ca576d0f8b1046))
+* make sure that exchange service is not closed for send message ([83d0b29](https://github.com/CaritasDeutschland/caritas-onlineBeratung-mailService/commit/83d0b291c147a32db518f41c2daedba85aeb541c))
+
 ## 1.1.0 (2020-07-29)
 
 
