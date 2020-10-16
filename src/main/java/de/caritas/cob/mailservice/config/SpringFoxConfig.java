@@ -46,14 +46,14 @@ public class SpringFoxConfig {
 
   // White list for path patterns that should be white listed so that swagger UI can be accessed
   // without authorization
-  public static final String[] whiteList =
+  public static final String[] WHITE_LIST =
       new String[] {"/mails/docs", "/mails/docs/**", "/v2/api-docs", "/configuration/ui",
           "/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**"};
 
   @Bean
   public Docket apiDocket() {
     return new Docket(DocumentationType.SWAGGER_2).select()
-        .apis(RequestHandlerSelectors.basePackage("de.caritas.cob.MailService.api")).build()
+        .apis(RequestHandlerSelectors.basePackage("de.caritas.cob.mailservice.api")).build()
         .consumes(getContentTypes()).produces(getContentTypes()).apiInfo(getApiInfo())
         .useDefaultResponseMessages(false).protocols(protocols())
         .directModelSubstitute(LocalTime.class, String.class);

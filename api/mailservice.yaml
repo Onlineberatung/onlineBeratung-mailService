@@ -1,23 +1,26 @@
-swagger: '2.0'
+openapi: 3.0.1
+
 info:
+  title: will be replaced
   description: This information will be replaced by the SpringFox config information
   version: 0.0.1
-  title: will be replaced
 
-# REST API path definitions #
-paths:    
+servers:
+  - url: /
+
+paths:
   /mails/send:
     post:
       tags:
-      - mails-controller
+        - mails-controller
       summary: Send e-mails via the mail service
       operationId: sendMails
-      parameters:
-      - in: "body"
-        name: "Mails"
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/MailsDTO'
         required: true
-        schema:
-          $ref: "#/definitions/MailsDTO"
       responses:
         200:
           description: OK - successfull operation
@@ -25,8 +28,45 @@ paths:
           description: BAD REQUEST - invalid/incomplete request or body object
         500:
           description: INTERNAL SERVER ERROR - server encountered unexpected condition
-          
-# Model/object definitions #
-definitions:
-  MailsDTO:
-    type: "object"
+      x-codegen-request-body-name: Mails
+
+components:
+  schemas:
+    MailsDTO:
+      type: object
+      required:
+        - mails
+      properties:
+        mails:
+          type: array
+          items:
+            $ref: '#/components/schemas/MailDTO'
+
+    MailDTO:
+      type: object
+      required:
+        - template
+        - email
+      properties:
+        template:
+          type: string
+          example: "template"
+        email:
+          type: string
+          example: "max@mustermann.de"
+        templateData:
+          type: array
+          items:
+            $ref: '#/components/schemas/TemplateDataDTO'
+
+    TemplateDataDTO:
+      type: object
+      required:
+        - key
+        - value
+      properties:
+        key:
+          type: string
+          example: "name"
+        value:
+          type: string
