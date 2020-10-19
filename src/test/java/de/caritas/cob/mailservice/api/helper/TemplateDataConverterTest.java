@@ -26,7 +26,8 @@ public class TemplateDataConverterTest {
   private final String KEY2 = "key2";
   private final String VALUE2 = "value2";
   private final List<TemplateDataDTO> TEMPLATE_DTO_LIST =
-      Arrays.asList(new TemplateDataDTO(KEY1, VALUE1), new TemplateDataDTO(KEY2, VALUE2));
+      Arrays.asList(new TemplateDataDTO().key(KEY1).value(VALUE1),
+          new TemplateDataDTO().key(KEY2).value(VALUE2));
 
   @Before
   public void setup() {
