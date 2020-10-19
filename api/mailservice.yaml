@@ -17,7 +17,7 @@ paths:
       operationId: sendMails
       requestBody:
         content:
-          '*/*':
+          'application/json':
             schema:
               $ref: '#/components/schemas/MailsDTO'
         required: true
@@ -28,7 +28,6 @@ paths:
           description: BAD REQUEST - invalid/incomplete request or body object
         500:
           description: INTERNAL SERVER ERROR - server encountered unexpected condition
-      x-codegen-request-body-name: Mails
 
 components:
   schemas:
