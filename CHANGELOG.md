@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/CaritasDeutschland/caritas-onlineBeratung-mailService/compare/v1.1.2...v1.2.0) (2020-10-28)
+
+
+### Features
+
+* update swagger to openapi and define model for generation ([6a82e2e](https://github.com/CaritasDeutschland/caritas-onlineBeratung-mailService/commit/6a82e2e104b870b53659965117d1ea083d5e0455))
+
 ### [1.1.2](https://github.com/CaritasDeutschland/caritas-onlineBeratung-mailService/compare/v1.1.1...v1.1.2) (2020-10-12)
 
 ### [1.1.1](https://github.com/CaritasDeutschland/caritas-onlineBeratung-mailService/compare/v1.1.0...v1.1.1) (2020-10-12)
