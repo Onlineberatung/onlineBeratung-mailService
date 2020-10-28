@@ -1,6 +1,7 @@
 package de.caritas.cob.mailservice.api.service;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
@@ -94,7 +95,7 @@ public class MailServiceTest {
     when(templateService.getProcessedHtmlTemplate(any(), any(), any()))
         .thenReturn(Optional.of("success"));
 
-    MailsDTO mailsDTO = new MailsDTO(asList(createMailDTO()));
+    MailsDTO mailsDTO = new MailsDTO().mails(singletonList(createMailDTO()));
 
     mailService.sendHtmlMails(mailsDTO);
     verify(exchangeMailService, atLeastOnce()).prepareAndSendHtmlMail(eq(EMAIL),
@@ -102,7 +103,8 @@ public class MailServiceTest {
   }
 
   private MailDTO createMailDTO() {
-    return new MailDTO("template", EMAIL, asList(new TemplateDataDTO("key", "value")));
+    return new MailDTO().template("template").email(EMAIL).templateData(
+        singletonList(new TemplateDataDTO().key("key").value("value")));
   }
 
   @Test
@@ -114,7 +116,7 @@ public class MailServiceTest {
     when(templateService.getProcessedHtmlTemplate(any(), any(), any()))
         .thenReturn(Optional.of("success"));
 
-    MailsDTO mailsDTO = new MailsDTO(asList(createMailDTO()));
+    MailsDTO mailsDTO = new MailsDTO().mails(singletonList(createMailDTO()));
 
     mailService.sendHtmlMails(mailsDTO);
     verify(smtpMailService, atLeastOnce()).prepareAndSendHtmlMail(eq(EMAIL),
@@ -124,7 +126,7 @@ public class MailServiceTest {
   @Test
   public void sendHtmlMails_ShouldNot_sendHtmlMails_WhenNoMailServiceIsSet()
       throws SecurityException {
-    MailsDTO mailsDTO = new MailsDTO(asList(createMailDTO()));
+    MailsDTO mailsDTO = new MailsDTO().mails(singletonList(createMailDTO()));
 
     mailService.sendHtmlMails(mailsDTO);
     verifyZeroInteractions(smtpMailService);
@@ -140,7 +142,7 @@ public class MailServiceTest {
     when(templateService.getProcessedHtmlTemplate(any(), any(), any()))
         .thenReturn(Optional.of("success"));
 
-    MailsDTO mailsDTO = new MailsDTO(asList(createMailDTO(), createMailDTO(), createMailDTO()));
+    MailsDTO mailsDTO = new MailsDTO().mails(asList(createMailDTO(), createMailDTO(), createMailDTO()));
 
     mailService.sendHtmlMails(mailsDTO);
     verify(smtpMailService, times(3)).prepareAndSendHtmlMail(eq(EMAIL),
@@ -155,7 +157,7 @@ public class MailServiceTest {
     when(templateDescriptionService.getTemplateDescription(any()))
         .thenThrow(new TemplateDescriptionServiceException("", new Exception()));
 
-    MailsDTO mailsDTO = new MailsDTO(asList(createMailDTO()));
+    MailsDTO mailsDTO = new MailsDTO().mails(singletonList(createMailDTO()));
     mailService.sendHtmlMails(mailsDTO);
     verify(smtpMailService, atLeastOnce()).prepareAndSendTextMail(eq(ERROR_RECIPIENS),
         Mockito.anyString(), Mockito.anyString());
