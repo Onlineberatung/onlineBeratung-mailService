@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(MailController.class)
-@AutoConfigureMockMvc(secure = false)
+@AutoConfigureMockMvc(addFilters = false)
 @TestPropertySource(properties = {"mail.usesmtp=false"})
 public class MailControllerTestExchangeIT {
 
