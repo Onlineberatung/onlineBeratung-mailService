@@ -86,7 +86,8 @@ public class ExchangeMailService {
       msg.send();
       LogService.logDebug("email sent");
     } catch (Exception e) {
-      throw new ExchangeMailServiceException("Error while sending email", e);
+      throw new ExchangeMailServiceException(
+          String.format("Error while sending Exchange email: %s", msg.toString()), e);
     } finally {
       exchangeService.close();
     }

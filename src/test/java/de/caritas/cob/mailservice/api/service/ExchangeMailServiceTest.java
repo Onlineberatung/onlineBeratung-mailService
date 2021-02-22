@@ -58,20 +58,14 @@ public class ExchangeMailServiceTest {
     }
   }
 
-  @Test
+  @Test(expected = ExchangeMailServiceException.class)
   public void prepareAndSendHtmlMail_Should_ThrowServiceException_When_MailCouldNotBeSend()
-      throws NoSuchFieldException, SecurityException {
+      throws NoSuchFieldException, SecurityException, ExchangeMailServiceException {
 
-    FieldSetter.setField(mailService, mailService.getClass().getDeclaredField("mailSender"),
-        String.valueOf(SENDER));
+    FieldSetter
+        .setField(mailService, mailService.getClass().getDeclaredField("mailSender"), SENDER);
 
-    try {
-      mailService.prepareAndSendHtmlMail(RECIPIENT, SUBJECT, TEMPLATE, null);
-      fail("Expected exception: ServiceException");
-    } catch (ExchangeMailServiceException serviceException) {
-      assertTrue("Excepted ServiceException thrown", true);
-      assertEquals("Error while sending email", serviceException.getMessage());
-    }
+    mailService.prepareAndSendHtmlMail(RECIPIENT, SUBJECT, TEMPLATE, null);
   }
 
   @Test
@@ -85,20 +79,14 @@ public class ExchangeMailServiceTest {
     }
   }
 
-  @Test
+  @Test(expected = ExchangeMailServiceException.class)
   public void prepareAndSendTextMail_Should_ThrowServiceException_When_MailCouldNotBeSend()
-      throws NoSuchFieldException, SecurityException {
+      throws NoSuchFieldException, SecurityException, ExchangeMailServiceException {
 
-    FieldSetter.setField(mailService, mailService.getClass().getDeclaredField("mailSender"),
-        String.valueOf(SENDER));
+    FieldSetter
+        .setField(mailService, mailService.getClass().getDeclaredField("mailSender"), SENDER);
 
-    try {
-      mailService.prepareAndSendTextMail(RECIPIENT, SUBJECT, BODY);
-      fail("Expected exception: ServiceException");
-    } catch (ExchangeMailServiceException serviceException) {
-      assertTrue("Excepted ServiceException thrown", true);
-      assertEquals("Error while sending email", serviceException.getMessage());
-    }
+    mailService.prepareAndSendTextMail(RECIPIENT, SUBJECT, BODY);
   }
 
   @Test(expected = ExchangeMailServiceException.class)
