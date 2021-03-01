@@ -1,5 +1,6 @@
 package de.caritas.cob.mailservice.api.service;
 
+import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getStackTrace;
 
 import de.caritas.cob.mailservice.api.exception.ExchangeMailServiceException;
@@ -9,11 +10,14 @@ import de.caritas.cob.mailservice.api.exception.TemplateDescriptionServiceExcept
 import de.caritas.cob.mailservice.api.exception.TemplateServiceException;
 import de.caritas.cob.mailservice.api.helper.TemplateDataConverter;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateDescription;
+import de.caritas.cob.mailservice.api.model.ErrorMailDTO;
 import de.caritas.cob.mailservice.api.model.MailDTO;
 import de.caritas.cob.mailservice.api.model.MailsDTO;
+import de.caritas.cob.mailservice.api.model.TemplateDataDTO;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -125,7 +129,7 @@ public class MailService {
    * @param body the mail body
    */
   public void sendErrorMail(String body) {
-    if (errorRecipients != null && !errorRecipients.trim().equals(StringUtils.EMPTY)) {
+    if (nonNull(errorRecipients) && !errorRecipients.trim().equals(StringUtils.EMPTY)) {
       sendErrorMailWithCheckedRecipients(body);
     } else {
       LogService.logWarn("Error mail was not send, because no error recipient is set.");
@@ -143,6 +147,44 @@ public class MailService {
     } catch (SmtpMailServiceException | ExchangeMailServiceException e) {
       throw new InternalServerErrorException(e.getMessage());
     }
+  }
+
+  /**
+   * Sends an error mail to all configured recipients.
+   *
+   * @param errorMailDTO the input {@link ErrorMailDTO}
+   */
+  public void sendErrorMailDto(ErrorMailDTO errorMailDTO) {
+    MailDTO mailDTO = new MailDTO()
+        .template(errorMailDTO.getTemplate())
+        .email(this.errorRecipients)
+        .templateData(errorMailDTO.getTemplateData());
+
+    try {
+      templateDescriptionService.getTemplateDescription(mailDTO.getTemplate())
+          .ifPresent(templateDescription -> loadUnescapedMailDataAndSendMail(mailDTO,
+              templateDescription));
+    } catch (TemplateDescriptionServiceException e) {
+      handleMailSendFailure(mailDTO, e);
+    }
+  }
+
+  private void loadUnescapedMailDataAndSendMail(MailDTO mail,
+      TemplateDescription templateDescription) {
+    Map<String, Object> templateData = mail.getTemplateData()
+        .stream()
+        .collect(Collectors.toMap(TemplateDataDTO::getKey, TemplateDataDTO::getValue));
+
+    String subject = templateService.getProcessedSubject(templateDescription, templateData);
+    try {
+      templateService
+          .getProcessedHtmlTemplate(templateDescription, mail.getTemplate(), templateData)
+          .ifPresent(template -> sendHtmlMail(mail, templateDescription, template, subject));
+    } catch (TemplateServiceException e) {
+      throw new InternalServerErrorException(
+          String.format("Could not load template: %s", e.getMessage()), e);
+    }
+
   }
 
 }
