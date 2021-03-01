@@ -1,5 +1,7 @@
 package de.caritas.cob.mailservice.api.service;
 
+import static org.apache.commons.lang3.exception.ExceptionUtils.getStackTrace;
+
 import de.caritas.cob.mailservice.api.exception.ExchangeMailServiceException;
 import de.caritas.cob.mailservice.api.exception.InternalServerErrorException;
 import de.caritas.cob.mailservice.api.exception.SmtpMailServiceException;
@@ -79,7 +81,8 @@ public class MailService {
       optionalProcessedHtmlTemplate = templateService
           .getProcessedHtmlTemplate(templateDescription, mail.getTemplate(), templateData);
     } catch (TemplateServiceException e) {
-      throw new InternalServerErrorException(e.getMessage());
+      throw new InternalServerErrorException(
+          String.format("Could not load template: %s", e.getMessage()), e);
     }
 
     String subject = templateService.getProcessedSubject(templateDescription, templateData);
@@ -99,7 +102,8 @@ public class MailService {
             processedHtmlTemplate, templateDescription.getTemplateImages());
       }
     } catch (SmtpMailServiceException | ExchangeMailServiceException e) {
-      throw new InternalServerErrorException(e.getMessage());
+      throw new InternalServerErrorException(
+          String.format("Could not send HTML mail: %s", e.getMessage()), e);
     }
   }
 
@@ -108,9 +112,10 @@ public class MailService {
         mail.getTemplate());
     LogService.logError(errorMessage, ex);
     StringBuilder stringBuilderMailBody = new StringBuilder();
-    stringBuilderMailBody.append("Error message:" + errorMessage + "\n");
     stringBuilderMailBody
-        .append(org.apache.commons.lang3.exception.ExceptionUtils.getStackTrace(ex));
+        .append("Error message:")
+        .append(errorMessage).append("\n")
+        .append(getStackTrace(ex));
     sendErrorMail(stringBuilderMailBody.toString());
   }
 
