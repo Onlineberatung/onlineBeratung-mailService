@@ -19,10 +19,13 @@ import de.caritas.cob.mailservice.api.exception.TemplateDescriptionServiceExcept
 import de.caritas.cob.mailservice.api.exception.TemplateServiceException;
 import de.caritas.cob.mailservice.api.helper.TemplateDataConverter;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateDescription;
+import de.caritas.cob.mailservice.api.model.ErrorMailDTO;
 import de.caritas.cob.mailservice.api.model.MailDTO;
 import de.caritas.cob.mailservice.api.model.MailsDTO;
 import de.caritas.cob.mailservice.api.model.TemplateDataDTO;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -184,6 +187,47 @@ public class MailServiceTest {
     mailService.sendHtmlMails(mailsDTO);
 
     verify(exception, atLeastOnce()).printStackTrace(any(PrintWriter.class));
+  }
+
+  @Test
+  public void sendErrotMailDto_Should_sendUnescapedHtmlErrorMail() throws Exception {
+    ReflectionTestUtils.setField(mailService, "errorRecipients", ERROR_RECIPIENTS);
+    ReflectionTestUtils.setField(mailService, FIELD_NAME_USE_SMTP, false);
+    TemplateDescription templateDescription = new TemplateDescription();
+    when(templateDescriptionService.getTemplateDescription(any()))
+        .thenReturn(Optional.of(templateDescription));
+    when(templateService.getProcessedHtmlTemplate(any(), any(), any()))
+        .thenReturn(Optional.of("success"));
+    ErrorMailDTO errorMailDTO = new ErrorMailDTO()
+        .template("free-text")
+        .templateData(singletonList(
+            new TemplateDataDTO().key("text").value("<h2>test</h2>")
+        ));
+
+    this.mailService.sendErrorMailDto(errorMailDTO);
+
+    Map<String, Object> expectedData = new HashMap<>();
+    expectedData.put("text", "<h2>test</h2>");
+    verify(this.exchangeMailService, times(1)).prepareAndSendHtmlMail(any(), any(), any(), any());
+    verify(this.templateService, times(1)).getProcessedSubject(eq(templateDescription),
+        eq(expectedData));
+  }
+
+  @Test(expected = InternalServerErrorException.class)
+  public void sendErrotMailDto_Should_ThrowInternalServerErrorExceptionAndLogExceptionStackTrace_When_AnErrorOccursDuringSendingMails()
+      throws Exception {
+    ReflectionTestUtils.setField(mailService, FIELD_NAME_USE_SMTP, false);
+    when(templateDescriptionService.getTemplateDescription(any()))
+        .thenReturn(Optional.of(new TemplateDescription()));
+    when(templateService.getProcessedHtmlTemplate(any(), any(), any()))
+        .thenThrow(new TemplateServiceException(""));
+    ErrorMailDTO errorMailDTO = new ErrorMailDTO()
+        .template("free-text")
+        .templateData(singletonList(
+            new TemplateDataDTO().key("text").value("<h2>test</h2>")
+        ));
+
+    mailService.sendErrorMailDto(errorMailDTO);
   }
 
 }

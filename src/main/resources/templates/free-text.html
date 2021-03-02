@@ -41,8 +41,10 @@
 
                <tr>
                   <td cellspacing='0' cellpadding='0' style="padding: 0;" colspan="2">
-                    <div style="color: #3F373F; margin: 16px; font-size: 16px; line-height: 21px; font-family: 'Open Sans', 'OpenSans', 'Arial', 'sans-serif';">
-                     <span th:utext="${#strings.replace( #strings.escapeXml( text ),'\n','&lt;br /&gt;')}" ></span>
+                    <div style="color: #3f373f; margin: 16px; font-size: 16px; line-height: 21px; font-family: 'Open Sans', 'OpenSans', 'Arial', 'sans-serif';">
+                       <div>
+                          [(${text})]
+                       </div>
                     </div>
                   </td>
                </tr>
