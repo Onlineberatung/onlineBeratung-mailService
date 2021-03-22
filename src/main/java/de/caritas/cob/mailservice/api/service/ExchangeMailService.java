@@ -60,16 +60,16 @@ public class ExchangeMailService {
   /**
    * Preparing and sending an text mail via Exchange.
    *
-   * @param recipient The mail address of the recipient
+   * @param recipients The mail address of the recipients
    * @param subject The subject of the mail
    * @param body The text to send
    */
-  public void prepareAndSendTextMail(String recipient, String subject, String body)
+  public void prepareAndSendTextMail(String recipients, String subject, String body)
       throws ExchangeMailServiceException {
-    this.prepareAndSendMail(recipient, subject, body, null, BodyType.Text);
+    this.prepareAndSendMail(recipients, subject, body, null, BodyType.Text);
   }
 
-  private void prepareAndSendMail(String recipient, String subject, String bodyText,
+  private void prepareAndSendMail(String recipients, String subject, String bodyText,
       List<TemplateImage> templateImages, BodyType bodyType) throws ExchangeMailServiceException {
 
     if (isNull(mailSender)) {
@@ -80,7 +80,7 @@ public class ExchangeMailService {
     setupExchangeService(exchangeService);
     EmailMessage msg = buildEmailMessage(subject, bodyText, bodyType, exchangeService);
     addEmailAttachmentsIfNecessary(templateImages, msg);
-    setMailRecipient(recipient, msg);
+    setMailRecipients(recipients, msg);
 
     try {
       msg.send();
@@ -146,7 +146,7 @@ public class ExchangeMailService {
     }
   }
 
-  private void setMailRecipient(String recipient, EmailMessage msg)
+  private void setMailRecipients(String recipients, EmailMessage msg)
       throws ExchangeMailServiceException {
     try {
       if (isNotBlank(fixMailRecipient)) {
@@ -154,7 +154,9 @@ public class ExchangeMailService {
         msg.getToRecipients().add(fixMailRecipient);
       } else {
         // No fixMailRecipient present - send to original recipient
-        msg.getToRecipients().add(recipient);
+        for (String recipient : recipients.split(",")) {
+          msg.getToRecipients().add(recipient);
+        }
       }
     } catch (Exception e) {
       throw new ExchangeMailServiceException("Could not set recipient", e);
