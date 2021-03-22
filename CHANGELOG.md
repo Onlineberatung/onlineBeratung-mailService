@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/CaritasDeutschland/caritas-onlineBeratung-mailService/compare/v1.4.0...v1.5.0) (2021-03-22)
+
+
+### Features
+
+* provide endpoint to send free html error mails ([9505a84](https://github.com/CaritasDeutschland/caritas-onlineBeratung-mailService/commit/9505a84e0a9bd56d372b3f52337caebf1ee92b72))
+
 ## [1.4.0](https://github.com/CaritasDeutschland/caritas-onlineBeratung-mailService/compare/v1.3.0...v1.4.0) (2021-03-01)
 
 
