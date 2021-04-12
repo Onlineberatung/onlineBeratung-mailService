@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/CaritasDeutschland/caritas-onlineBeratung-mailService/compare/v1.5.0...v1.6.0) (2021-04-12)
+
+
+### Features
+
+* switched java version for docker build, github actions and maven build ([c9edef4](https://github.com/CaritasDeutschland/caritas-onlineBeratung-mailService/commit/c9edef4053a5bc12b59efb88706fb7c3b678cf6e))
+
 ## [1.5.0](https://github.com/CaritasDeutschland/caritas-onlineBeratung-mailService/compare/v1.4.0...v1.5.0) (2021-03-22)
 
 
