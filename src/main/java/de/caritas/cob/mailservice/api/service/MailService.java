@@ -1,7 +1,6 @@
 package de.caritas.cob.mailservice.api.service;
 
 import static java.util.Objects.nonNull;
-import static org.apache.commons.lang3.exception.ExceptionUtils.getStackTrace;
 
 import de.caritas.cob.mailservice.api.exception.ExchangeMailServiceException;
 import de.caritas.cob.mailservice.api.exception.InternalServerErrorException;
