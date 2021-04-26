@@ -1,0 +1,29 @@
+{
+	"htmlTemplateFilename":"feedback-message-notification-new.html",
+	"subject":"Neue Feedback-Nachricht",
+	"templateImages" : [
+		{
+			"filename":"company-logo.jpg",
+			"filetype":"image/jpg"
+		},
+		{
+			"filename":"illustration-bottom.png",
+			"filetype":"image/png"
+		},
+		{
+			"filename":"illustration-top.png",
+			"filetype":"image/png"
+		},
+		{
+			"filename":"button_nachricht_ansehen_1x.png",
+			"filetype":"image/png"
+		}		
+	],
+	"templateDataFields": 
+		[
+			"name_sender",
+			"name_recipient",
+			"name_user",
+			"url"
+		]
+}

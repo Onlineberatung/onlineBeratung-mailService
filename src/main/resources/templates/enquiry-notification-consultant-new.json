@@ -1,0 +1,29 @@
+{
+	"htmlTemplateFilename":"enquiry-notification-consultant-new.html",
+	"subject":"Neue Erstanfrage [PLZ: ${plz}]",
+	"templateImages" : [
+		{
+			"filename":"company-logo.jpg",
+			"filetype":"image/jpg"
+		},
+		{
+			"filename":"illustration-bottom.png",
+			"filetype":"image/png"
+		},
+		{
+			"filename":"illustration-top.png",
+			"filetype":"image/png"
+		},
+		{
+			"filename":"button_anfrage_ansehen_1x.png",
+			"filetype":"image/png"
+		}		
+	],
+	"templateDataFields": 
+		[
+			"beratungsstelle",
+			"plz",
+			"url",
+			"name"
+		]
+}
