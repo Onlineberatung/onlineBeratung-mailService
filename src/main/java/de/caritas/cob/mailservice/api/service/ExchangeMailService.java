@@ -27,6 +27,8 @@ public class ExchangeMailService {
 
   private static final String TEMPLATE_IMAGE_DIR = "/templates/images/";
 
+  private static final String NEW_TEMPLATE_IMAGE_DIR = "/templates/new-images/";
+
   @Value("${mail.sender}")
   private String mailSender;
 
@@ -44,6 +46,9 @@ public class ExchangeMailService {
 
   @Value("${mail.exchange.version}")
   String exchangeVersion;
+
+  @Value("${newResources}")
+  private boolean newResources;
 
   /**
    * Preparing and sending an html mail via Exchange.
@@ -130,7 +135,7 @@ public class ExchangeMailService {
         int attachmentIndex = 0;
         for (TemplateImage templateImage : templateImages) {
           InputStream inputStream =
-              getClass().getResourceAsStream(TEMPLATE_IMAGE_DIR + templateImage.getFilename());
+              getClass().getResourceAsStream(newResources ? NEW_TEMPLATE_IMAGE_DIR : TEMPLATE_IMAGE_DIR + templateImage.getFilename());
           msg.getAttachments().addFileAttachment(templateImage.getFilename(), inputStream);
           msg.getAttachments().getItems().get(attachmentIndex).setIsInline(true);
           msg.getAttachments().getItems().get(attachmentIndex)
