@@ -3,12 +3,13 @@ package de.caritas.cob.mailservice.api.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.caritas.cob.mailservice.api.exception.TemplateDescriptionServiceException;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateDescription;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,9 +21,15 @@ public class TemplateDescriptionService {
   private static final String TEMPLATE_DIR = "/templates/";
   private static final String TEMPLATE_EXTENSION = ".json";
 
+  @Value("${newResources}")
+  private boolean newResources;
+
+  @Value("${resourcePath}")
+  private String resourcePath;
+
   /**
    * Returns an instance of a mail template object
-   * 
+   *
    * @param templateName the name of the mail template
    * @return the mail template object
    */
@@ -35,7 +42,7 @@ public class TemplateDescriptionService {
 
   /**
    * Load template description
-   * 
+   *
    * @param templateName the template name
    * @return the template description
    */
@@ -56,17 +63,20 @@ public class TemplateDescriptionService {
 
   /**
    * Load template file from resources. InputStream is needed as file is located in jar.
-   * 
+   *
    * @param templateName
    * @return the content of the template description file
    */
   private String loadTemplateDescriptionFile(String templateName)
       throws TemplateDescriptionServiceException {
-    InputStream in =
-        TemplateDescriptionService.class.getResourceAsStream(getTemplateFilename(templateName));
 
     try {
-      final List<String> fileLines = IOUtils.readLines(in, StandardCharsets.UTF_8.displayName());
+      InputStream inputStream =
+          newResources ? new FileInputStream(resourcePath + getTemplateFilename(templateName))
+              : TemplateDescriptionService.class
+                  .getResourceAsStream(getTemplateFilename(templateName));
+      final List<String> fileLines = IOUtils
+          .readLines(inputStream, StandardCharsets.UTF_8.displayName());
       return String.join("", fileLines);
     } catch (Exception ex) {
       throw new TemplateDescriptionServiceException(String.format(
@@ -77,7 +87,7 @@ public class TemplateDescriptionService {
 
   /**
    * Get the filename and filepath for the template description file
-   * 
+   *
    * @param templateName the template name
    * @return the filename with filepath of the template description file
    */
