@@ -1,6 +1,6 @@
 {
-	"htmlTemplateFilename":"free-text-new.html",
-	"subject":"${subject}",
+	"htmlTemplateFilename":"message-notification-asker.html",
+	"subject":"Antwort von ${consultantName}",
 	"templateImages" : [
 		{
 			"filename":"company-logo.jpg",
@@ -13,12 +13,16 @@
 		{
 			"filename":"illustration-top.png",
 			"filetype":"image/png"
+		},
+		{
+			"filename":"button_antwort_lesen_1x.png",
+			"filetype":"image/png"
 		}		
 	],
 	"templateDataFields": 
 		[
-			"subject",
-			"text",
+			"consultantName",
+			"askerName",
 			"url"
 		]
 }

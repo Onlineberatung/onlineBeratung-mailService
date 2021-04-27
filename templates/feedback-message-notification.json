@@ -1,6 +1,6 @@
 {
-	"htmlTemplateFilename":"message-notification-consultant-new.html",
-	"subject":"Neue Nachricht [PLZ: ${plz}]",
+	"htmlTemplateFilename":"feedback-message-notification.html",
+	"subject":"Neue Feedback-Nachricht",
 	"templateImages" : [
 		{
 			"filename":"company-logo.jpg",
@@ -21,8 +21,9 @@
 	],
 	"templateDataFields": 
 		[
-			"plz",
-			"url",
-			"name"
+			"name_sender",
+			"name_recipient",
+			"name_user",
+			"url"
 		]
 }

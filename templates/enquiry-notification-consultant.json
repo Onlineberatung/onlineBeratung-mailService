@@ -1,6 +1,6 @@
 {
-	"htmlTemplateFilename":"assign-enquiry-notification-new.html",
-	"subject":"Neue_r Ratsuchende_r",
+	"htmlTemplateFilename":"enquiry-notification-consultant.html",
+	"subject":"Neue Erstanfrage [PLZ: ${plz}]",
 	"templateImages" : [
 		{
 			"filename":"company-logo.jpg",
@@ -15,15 +15,15 @@
 			"filetype":"image/png"
 		},
 		{
-			"filename":"button_nachricht_ansehen_1x.png",
+			"filename":"button_anfrage_ansehen_1x.png",
 			"filetype":"image/png"
 		}		
 	],
 	"templateDataFields": 
 		[
-			"name_recipient",
-			"name_sender",
-			"name_user",
-			"url"
+			"beratungsstelle",
+			"plz",
+			"url",
+			"name"
 		]
 }

@@ -1,6 +1,6 @@
 {
-	"htmlTemplateFilename":"feedback-message-notification-new.html",
-	"subject":"Neue Feedback-Nachricht",
+	"htmlTemplateFilename":"assign-enquiry-notification.html",
+	"subject":"Neue_r Ratsuchende_r",
 	"templateImages" : [
 		{
 			"filename":"company-logo.jpg",
@@ -21,8 +21,8 @@
 	],
 	"templateDataFields": 
 		[
-			"name_sender",
 			"name_recipient",
+			"name_sender",
 			"name_user",
 			"url"
 		]
