@@ -4,10 +4,14 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import de.caritas.cob.mailservice.api.exception.SmtpMailServiceException;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateImage;
+import java.io.FileInputStream;
 import java.util.List;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -22,7 +26,7 @@ import org.springframework.util.CollectionUtils;
 public class SmtpMailService {
 
   private static final String TEMPLATE_IMAGE_DIR = "/templates/images/";
-  private static final String NEW_TEMPLATE_IMAGE_DIR = "/templates/new-images/";
+  private static final String NEW_TEMPLATE_IMAGE_DIR = "images/";
 
   private JavaMailSender javaMailSender;
 
@@ -31,6 +35,9 @@ public class SmtpMailService {
 
   @Value("${mail.fix.recipient}")
   private String fixMailRecipient;
+
+  @Value("${resourcePath}")
+  private String resourcePath;
 
   @Value("${newResources}")
   private boolean newResources;
@@ -46,8 +53,8 @@ public class SmtpMailService {
   /**
    * Preparing and sending an html mail via smtp.
    *
-   * @param recipient The mail address of the recipient
-   * @param subject The subject of the mail
+   * @param recipient    The mail address of the recipient
+   * @param subject      The subject of the mail
    * @param htmlTemplate The name of the html template
    */
   public void prepareAndSendHtmlMail(String recipient, String subject, String htmlTemplate,
@@ -82,8 +89,13 @@ public class SmtpMailService {
 
       if (!CollectionUtils.isEmpty(templateImages)) {
         for (TemplateImage templateImage : templateImages) {
-          messageHelper.addInline(templateImage.getFilename(),
-              new ClassPathResource((newResources ? NEW_TEMPLATE_IMAGE_DIR: TEMPLATE_IMAGE_DIR) + templateImage.getFilename()),
+          InputStreamSource inputStreamSource = newResources ? new ByteArrayResource(
+              IOUtils
+                  .toByteArray(new FileInputStream(resourcePath + NEW_TEMPLATE_IMAGE_DIR + templateImage
+                      .getFilename()))) : new ClassPathResource(
+              TEMPLATE_IMAGE_DIR + templateImage
+                  .getFilename());
+          messageHelper.addInline(templateImage.getFilename(), inputStreamSource,
               templateImage.getFiletype());
         }
       }
@@ -94,8 +106,8 @@ public class SmtpMailService {
    * Preparing and sending an simple text mail.
    *
    * @param recipient The mail address of the recipient
-   * @param subject The subject of the mail
-   * @param body The body of the mail
+   * @param subject   The subject of the mail
+   * @param body      The body of the mail
    */
   public void prepareAndSendTextMail(String recipient, String subject, String body)
       throws SmtpMailServiceException {

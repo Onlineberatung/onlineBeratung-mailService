@@ -5,6 +5,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import de.caritas.cob.mailservice.api.exception.ExchangeMailServiceException;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateImage;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -26,8 +27,8 @@ import org.springframework.util.CollectionUtils;
 public class ExchangeMailService {
 
   private static final String TEMPLATE_IMAGE_DIR = "/templates/images/";
+  private static final String NEW_TEMPLATE_IMAGE_DIR = "images/";
 
-  private static final String NEW_TEMPLATE_IMAGE_DIR = "/templates/new-images/";
 
   @Value("${mail.sender}")
   private String mailSender;
@@ -47,14 +48,17 @@ public class ExchangeMailService {
   @Value("${mail.exchange.version}")
   String exchangeVersion;
 
+  @Value("${resourcePath}")
+  private String resourcePath;
+
   @Value("${newResources}")
   private boolean newResources;
 
   /**
    * Preparing and sending an html mail via Exchange.
    *
-   * @param recipient The mail address of the recipient
-   * @param subject The subject of the mail
+   * @param recipient    The mail address of the recipient
+   * @param subject      The subject of the mail
    * @param htmlTemplate The name of the html template
    */
   public void prepareAndSendHtmlMail(String recipient, String subject, String htmlTemplate,
@@ -66,8 +70,8 @@ public class ExchangeMailService {
    * Preparing and sending an text mail via Exchange.
    *
    * @param recipients The mail address of the recipients
-   * @param subject The subject of the mail
-   * @param body The text to send
+   * @param subject    The subject of the mail
+   * @param body       The text to send
    */
   public void prepareAndSendTextMail(String recipients, String subject, String body)
       throws ExchangeMailServiceException {
@@ -135,7 +139,9 @@ public class ExchangeMailService {
         int attachmentIndex = 0;
         for (TemplateImage templateImage : templateImages) {
           InputStream inputStream =
-              getClass().getResourceAsStream(newResources ? NEW_TEMPLATE_IMAGE_DIR : TEMPLATE_IMAGE_DIR + templateImage.getFilename());
+              newResources ? new FileInputStream(
+                  resourcePath + NEW_TEMPLATE_IMAGE_DIR + templateImage.getFilename()) : getClass()
+                  .getResourceAsStream(TEMPLATE_IMAGE_DIR + templateImage.getFilename());
           msg.getAttachments().addFileAttachment(templateImage.getFilename(), inputStream);
           msg.getAttachments().getItems().get(attachmentIndex).setIsInline(true);
           msg.getAttachments().getItems().get(attachmentIndex)

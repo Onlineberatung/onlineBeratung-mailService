@@ -72,7 +72,7 @@ public class TemplateDescriptionService {
 
     try {
       InputStream inputStream =
-          newResources ? new FileInputStream(resourcePath + getTemplateFilename(templateName))
+          newResources ? new FileInputStream(resourcePath + templateName.toLowerCase() + TEMPLATE_EXTENSION)
               : TemplateDescriptionService.class
                   .getResourceAsStream(getTemplateFilename(templateName));
       final List<String> fileLines = IOUtils
