@@ -26,7 +26,7 @@ import org.springframework.util.CollectionUtils;
 public class SmtpMailService {
 
   private static final String TEMPLATE_IMAGE_DIR = "/templates/images/";
-  private static final String NEW_TEMPLATE_IMAGE_DIR = "images/";
+  private static final String CUSTOM_TEMPLATE_IMAGE_DIR = "images/";
 
   private JavaMailSender javaMailSender;
 
@@ -36,11 +36,11 @@ public class SmtpMailService {
   @Value("${mail.fix.recipient}")
   private String fixMailRecipient;
 
-  @Value("${resourcePath}")
-  private String resourcePath;
+  @Value("${customResourcePath}")
+  private String customResourcePath;
 
-  @Value("${newResources}")
-  private boolean newResources;
+  @Value("${useCustomResourcesPath}")
+  private boolean useCustomResourcesPath;
 
   /**
    * Standard constructor for mail service
@@ -89,12 +89,17 @@ public class SmtpMailService {
 
       if (!CollectionUtils.isEmpty(templateImages)) {
         for (TemplateImage templateImage : templateImages) {
-          InputStreamSource inputStreamSource = newResources ? new ByteArrayResource(
-              IOUtils
-                  .toByteArray(new FileInputStream(resourcePath + NEW_TEMPLATE_IMAGE_DIR + templateImage
-                      .getFilename()))) : new ClassPathResource(
-              TEMPLATE_IMAGE_DIR + templateImage
-                  .getFilename());
+          InputStreamSource inputStreamSource;
+          if (useCustomResourcesPath) {
+            inputStreamSource = new ByteArrayResource(
+                IOUtils.toByteArray(new FileInputStream(
+                    customResourcePath + CUSTOM_TEMPLATE_IMAGE_DIR + templateImage
+                        .getFilename())));
+          } else {
+            inputStreamSource = new ClassPathResource(
+                TEMPLATE_IMAGE_DIR + templateImage
+                    .getFilename());
+          }
           messageHelper.addInline(templateImage.getFilename(), inputStreamSource,
               templateImage.getFiletype());
         }

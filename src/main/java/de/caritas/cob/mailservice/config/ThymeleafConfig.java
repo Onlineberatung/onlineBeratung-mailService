@@ -12,27 +12,29 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 @Configuration
 public class ThymeleafConfig {
 
-  @Value("${resourcePath}")
-  private String resourcePath;
+  @Value("${customResourcePath}")
+  private String customResourcePath;
 
-  @Value("${newResources}")
-  private boolean newResources;
+  @Value("${useCustomResourcesPath}")
+  private boolean useCustomResourcesPath;
 
 
   /**
-   * This method is use to get ClassLoaderTemplateResolver.
+   * Based on the {@link ThymeleafConfig#useCustomResourcesPath} value this method creates the right template resolver.
+   * useCustomResourcesPath == true -> {@link ThymeleafConfig#htmlFileTemplateResolver()}
+   * useCustomResourcesPath == true -> {@link ThymeleafConfig#htmlClassLoaderTemplateResolver()}
    * 
    * @return ClassLoaderTemplateResolver.
    */
   @Bean
   public ITemplateResolver templateResolver() {
-    return newResources ? htmlFileTemplateResolver() : htmlClassLoaderTemplateResolver();
+    return useCustomResourcesPath ? htmlFileTemplateResolver() : htmlClassLoaderTemplateResolver();
   }
 
   private ITemplateResolver htmlFileTemplateResolver() {
     FileTemplateResolver emailFileTemplateResolver = new FileTemplateResolver();
     emailFileTemplateResolver.setOrder(1);
-    emailFileTemplateResolver.setPrefix(resourcePath);
+    emailFileTemplateResolver.setPrefix(customResourcePath);
     emailFileTemplateResolver.setSuffix(".html");
     emailFileTemplateResolver.setTemplateMode(TemplateMode.HTML);
     emailFileTemplateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());

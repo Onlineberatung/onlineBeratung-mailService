@@ -27,7 +27,7 @@ import org.springframework.util.CollectionUtils;
 public class ExchangeMailService {
 
   private static final String TEMPLATE_IMAGE_DIR = "/templates/images/";
-  private static final String NEW_TEMPLATE_IMAGE_DIR = "images/";
+  private static final String CUSTOM_TEMPLATE_IMAGE_DIR = "images/";
 
 
   @Value("${mail.sender}")
@@ -48,11 +48,11 @@ public class ExchangeMailService {
   @Value("${mail.exchange.version}")
   String exchangeVersion;
 
-  @Value("${resourcePath}")
-  private String resourcePath;
+  @Value("${customResourcePath}")
+  private String customResourcePath;
 
-  @Value("${newResources}")
-  private boolean newResources;
+  @Value("${useCustomResourcesPath}")
+  private boolean useCustomResourcesPath;
 
   /**
    * Preparing and sending an html mail via Exchange.
@@ -139,8 +139,8 @@ public class ExchangeMailService {
         int attachmentIndex = 0;
         for (TemplateImage templateImage : templateImages) {
           InputStream inputStream =
-              newResources ? new FileInputStream(
-                  resourcePath + NEW_TEMPLATE_IMAGE_DIR + templateImage.getFilename()) : getClass()
+              useCustomResourcesPath ? new FileInputStream(
+                  customResourcePath + CUSTOM_TEMPLATE_IMAGE_DIR + templateImage.getFilename()) : getClass()
                   .getResourceAsStream(TEMPLATE_IMAGE_DIR + templateImage.getFilename());
           msg.getAttachments().addFileAttachment(templateImage.getFilename(), inputStream);
           msg.getAttachments().getItems().get(attachmentIndex).setIsInline(true);
