@@ -48,10 +48,10 @@ public class ExchangeMailService {
   @Value("${mail.exchange.version}")
   String exchangeVersion;
 
-  @Value("${customResourcePath}")
+  @Value("${template.custom.resources.path}")
   private String customResourcePath;
 
-  @Value("${useCustomResourcesPath}")
+  @Value("${template.use.custom.resources.path}")
   private boolean useCustomResourcesPath;
 
   /**

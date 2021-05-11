@@ -12,10 +12,10 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 @Configuration
 public class ThymeleafConfig {
 
-  @Value("${customResourcePath}")
+  @Value("${template.custom.resources.path}")
   private String customResourcePath;
 
-  @Value("${useCustomResourcesPath}")
+  @Value("${template.use.custom.resources.path}")
   private boolean useCustomResourcesPath;
 
 

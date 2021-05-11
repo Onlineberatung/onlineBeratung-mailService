@@ -21,10 +21,10 @@ public class TemplateDescriptionService {
   private static final String TEMPLATE_DIR = "/templates/";
   private static final String TEMPLATE_EXTENSION = ".json";
 
-  @Value("${useCustomResourcesPath}")
+  @Value("${template.use.custom.resources.path}")
   private boolean useCustomResourcesPath;
 
-  @Value("${customResourcePath}")
+  @Value("${template.custom.resources.path}")
   private String customResourcePath;
 
   /**
