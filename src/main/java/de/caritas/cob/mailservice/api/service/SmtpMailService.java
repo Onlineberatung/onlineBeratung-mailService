@@ -74,28 +74,12 @@ public class SmtpMailService {
 
   }
 
-  private void setRecipients(String recipient, MimeMessageHelper messageHelper,
-      boolean splitRecipient)
-      throws MessagingException {
-    messageHelper.setFrom(this.mailSender);
-    if (isNotBlank(fixMailRecipient)) {
-      messageHelper.setTo(fixMailRecipient);
-    } else {
-      if (splitRecipient) {
-        String[] recipients = recipient.split(",");
-        messageHelper.setTo(recipients);
-      } else {
-        messageHelper.setTo(recipient);
-      }
-    }
-  }
-
   private MimeMessagePreparator buildHtmlMessagePreparator(String recipient, String subject,
       String htmlTemplate, List<TemplateImage> templateImages) {
     return mimeMessage -> {
       var messageHelper = new MimeMessageHelper(mimeMessage,
           (!CollectionUtils.isEmpty(templateImages)), "UTF-8");
-      setRecipients(recipient,messageHelper,false);
+      setRecipients(recipient, messageHelper, false);
       messageHelper.setSubject(subject);
       messageHelper.setText(htmlTemplate, true);
 
@@ -145,9 +129,25 @@ public class SmtpMailService {
     return mimeMessage -> {
 
       var messageHelper = new MimeMessageHelper(mimeMessage);
-      setRecipients(recipient, messageHelper,true);
+      setRecipients(recipient, messageHelper, true);
       messageHelper.setSubject(subject);
       messageHelper.setText(body, false);
     };
+  }
+
+  private void setRecipients(String recipient, MimeMessageHelper messageHelper,
+      boolean splitRecipient)
+      throws MessagingException {
+    messageHelper.setFrom(this.mailSender);
+    if (isNotBlank(fixMailRecipient)) {
+      messageHelper.setTo(fixMailRecipient);
+    } else {
+      if (splitRecipient) {
+        String[] recipients = recipient.split(",");
+        messageHelper.setTo(recipients);
+      } else {
+        messageHelper.setTo(recipient);
+      }
+    }
   }
 }
