@@ -6,7 +6,6 @@ import de.caritas.cob.mailservice.api.exception.SmtpMailServiceException;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateImage;
 import java.io.FileInputStream;
 import java.util.List;
-import javax.mail.MessagingException;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -79,7 +78,8 @@ public class SmtpMailService {
     return mimeMessage -> {
       var messageHelper = new MimeMessageHelper(mimeMessage,
           (!CollectionUtils.isEmpty(templateImages)), "UTF-8");
-      setRecipients(recipient, messageHelper, false);
+      messageHelper.setFrom(this.mailSender);
+      messageHelper.setTo(getRecipients(recipient));
       messageHelper.setSubject(subject);
       messageHelper.setText(htmlTemplate, true);
 
@@ -129,25 +129,18 @@ public class SmtpMailService {
     return mimeMessage -> {
 
       var messageHelper = new MimeMessageHelper(mimeMessage);
-      setRecipients(recipient, messageHelper, true);
+      messageHelper.setFrom(this.mailSender);
+      messageHelper.setTo(getRecipients(recipient));
       messageHelper.setSubject(subject);
       messageHelper.setText(body, false);
     };
   }
 
-  private void setRecipients(String recipient, MimeMessageHelper messageHelper,
-      boolean splitRecipient)
-      throws MessagingException {
-    messageHelper.setFrom(this.mailSender);
+  private String[] getRecipients(String recipient) {
     if (isNotBlank(fixMailRecipient)) {
-      messageHelper.setTo(fixMailRecipient);
+      return new String[] { fixMailRecipient };
     } else {
-      if (splitRecipient) {
-        String[] recipients = recipient.split(",");
-        messageHelper.setTo(recipients);
-      } else {
-        messageHelper.setTo(recipient);
-      }
+      return recipient.split(",");
     }
   }
 }
