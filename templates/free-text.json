@@ -1,0 +1,24 @@
+{
+	"htmlTemplateFilename":"free-text.html",
+	"subject":"${subject}",
+	"templateImages" : [
+		{
+			"filename":"company-logo.jpg",
+			"filetype":"image/jpg"
+		},
+		{
+			"filename":"illustration-bottom.png",
+			"filetype":"image/png"
+		},
+		{
+			"filename":"illustration-top.png",
+			"filetype":"image/png"
+		}		
+	],
+	"templateDataFields": 
+		[
+			"subject",
+			"text",
+			"url"
+		]
+}

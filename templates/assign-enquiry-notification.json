@@ -1,0 +1,29 @@
+{
+	"htmlTemplateFilename":"assign-enquiry-notification.html",
+	"subject":"Neue_r Ratsuchende_r",
+	"templateImages" : [
+		{
+			"filename":"company-logo.jpg",
+			"filetype":"image/jpg"
+		},
+		{
+			"filename":"illustration-bottom.png",
+			"filetype":"image/png"
+		},
+		{
+			"filename":"illustration-top.png",
+			"filetype":"image/png"
+		},
+		{
+			"filename":"button_nachricht_ansehen_1x.png",
+			"filetype":"image/png"
+		}		
+	],
+	"templateDataFields": 
+		[
+			"name_recipient",
+			"name_sender",
+			"name_user",
+			"url"
+		]
+}
