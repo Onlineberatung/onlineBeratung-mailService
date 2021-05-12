@@ -49,16 +49,14 @@ public class TemplateDescriptionService {
   private TemplateDescription loadTemplateDescription(String templateName)
       throws TemplateDescriptionServiceException {
     var mapper = new ObjectMapper();
-    TemplateDescription templateDescription = null;
     String templateDescriptionJson = loadTemplateDescriptionFile(templateName);
     try {
-      templateDescription = mapper.readValue(templateDescriptionJson, TemplateDescription.class);
+      return mapper.readValue(templateDescriptionJson, TemplateDescription.class);
     } catch (Exception ex) {
       throw new TemplateDescriptionServiceException(String.format(
           "Json file with template description could not be parsed, template name: %s",
           templateName), ex);
     }
-    return templateDescription;
   }
 
   /**
@@ -74,6 +72,7 @@ public class TemplateDescriptionService {
             customResourcePath + templateName.toLowerCase() + TEMPLATE_EXTENSION)
             : TemplateDescriptionService.class
                 .getResourceAsStream(getTemplateFilename(templateName))) {
+      assert inputStream != null;
       final List<String> fileLines = IOUtils
           .readLines(inputStream, StandardCharsets.UTF_8.displayName());
       return String.join("", fileLines);
