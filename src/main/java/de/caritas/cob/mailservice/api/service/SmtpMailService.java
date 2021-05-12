@@ -6,6 +6,7 @@ import de.caritas.cob.mailservice.api.exception.SmtpMailServiceException;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateImage;
 import java.io.FileInputStream;
 import java.util.List;
+import javax.mail.MessagingException;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -73,17 +74,28 @@ public class SmtpMailService {
 
   }
 
-  private MimeMessagePreparator buildHtmlMessagePreparator(String recipient, String subject,
-      String htmlTemplate, List<TemplateImage> templateImages) {
-    return mimeMessage -> {
-      MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage,
-          (!CollectionUtils.isEmpty(templateImages)), "UTF-8");
-      messageHelper.setFrom(this.mailSender);
-      if (isNotBlank(fixMailRecipient)) {
-        messageHelper.setTo(fixMailRecipient);
+  private void setRecipients(String recipient, MimeMessageHelper messageHelper,
+      boolean splitRecipient)
+      throws MessagingException {
+    messageHelper.setFrom(this.mailSender);
+    if (isNotBlank(fixMailRecipient)) {
+      messageHelper.setTo(fixMailRecipient);
+    } else {
+      if (splitRecipient) {
+        String[] recipients = recipient.split(",");
+        messageHelper.setTo(recipients);
       } else {
         messageHelper.setTo(recipient);
       }
+    }
+  }
+
+  private MimeMessagePreparator buildHtmlMessagePreparator(String recipient, String subject,
+      String htmlTemplate, List<TemplateImage> templateImages) {
+    return mimeMessage -> {
+      var messageHelper = new MimeMessageHelper(mimeMessage,
+          (!CollectionUtils.isEmpty(templateImages)), "UTF-8");
+      setRecipients(recipient,messageHelper,false);
       messageHelper.setSubject(subject);
       messageHelper.setText(htmlTemplate, true);
 
@@ -132,17 +144,10 @@ public class SmtpMailService {
       String body) {
     return mimeMessage -> {
 
-      MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-      messageHelper.setFrom(this.mailSender);
-      if (isNotBlank(fixMailRecipient)) {
-        messageHelper.setTo(fixMailRecipient);
-      } else {
-        String[] recipients = recipient.split(",");
-        messageHelper.setTo(recipients);
-      }
+      var messageHelper = new MimeMessageHelper(mimeMessage);
+      setRecipients(recipient, messageHelper,true);
       messageHelper.setSubject(subject);
       messageHelper.setText(body, false);
     };
   }
-
 }

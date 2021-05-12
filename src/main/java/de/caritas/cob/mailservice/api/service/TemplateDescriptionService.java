@@ -48,7 +48,7 @@ public class TemplateDescriptionService {
    */
   private TemplateDescription loadTemplateDescription(String templateName)
       throws TemplateDescriptionServiceException {
-    ObjectMapper mapper = new ObjectMapper();
+    var mapper = new ObjectMapper();
     TemplateDescription templateDescription = null;
     String templateDescriptionJson = loadTemplateDescriptionFile(templateName);
     try {
@@ -69,12 +69,11 @@ public class TemplateDescriptionService {
    */
   private String loadTemplateDescriptionFile(String templateName)
       throws TemplateDescriptionServiceException {
-    try {
-
-      InputStream inputStream =
-          useCustomResourcesPath ? new FileInputStream(customResourcePath + templateName.toLowerCase() + TEMPLATE_EXTENSION)
-              : TemplateDescriptionService.class
-                  .getResourceAsStream(getTemplateFilename(templateName));
+    try (InputStream inputStream =
+        useCustomResourcesPath ? new FileInputStream(
+            customResourcePath + templateName.toLowerCase() + TEMPLATE_EXTENSION)
+            : TemplateDescriptionService.class
+                .getResourceAsStream(getTemplateFilename(templateName))) {
       final List<String> fileLines = IOUtils
           .readLines(inputStream, StandardCharsets.UTF_8.displayName());
       return String.join("", fileLines);
