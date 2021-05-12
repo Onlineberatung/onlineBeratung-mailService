@@ -1,5 +1,6 @@
 package de.caritas.cob.mailservice.api.service;
 
+import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import de.caritas.cob.mailservice.api.exception.SmtpMailServiceException;
@@ -29,7 +30,7 @@ public class SmtpMailService {
   private static final String TEMPLATE_IMAGE_DIR = "/templates/images/";
   private static final String CUSTOM_TEMPLATE_IMAGE_DIR = "images/";
 
-  private JavaMailSender javaMailSender;
+  private final JavaMailSender javaMailSender;
 
   @Value("${mail.sender}")
   private String mailSender;
@@ -61,7 +62,7 @@ public class SmtpMailService {
   public void prepareAndSendHtmlMail(String recipient, String subject, String htmlTemplate,
       List<TemplateImage> templateImages) throws SmtpMailServiceException {
 
-    if (mailSender == null) {
+    if (isNull(mailSender)) {
       throw new SmtpMailServiceException("No sender mail address set");
     }
 
