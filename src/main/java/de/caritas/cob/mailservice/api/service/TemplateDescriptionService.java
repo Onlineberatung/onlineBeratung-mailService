@@ -64,7 +64,7 @@ public class TemplateDescriptionService {
   /**
    * Load template file from resources. InputStream is needed as file is located in jar.
    *
-   * @param templateName
+   * @param templateName the name of the template
    * @return the content of the template description file
    */
   private String loadTemplateDescriptionFile(String templateName)
