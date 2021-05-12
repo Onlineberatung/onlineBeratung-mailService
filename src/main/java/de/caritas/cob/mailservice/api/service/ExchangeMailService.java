@@ -85,7 +85,7 @@ public class ExchangeMailService {
       throw new ExchangeMailServiceException("No sender mail address set");
     }
 
-    ExchangeService exchangeService = new ExchangeService(ExchangeVersion.valueOf(exchangeVersion));
+    var exchangeService = new ExchangeService(ExchangeVersion.valueOf(exchangeVersion));
     setupExchangeService(exchangeService);
     EmailMessage msg = buildEmailMessage(subject, bodyText, bodyType, exchangeService);
     addEmailAttachmentsIfNecessary(templateImages, msg);
@@ -119,10 +119,10 @@ public class ExchangeMailService {
   private EmailMessage buildEmailMessage(String subject, String bodyText, BodyType bodyType,
       ExchangeService exchangeService) throws ExchangeMailServiceException {
     try {
-      EmailMessage msg = new EmailMessage(exchangeService);
+      var msg = new EmailMessage(exchangeService);
       msg.setSubject(subject);
 
-      MessageBody messageBody = new MessageBody();
+      var messageBody = new MessageBody();
       messageBody.setBodyType(bodyType);
       messageBody.setText(bodyText);
       msg.setBody(messageBody);
@@ -135,24 +135,27 @@ public class ExchangeMailService {
   private void addEmailAttachmentsIfNecessary(List<TemplateImage> templateImages, EmailMessage msg)
       throws ExchangeMailServiceException {
     if (!CollectionUtils.isEmpty(templateImages)) {
-      try {
-        int attachmentIndex = 0;
-        for (TemplateImage templateImage : templateImages) {
-          InputStream inputStream =
-              useCustomResourcesPath ? new FileInputStream(
-                  customResourcePath + CUSTOM_TEMPLATE_IMAGE_DIR + templateImage.getFilename()) : getClass()
-                  .getResourceAsStream(TEMPLATE_IMAGE_DIR + templateImage.getFilename());
+
+      int attachmentIndex = 0;
+      for (TemplateImage templateImage : templateImages) {
+        try (InputStream inputStream =
+            useCustomResourcesPath ? new FileInputStream(
+                customResourcePath + CUSTOM_TEMPLATE_IMAGE_DIR + templateImage.getFilename())
+                : getClass()
+                    .getResourceAsStream(TEMPLATE_IMAGE_DIR + templateImage.getFilename())) {
+
           msg.getAttachments().addFileAttachment(templateImage.getFilename(), inputStream);
           msg.getAttachments().getItems().get(attachmentIndex).setIsInline(true);
           msg.getAttachments().getItems().get(attachmentIndex)
               .setContentId(templateImage.getFilename());
-          msg.getAttachments().getItems().get(attachmentIndex).setName(templateImage.getFilename());
+          msg.getAttachments().getItems().get(attachmentIndex)
+              .setName(templateImage.getFilename());
           msg.getAttachments().getItems().get(attachmentIndex)
               .setContentType(templateImage.getFiletype());
           attachmentIndex++;
+        } catch (Exception e) {
+          throw new ExchangeMailServiceException("Error while processing attachments", e);
         }
-      } catch (Exception e) {
-        throw new ExchangeMailServiceException("Error while processing attachments", e);
       }
     }
   }
