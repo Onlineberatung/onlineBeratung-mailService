@@ -3,8 +3,8 @@
 	"subject":"Neue Nachricht [PLZ: ${plz}]",
 	"templateImages" : [
 		{
-			"filename":"company-logo.jpg",
-			"filetype":"image/jpg"
+			"filename":"logo.png",
+			"filetype":"image/png"
 		},
 		{
 			"filename":"illustration-bottom.png",
@@ -13,11 +13,7 @@
 		{
 			"filename":"illustration-top.png",
 			"filetype":"image/png"
-		},
-		{
-			"filename":"button_nachricht_ansehen_1x.png",
-			"filetype":"image/png"
-		}		
+		}
 	],
 	"templateDataFields": 
 		[
