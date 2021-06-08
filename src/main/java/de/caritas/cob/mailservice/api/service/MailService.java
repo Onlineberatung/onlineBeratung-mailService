@@ -112,15 +112,9 @@ public class MailService {
   }
 
   private void handleMailSendFailure(MailDTO mail, Exception ex) {
-    String errorMessage = String.format("Mail request for template %s could not be executed.",
-        mail.getTemplate());
-    LogService.logError(errorMessage, ex);
-    StringBuilder stringBuilderMailBody = new StringBuilder();
-    stringBuilderMailBody
-        .append("Error message:")
-        .append(errorMessage).append("\n")
-        .append(getStackTrace(ex));
-    sendErrorMail(stringBuilderMailBody.toString());
+    String errorMessage = new MailErrorMessageBuilder().buildEmailErrorMessage(mail, ex);
+    LogService.logError(errorMessage);
+    sendErrorMail(errorMessage);
   }
 
   /**
