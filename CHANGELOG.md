@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/CaritasDeutschland/caritas-onlineBeratung-mailService/compare/v1.6.0...v1.7.0) (2021-06-15)
+
+
+### Features
+
+* prevent sending possible mails of stacktrace ([945abf3](https://github.com/CaritasDeutschland/caritas-onlineBeratung-mailService/commit/945abf35d178b13edbc3b00dba4e7ecd0242e847))
+
 ## [1.6.0](https://github.com/CaritasDeutschland/caritas-onlineBeratung-mailService/compare/v1.5.0...v1.6.0) (2021-04-12)
 
 
