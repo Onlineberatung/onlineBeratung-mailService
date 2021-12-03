@@ -5,6 +5,8 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import de.caritas.cob.mailservice.api.exception.ExchangeMailServiceException;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateImage;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -138,8 +140,7 @@ public class ExchangeMailService {
       for (TemplateImage templateImage : templateImages) {
         try {
           var inputStream =
-              useCustomResourcesPath ? getClass().getResourceAsStream(
-                  customResourcePath + CUSTOM_TEMPLATE_IMAGE_DIR + templateImage.getFilename())
+              useCustomResourcesPath ? buildStreamForExternalPath(templateImage.getFilename())
                   : getClass()
                       .getResourceAsStream(TEMPLATE_IMAGE_DIR + templateImage.getFilename());
           msg.getAttachments().addFileAttachment(templateImage.getFilename(), inputStream);
@@ -156,6 +157,11 @@ public class ExchangeMailService {
         }
       }
     }
+  }
+
+  private FileInputStream buildStreamForExternalPath(String templateName)
+      throws FileNotFoundException {
+    return new FileInputStream(customResourcePath + CUSTOM_TEMPLATE_IMAGE_DIR + templateName);
   }
 
   private void setMailRecipients(String recipients, EmailMessage msg)
