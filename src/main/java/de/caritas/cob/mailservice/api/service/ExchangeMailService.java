@@ -5,8 +5,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import de.caritas.cob.mailservice.api.exception.ExchangeMailServiceException;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateImage;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -138,12 +136,12 @@ public class ExchangeMailService {
 
       int attachmentIndex = 0;
       for (TemplateImage templateImage : templateImages) {
-        try (InputStream inputStream =
-            useCustomResourcesPath ? new FileInputStream(
-                customResourcePath + CUSTOM_TEMPLATE_IMAGE_DIR + templateImage.getFilename())
-                : getClass()
-                    .getResourceAsStream(TEMPLATE_IMAGE_DIR + templateImage.getFilename())) {
-
+        try {
+          var inputStream =
+              useCustomResourcesPath ? getClass().getResourceAsStream(
+                  customResourcePath + CUSTOM_TEMPLATE_IMAGE_DIR + templateImage.getFilename())
+                  : getClass()
+                      .getResourceAsStream(TEMPLATE_IMAGE_DIR + templateImage.getFilename());
           msg.getAttachments().addFileAttachment(templateImage.getFilename(), inputStream);
           msg.getAttachments().getItems().get(attachmentIndex).setIsInline(true);
           msg.getAttachments().getItems().get(attachmentIndex)

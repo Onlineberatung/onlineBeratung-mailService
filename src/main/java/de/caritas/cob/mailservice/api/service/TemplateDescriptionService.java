@@ -3,8 +3,6 @@ package de.caritas.cob.mailservice.api.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.caritas.cob.mailservice.api.exception.TemplateDescriptionServiceException;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateDescription;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
@@ -67,11 +65,10 @@ public class TemplateDescriptionService {
    */
   private String loadTemplateDescriptionFile(String templateName)
       throws TemplateDescriptionServiceException {
-    try (InputStream inputStream =
-        useCustomResourcesPath ? new FileInputStream(
-            customResourcePath + templateName.toLowerCase() + TEMPLATE_EXTENSION)
-            : TemplateDescriptionService.class
-                .getResourceAsStream(getTemplateFilename(templateName))) {
+    try {
+      var inputStream = useCustomResourcesPath ? TemplateDescriptionService.class
+          .getResourceAsStream(customResourcePath + templateName.toLowerCase() + TEMPLATE_EXTENSION)
+          : TemplateDescriptionService.class.getResourceAsStream(getTemplateFilename(templateName));
       assert inputStream != null;
       final List<String> fileLines = IOUtils
           .readLines(inputStream, StandardCharsets.UTF_8.displayName());
