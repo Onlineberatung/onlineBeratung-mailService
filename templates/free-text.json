@@ -3,8 +3,8 @@
 	"subject":"${subject}",
 	"templateImages" : [
 		{
-			"filename":"company-logo.jpg",
-			"filetype":"image/jpg"
+			"filename":"logo.png",
+			"filetype":"image/png"
 		},
 		{
 			"filename":"illustration-bottom.png",
