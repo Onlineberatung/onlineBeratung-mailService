@@ -3,6 +3,8 @@ package de.caritas.cob.mailservice.api.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.caritas.cob.mailservice.api.exception.TemplateDescriptionServiceException;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateDescription;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
@@ -66,8 +68,7 @@ public class TemplateDescriptionService {
   private String loadTemplateDescriptionFile(String templateName)
       throws TemplateDescriptionServiceException {
     try {
-      var inputStream = useCustomResourcesPath ? TemplateDescriptionService.class
-          .getResourceAsStream(customResourcePath + templateName.toLowerCase() + TEMPLATE_EXTENSION)
+      var inputStream = useCustomResourcesPath ? buildStreamForExternalPath(templateName)
           : TemplateDescriptionService.class.getResourceAsStream(getTemplateFilename(templateName));
       assert inputStream != null;
       final List<String> fileLines = IOUtils
@@ -78,6 +79,12 @@ public class TemplateDescriptionService {
           "Json file with template description could not be loaded, template name: %s",
           templateName), ex);
     }
+  }
+
+  private FileInputStream buildStreamForExternalPath(String templateName)
+      throws FileNotFoundException {
+    return new FileInputStream(
+        customResourcePath + templateName.toLowerCase() + TEMPLATE_EXTENSION);
   }
 
   /**
