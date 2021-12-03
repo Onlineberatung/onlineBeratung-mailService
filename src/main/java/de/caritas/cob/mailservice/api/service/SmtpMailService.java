@@ -1,13 +1,18 @@
 package de.caritas.cob.mailservice.api.service;
 
+import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import de.caritas.cob.mailservice.api.exception.SmtpMailServiceException;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateImage;
+import java.io.FileInputStream;
 import java.util.List;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -22,14 +27,21 @@ import org.springframework.util.CollectionUtils;
 public class SmtpMailService {
 
   private static final String TEMPLATE_IMAGE_DIR = "/templates/images/";
+  private static final String CUSTOM_TEMPLATE_IMAGE_DIR = "images/";
 
-  private JavaMailSender javaMailSender;
+  private final JavaMailSender javaMailSender;
 
   @Value("${mail.sender}")
   private String mailSender;
 
   @Value("${mail.fix.recipient}")
   private String fixMailRecipient;
+
+  @Value("${template.custom.resources.path}")
+  private String customResourcePath;
+
+  @Value("${template.use.custom.resources.path}")
+  private boolean useCustomResourcesPath;
 
   /**
    * Standard constructor for mail service
@@ -42,14 +54,14 @@ public class SmtpMailService {
   /**
    * Preparing and sending an html mail via smtp.
    *
-   * @param recipient The mail address of the recipient
-   * @param subject The subject of the mail
+   * @param recipient    The mail address of the recipient
+   * @param subject      The subject of the mail
    * @param htmlTemplate The name of the html template
    */
   public void prepareAndSendHtmlMail(String recipient, String subject, String htmlTemplate,
       List<TemplateImage> templateImages) throws SmtpMailServiceException {
 
-    if (mailSender == null) {
+    if (isNull(mailSender)) {
       throw new SmtpMailServiceException("No sender mail address set");
     }
 
@@ -65,21 +77,27 @@ public class SmtpMailService {
   private MimeMessagePreparator buildHtmlMessagePreparator(String recipient, String subject,
       String htmlTemplate, List<TemplateImage> templateImages) {
     return mimeMessage -> {
-      MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage,
+      var messageHelper = new MimeMessageHelper(mimeMessage,
           (!CollectionUtils.isEmpty(templateImages)), "UTF-8");
       messageHelper.setFrom(this.mailSender);
-      if (isNotBlank(fixMailRecipient)) {
-        messageHelper.setTo(fixMailRecipient);
-      } else {
-        messageHelper.setTo(recipient);
-      }
+      messageHelper.setTo(getRecipients(recipient));
       messageHelper.setSubject(subject);
       messageHelper.setText(htmlTemplate, true);
 
       if (!CollectionUtils.isEmpty(templateImages)) {
         for (TemplateImage templateImage : templateImages) {
-          messageHelper.addInline(templateImage.getFilename(),
-              new ClassPathResource(TEMPLATE_IMAGE_DIR + templateImage.getFilename()),
+          InputStreamSource inputStreamSource;
+          if (useCustomResourcesPath) {
+            inputStreamSource = new ByteArrayResource(
+                IOUtils.toByteArray(new FileInputStream(
+                    customResourcePath + CUSTOM_TEMPLATE_IMAGE_DIR + templateImage
+                        .getFilename())));
+          } else {
+            inputStreamSource = new ClassPathResource(
+                TEMPLATE_IMAGE_DIR + templateImage
+                    .getFilename());
+          }
+          messageHelper.addInline(templateImage.getFilename(), inputStreamSource,
               templateImage.getFiletype());
         }
       }
@@ -90,8 +108,8 @@ public class SmtpMailService {
    * Preparing and sending an simple text mail.
    *
    * @param recipient The mail address of the recipient
-   * @param subject The subject of the mail
-   * @param body The body of the mail
+   * @param subject   The subject of the mail
+   * @param body      The body of the mail
    */
   public void prepareAndSendTextMail(String recipient, String subject, String body)
       throws SmtpMailServiceException {
@@ -111,17 +129,19 @@ public class SmtpMailService {
       String body) {
     return mimeMessage -> {
 
-      MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+      var messageHelper = new MimeMessageHelper(mimeMessage);
       messageHelper.setFrom(this.mailSender);
-      if (isNotBlank(fixMailRecipient)) {
-        messageHelper.setTo(fixMailRecipient);
-      } else {
-        String[] recipients = recipient.split(",");
-        messageHelper.setTo(recipients);
-      }
+      messageHelper.setTo(getRecipients(recipient));
       messageHelper.setSubject(subject);
       messageHelper.setText(body, false);
     };
   }
 
+  private String[] getRecipients(String recipient) {
+    if (isNotBlank(fixMailRecipient)) {
+      return new String[] { fixMailRecipient };
+    } else {
+      return recipient.split(",");
+    }
+  }
 }
