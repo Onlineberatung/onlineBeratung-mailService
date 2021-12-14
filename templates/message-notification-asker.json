@@ -1,0 +1,24 @@
+{
+	"htmlTemplateFilename":"message-notification-asker.html",
+	"subject":"Antwort von ${consultantName}",
+	"templateImages" : [
+		{
+			"filename":"logo.png",
+			"filetype":"image/png"
+		},
+		{
+			"filename":"illustration-bottom.png",
+			"filetype":"image/png"
+		},
+		{
+			"filename":"illustration-top.png",
+			"filetype":"image/png"
+		}	
+	],
+	"templateDataFields": 
+		[
+			"consultantName",
+			"askerName",
+			"url"
+		]
+}
