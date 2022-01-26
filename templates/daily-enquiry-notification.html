@@ -44,8 +44,13 @@
                     <div style="color: #3F373F; margin: 16px; font-size: 16px; line-height: 21px; font-family: 'Open Sans', 'OpenSans', 'Arial', 'sans-serif';">
                      <b>Liebe(r) <span data-th-text="${consultant_name}"></span>,</b>
                      <br/><br/>
-                       es liegen <span data-th-text="${enquiries}"></span> Erstanfragen in der Beratungsstelle <span data-th-text="${agency_name}"></span> vor.
-                       <br/><br/>
+                       <div th:if="${enquiries} gt 1">
+                          es liegen <span data-th-text="${enquiries}"></span> Erstanfragen in der Beratungsstelle <span data-th-text="${agency_name}"></span> vor.
+                       </div>
+                       <div th:unless="${enquiries} gt 1">
+                          es liegt eine Erstanfrage in der Beratungsstelle <span data-th-text="${agency_name}"></span> vor.
+                       </div>
+                       <br/>
                        Liebe Grüße
                        <br/>
                        Ihr Diakonie Team
