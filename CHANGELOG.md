@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0](https://github.com/CaritasDeutschland/caritas-onlineBeratung-mailService/compare/v1.8.1...v1.9.0) (2022-02-02)
+
+
+### Features
+
+* add login path to base url ([9ed7fba](https://github.com/CaritasDeutschland/caritas-onlineBeratung-mailService/commit/9ed7fba49bda6ff27f6ae1acea6114ffe13777ee))
+* different texts for single or multiple enquiries ([cd54ab7](https://github.com/CaritasDeutschland/caritas-onlineBeratung-mailService/commit/cd54ab728d75c75694fee52515b38910f9508fdc))
+
 ## [1.8.0](https://github.com/CaritasDeutschland/caritas-onlineBeratung-mailService/compare/v1.7.0...v1.8.0) (2021-12-14)
 
 
