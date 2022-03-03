@@ -3,10 +3,6 @@
 	"subject":"Neue Feedback-Nachricht",
 	"templateImages" : [
 		{
-			"filename":"logo.png",
-			"filetype":"image/png"
-		},
-		{
 			"filename":"illustration-bottom.png",
 			"filetype":"image/png"
 		},

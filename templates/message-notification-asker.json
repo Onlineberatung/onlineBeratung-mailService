@@ -3,10 +3,6 @@
 	"subject":"Antwort von ${consultantName}",
 	"templateImages" : [
 		{
-			"filename":"logo.png",
-			"filetype":"image/png"
-		},
-		{
 			"filename":"illustration-bottom.png",
 			"filetype":"image/png"
 		},
