@@ -3,13 +3,13 @@
 	"subject":"${subject}",
 	"templateImages" : [
 		{
-			"filename":"illustration-bottom.png",
+			"filename":"illustration.png",
 			"filetype":"image/png"
 		},
 		{
-			"filename":"illustration-top.png",
+			"filename":"logo.png",
 			"filetype":"image/png"
-		}		
+		}	
 	],
 	"templateDataFields": 
 		[
