@@ -1,17 +1,13 @@
 {
 	"htmlTemplateFilename":"daily-enquiry-notification.html",
-	"subject":"${subject}",
+	"subject":"Diakonie ${subject}",
 	"templateImages" : [
 		{
+			"filename":"illustration.png",
+			"filetype":"image/png"
+		},
+		{
 			"filename":"logo.png",
-			"filetype":"image/png"
-		},
-		{
-			"filename":"illustration-bottom.png",
-			"filetype":"image/png"
-		},
-		{
-			"filename":"illustration-top.png",
 			"filetype":"image/png"
 		}
 	],

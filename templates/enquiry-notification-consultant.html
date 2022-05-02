@@ -1,85 +1,88 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-   <meta http-equiv='Content-Type' content='text/html charset=UTF-8'/>
+   <meta http-equiv='Content-Type' content='text/html charset=UTF-8' />
 </head>
 
-<body style="margin: 0; padding: 0; background-color: #FAF6F3; width: 100%; font-family: 'Arial', sans-serif; overflow-x: hidden;">
-<div align='center'>
-<table width='100%' style='table-layout: fixed; border-collapse: collapse; max-width: 580px; margin: 0 auto;' cellspacing='0' cellpadding='0' border="0">
-   <tr>
-      <td width='5%' style="padding: 0;"><!-- spacer --></td>
-      <td width='90%' style='background-color: #fff; padding: 0; '>
-         <table style="table-layout: fixed; width: 100%" cellspacing='0' cellpadding='0' border="0">
-            <thead style='background-color: #5a2572;'>
-               <td width="10%">
-                  <div style="margin: 30px 16px 16px; width: 100%">
-                     <a href=''><img style='width: 40px; height: 40px;' src='cid:logo.png'/></a>
-                  </div>
-               </td>
-               <td style='padding: 0; text-align: center; width: 90%; padding-right: 10%;'>
-                  <!-- logo -->
+<body
+   style="margin: 0; padding: 0; background-color: #FAF6F3; width: 100%; font-family: 'Arial', 'sans-serif'; overflow-x: hidden;">
+   <table
+      style="table-layout: fixed; width: 100%; border-collapse: collapse; max-width: 580px; margin: 0 auto; padding: 0; background-color: #fff;"
+      cellspacing="0" cellpadding="0" border="0">
+      <thead style="background-color: #5a2572; height: 100px;">
+         <td style="padding: 40px 36px; text-align: left; width: 100%;">
+            <!-- logo -->
+            <img width="141" height="20" src="cid:logo.png">
+         </td>
+      </thead>
 
-                  <!-- claim -->
-                  <h1 style='color: #FFFFFF; font-size: 26px; font-weight: bold; line-height: 26px; padding-bottom: 0; margin-bottom: 0;'>Beratung & Hilfe</h1>
-                  <div style='color: #FFFFFF; font-size: 12px; line-height: 19px;'>Online. Anonym. Sicher.</div>
-               </td>
-            </thead>
+      <tbody style="width: 100%;">
+         <tr>
+            <td style="padding: 24px 36px; text-align: left;">
+               <!-- claim -->
+               <h1
+                  style="color: #3F373F; font-size: 20px; font-weight: bold; line-height: 26px; padding-bottom: 0; margin-bottom: 0;">
+                  Beratung</h1>
+               <div style="color: #3F373F; font-size: 14px; line-height: 20px;">Online. Anonym. Sicher.</div>
+            </td>
+         </tr>
 
-            <tbody>
-               <tr style="background-color: #5a2572;">
-                  <td colspan='2' cellspacing='0' cellpadding='0' style="padding: 10px 0 0; text-align: center;">
-                     <img width="80" height="40" src="cid:illustration-top.png" style="vertical-align: bottom;">
-                  </td>
-               </tr>
+         <tr>
+            <td>
+               <table style="background-color: #F2F0F9; width: 100%; table-layout: fixed; border-collapse: collapse;">
+                  <tr>
+                     <td cellspacing="0" cellpadding="0" colspan="2" style="text-align: center; padding: 24px 0 0;">
+                        <!-- illustration -->
+                        <img width="80" height="80" src="cid:illustration.png">
+                     </td>
+                  </tr>
+                  <tr>
+                     <td cellspacing="0" cellpadding="0" colspan="2"
+                        style="text-align: left; padding: 36px; color: #3F373F;font-size: 16px; line-height: 24px; font-family: 'Open Sans', 'OpenSans', 'Arial', 'sans-serif';">
+                        <!-- message -->
+                        <b>Liebe(r) <span data-th-text="${name}"></span>,</b>
+                        <br /><br />
+                        in der Beratungsstelle <span data-th-text="${beratungsstelle}"></span> ist eine neue
+                        Erstanfrage eingegangen.
+                        <br /><br />
+                        Dein Team des <br /> Online-Beratungsportals der Diakonie
+                     </td>
+                  </tr>
+                  <tr>
+                     <td cellspacing="0" cellpadding="0" colspan="2">
+                        <table
+                           style="margin: 0 36px 24px; background-color: #F2F0F9; border-collapse: collapse; padding: 0;">
+                           <tr style="padding: 0;">
+                              <td style="text-align: center; padding: 0;">
+                                 <!-- button -->
+                                 <div style="background-color: #5a2572; width: 227px; padding: 12px 24px;">
+                                    <a data-th-href="${url} + '/login'"
+                                       style="color: #fff; text-transform: uppercase; font-weight: bold; text-decoration: none;">Anfrage
+                                       ansehen</a>
+                                 </div>
+                              </td>
+                           </tr>
+                        </table>
+                     </td>
+                  </tr>
+               </table>
+            </td>
+         </tr>
 
-               <tr>
-                  <td colspan='2' cellspacing='0' cellpadding='0' style="padding: 0;  text-align: center;">
-                     <img width="80" height="40" src="cid:illustration-bottom.png">
-                  </td>
-               </tr>
-
-               <tr>
-                  <td cellspacing='0' cellpadding='0' style="padding: 0;" colspan="2">
-                    <div style="color: #3F373F; margin: 16px; font-size: 16px; line-height: 21px; font-family: 'Open Sans', 'OpenSans', 'Arial', 'sans-serif';">
-                     <b>Liebe(r) <span data-th-text="${name}"></span>,</b>
-                     <br/><br/>
-                       in der Beratungsstelle <span data-th-text="${beratungsstelle}"></span> ist eine neue Erstanfrage eingegangen.
-                       <br/><br/>
-                       Liebe Grüße
-                       <br/>
-                       Ihr Diakonie Team
-                    </div>
-                  </td>
-               </tr>
-
-               <tr>
-                  <td colspan='2' style='text-align: center; padding: 0; '>
-                     <div style="margin: 40px 0 56px;">
-                        <a data-th-href="${url}" style="color: #fff; background: #5a2572; padding: 16px 24px; text-transform: uppercase; font-weight: bold; text-decoration: none;">Anfrage ansehen</a>
-                     </div>
-
-                     <span style='clear: both;'><!-- clear --></span>
-                  </td>
-               </tr>
-            </tbody>
-         </table>
-      </td>
-      <td width='5%' style="padding: 0;"><!-- spacer --></td>
-   </tr>
-</table>
-
-<table style="width: 100%">
-   <tr>
-      <td style='text-align: center; padding: 0;'>
-         <div style="text-align: center; padding-top: 8px;">
-            <a data-th-href="${urlimpressum}" style="color: #666; text-decoration: none; font-size: 14px; line-height: 19px;">Impressum</a>
-            <span style="color: #666; text-decoration: none; font-size: 14px; line-height: 19px;">&nbsp; | &nbsp;</span>
-            <a data-th-href="${urldatenschutz}" style="color: #666; text-decoration: none; font-size: 14px; line-height: 19px;">Datenschutz</a>
-         </div>
-      </td>
-   </tr>
-</table>
-</div>
+         <tr>
+            <!-- legal links -->
+            <td style="padding: 24px 36px; text-align: left;">
+               <a data-th-href="${urlimpressum}"
+                  style="color: #5A2572; text-decoration: none; font-size: 14px; line-height: 20px;">Impressum</a>
+               <span style="color: #5A2572; text-decoration: none; font-size: 14px; line-height: 20px;">&nbsp; |
+                  &nbsp;</span>
+               <a data-th-href="${urldatenschutz}"
+                  style="color: #5A2572; text-decoration: none; font-size: 14px; line-height: 20px;">Datenschutz</a>
+            </td>
+         </tr>
+      </tbody>
+   </table>
 </body>
+
 </html>
