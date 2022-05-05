@@ -1,6 +1,6 @@
 {
-	"htmlTemplateFilename":"free-text.html",
-	"subject":"${subject}",
+	"htmlTemplateFilename":"daily-enquiry-notification.html",
+	"subject":"Diakonie ${subject}",
 	"templateImages" : [
 		{
 			"filename":"illustration.png",
@@ -9,12 +9,14 @@
 		{
 			"filename":"logo.png",
 			"filetype":"image/png"
-		}	
+		}
 	],
 	"templateDataFields": 
 		[
 			"subject",
-			"text",
-			"url"
+			"agency_name",
+			"url",
+			"consultant_name",
+			"enquiries"
 		]
 }
