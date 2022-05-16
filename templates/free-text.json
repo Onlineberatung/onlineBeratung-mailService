@@ -1,6 +1,6 @@
 {
 	"htmlTemplateFilename":"free-text.html",
-	"subject":"${subject}",
+	"subject":"Diakonie Online-Beratung: ${subject}",
 	"templateImages" : [
 		{
 			"filename":"illustration.png",

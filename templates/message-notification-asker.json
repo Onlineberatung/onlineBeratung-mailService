@@ -1,6 +1,6 @@
 {
 	"htmlTemplateFilename":"message-notification-asker.html",
-	"subject":"Antwort von ${consultantName}",
+	"subject":"Diakonie Online-Beratung: Antwort von Berater_in erhalten",
 	"templateImages" : [
 		{
 			"filename":"illustration.png",

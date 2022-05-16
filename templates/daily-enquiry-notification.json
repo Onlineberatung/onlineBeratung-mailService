@@ -1,6 +1,6 @@
 {
 	"htmlTemplateFilename":"daily-enquiry-notification.html",
-	"subject":"Diakonie ${subject}",
+	"subject":"Diakonie Online-Beratung: ${subject}",
 	"templateImages" : [
 		{
 			"filename":"illustration.png",
