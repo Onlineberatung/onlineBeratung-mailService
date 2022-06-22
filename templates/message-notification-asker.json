@@ -1,19 +1,15 @@
 {
 	"htmlTemplateFilename":"message-notification-asker.html",
-	"subject":"Antwort von ${consultantName}",
+	"subject":"Diakonie Online-Beratung: Antwort von Berater_in erhalten",
 	"templateImages" : [
+		{
+			"filename":"illustration.png",
+			"filetype":"image/png"
+		},
 		{
 			"filename":"logo.png",
 			"filetype":"image/png"
-		},
-		{
-			"filename":"illustration-bottom.png",
-			"filetype":"image/png"
-		},
-		{
-			"filename":"illustration-top.png",
-			"filetype":"image/png"
-		}	
+		}
 	],
 	"templateDataFields": 
 		[

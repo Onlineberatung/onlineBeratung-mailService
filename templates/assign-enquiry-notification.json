@@ -1,17 +1,13 @@
 {
 	"htmlTemplateFilename":"assign-enquiry-notification.html",
-	"subject":"Neue_r Ratsuchende_r",
+	"subject":"Diakonie Online-Beratung: Neue_r Ratsuchende_r",
 	"templateImages" : [
 		{
+			"filename":"illustration.png",
+			"filetype":"image/png"
+		},
+		{
 			"filename":"logo.png",
-			"filetype":"image/png"
-		},
-		{
-			"filename":"illustration-bottom.png",
-			"filetype":"image/png"
-		},
-		{
-			"filename":"illustration-top.png",
 			"filetype":"image/png"
 		}
 	],

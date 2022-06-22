@@ -1,17 +1,13 @@
 {
 	"htmlTemplateFilename":"message-notification-consultant.html",
-	"subject":"Neue Nachricht [PLZ: ${plz}]",
+	"subject":"Diakonie Online-Beratung: Neue Nachricht [PLZ: ${plz}]",
 	"templateImages" : [
 		{
+			"filename":"illustration.png",
+			"filetype":"image/png"
+		},
+		{
 			"filename":"logo.png",
-			"filetype":"image/png"
-		},
-		{
-			"filename":"illustration-bottom.png",
-			"filetype":"image/png"
-		},
-		{
-			"filename":"illustration-top.png",
 			"filetype":"image/png"
 		}
 	],

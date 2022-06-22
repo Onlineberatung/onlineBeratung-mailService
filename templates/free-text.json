@@ -1,19 +1,15 @@
 {
 	"htmlTemplateFilename":"free-text.html",
-	"subject":"${subject}",
+	"subject":"Diakonie Online-Beratung: ${subject}",
 	"templateImages" : [
+		{
+			"filename":"illustration.png",
+			"filetype":"image/png"
+		},
 		{
 			"filename":"logo.png",
 			"filetype":"image/png"
-		},
-		{
-			"filename":"illustration-bottom.png",
-			"filetype":"image/png"
-		},
-		{
-			"filename":"illustration-top.png",
-			"filetype":"image/png"
-		}		
+		}	
 	],
 	"templateDataFields": 
 		[
