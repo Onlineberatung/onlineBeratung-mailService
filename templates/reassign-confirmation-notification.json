@@ -1,0 +1,20 @@
+{
+	"htmlTemplateFilename":"reassign-request-notification.html",
+	"subject":"Diakonie Online-Beratung: Neue_r Ratsuchende_r",
+	"templateImages" : [
+		{
+			"filename":"illustration.png",
+			"filetype":"image/png"
+		},
+		{
+			"filename":"logo.png",
+			"filetype":"image/png"
+		}
+	],
+	"templateDataFields": 
+		[
+			"name_recipient",
+			"name_sender",
+			"url"
+		]
+}
