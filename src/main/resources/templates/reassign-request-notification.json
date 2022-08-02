@@ -22,7 +22,6 @@
 	"templateDataFields": 
 		[
 			"name_recipient",
-			"name_sender",
 			"url"
 		]
 }
