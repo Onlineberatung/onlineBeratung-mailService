@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.caritas.cob.mailservice.api.model.LanguageCode;
 import de.caritas.cob.mailservice.api.model.MailDTO;
 import de.caritas.cob.mailservice.api.model.MailsDTO;
 import de.caritas.cob.mailservice.api.model.TemplateDataDTO;
@@ -64,8 +65,9 @@ class MailControllerE2EIT {
   }
 
   @Test
-  void sendMailsShouldShouldSendEmailAndRespondWithOkAndContainRenderedData() throws Exception {
-    givenAnEmailList();
+  void sendMailsShouldShouldSendEmailAndRenderDataWithDefaultLanguageWhenLanguageNotGiven()
+      throws Exception {
+    givenAnEmailList(LanguageCode.FALSE);
 
     mockMvc.perform(
         post("/mails/send")
@@ -87,24 +89,70 @@ class MailControllerE2EIT {
     var subject = getArg(prep, 4);
     assertEquals("Neuzuweisung erfolgt", subject);
 
-    var text = getArg(prep, 5);
-    assertTrue(text.startsWith("<!DOCTYPE html>"));
-    var data = mailDTO.getTemplateData();
-    var salutation = "<b>Liebe(r) <span>" + valueOf("name_recipient", data) + "</span>,</b>";
-    assertTrue(text.contains(salutation));
-    var message = "<span>"
-        + valueOf("name_from_consultant", data)
-        + "</span> hat Ihnen eine_n Ratsuchende_n übergeben.";
-    assertTrue(text.contains(message));
-    var anchorStart = "<a href=\"" + valueOf("url", data) + "\">";
-    assertTrue(text.contains(anchorStart));
+    assertTextIsGerman(prep, mailDTO);
+  }
+
+  @Test
+  void sendMailsShouldShouldSendEmailAndRenderDataWithDefaultLanguageWhenLanguageIsNull()
+      throws Exception {
+    givenAnEmailList(null);
+
+    mockMvc.perform(
+        post("/mails/send")
+            .cookie(CSRF_COOKIE)
+            .header(CSRF_HEADER, CSRF_VALUE)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(mailsDTO))
+            .accept(MediaType.APPLICATION_JSON)
+    ).andExpect(status().isOk());
+
+    verify(javaMailSender).send(mimeMessagePrepCaptor.capture());
+
+    var prep = mimeMessagePrepCaptor.getValue();
+    var mailDTO = mailsDTO.getMails().get(0);
+
+    var recipient = getArg(prep, 3);
+    assertEquals(mailDTO.getEmail(), recipient);
+
+    var subject = getArg(prep, 4);
+    assertEquals("Neuzuweisung erfolgt", subject);
+
+    assertTextIsGerman(prep, mailDTO);
+  }
+
+  @Test
+  void sendMailsShouldShouldSendEmailAndRenderDataWithDefaultLanguageWhenLanguageDoesNotExist()
+      throws Exception {
+    givenAnEmailList(LanguageCode.IO);
+
+    mockMvc.perform(
+        post("/mails/send")
+            .cookie(CSRF_COOKIE)
+            .header(CSRF_HEADER, CSRF_VALUE)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(mailsDTO))
+            .accept(MediaType.APPLICATION_JSON)
+    ).andExpect(status().isOk());
+
+    verify(javaMailSender).send(mimeMessagePrepCaptor.capture());
+
+    var prep = mimeMessagePrepCaptor.getValue();
+    var mailDTO = mailsDTO.getMails().get(0);
+
+    var recipient = getArg(prep, 3);
+    assertEquals(mailDTO.getEmail(), recipient);
+
+    var subject = getArg(prep, 4);
+    assertEquals("Neuzuweisung erfolgt", subject);
+
+    assertTextIsGerman(prep, mailDTO);
   }
 
   private void givenAnEmptyEmailList() {
     mailsDTO = new MailsDTO().mails(List.of());
   }
 
-  private void givenAnEmailList() {
+  private void givenAnEmailList(LanguageCode languageCode) {
     var email = new MailDTO();
     email.setEmail(RandomStringUtils.randomAlphanumeric(32));
     email.setTemplate("reassign-confirmation-notification");
@@ -119,6 +167,9 @@ class MailControllerE2EIT {
         .key("url")
         .value(RandomStringUtils.randomAlphanumeric(16));
     email.setTemplateData(List.of(nameRecipient, nameFromConsultant, url));
+    if (languageCode != LanguageCode.FALSE) {
+      email.setLanguage(languageCode);
+    }
 
     mailsDTO = new MailsDTO().mails(List.of(email));
   }
@@ -137,5 +188,23 @@ class MailControllerE2EIT {
     recipientField.setAccessible(true);
 
     return recipientField.get(prep).toString();
+  }
+
+  private void assertTextIsGerman(MimeMessagePreparator prep, MailDTO mailDTO)
+      throws NoSuchFieldException, IllegalAccessException {
+    var text = getArg(prep, 5);
+    assertTrue(text.startsWith("<!DOCTYPE html>"));
+
+    var data = mailDTO.getTemplateData();
+    var salutation = "<b>Liebe(r) <span>" + valueOf("name_recipient", data) + "</span>,</b>";
+    assertTrue(text.contains(salutation));
+
+    var message = "<span>"
+        + valueOf("name_from_consultant", data)
+        + "</span> hat Ihnen eine_n Ratsuchende_n übergeben.";
+    assertTrue(text.contains(message));
+
+    var anchorStart = "<a href=\"" + valueOf("url", data) + "\">";
+    assertTrue(text.contains(anchorStart));
   }
 }
