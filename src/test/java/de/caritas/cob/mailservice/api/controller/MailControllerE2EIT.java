@@ -29,7 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("testing")
-public class MailControllerE2EIT {
+class MailControllerE2EIT {
 
   private static final String CSRF_HEADER = "csrfHeader";
   private static final String CSRF_VALUE = "test";
