@@ -51,7 +51,7 @@ class MailControllerE2EIT {
   private MailsDTO mailsDTO;
 
   @Test
-  void sendMailsShouldShouldRespondWithOkWhenEmailListIsEmpty() throws Exception {
+  void sendMailsShouldRespondWithOkWhenEmailListIsEmpty() throws Exception {
     givenAnEmptyEmailList();
 
     mockMvc.perform(
@@ -65,7 +65,7 @@ class MailControllerE2EIT {
   }
 
   @Test
-  void sendMailsShouldShouldSendEmailAndRenderDataWithDefaultLanguageWhenLanguageNotGiven()
+  void sendMailsShouldSendEmailAndRenderDataWithDefaultLanguageWhenLanguageNotGiven()
       throws Exception {
     givenAnEmailList(LanguageCode.FALSE);
 
@@ -93,7 +93,7 @@ class MailControllerE2EIT {
   }
 
   @Test
-  void sendMailsShouldShouldSendEmailAndRenderDataWithDefaultLanguageWhenLanguageIsNull()
+  void sendMailsShouldSendEmailAndRenderDataWithDefaultLanguageWhenLanguageIsNull()
       throws Exception {
     givenAnEmailList(null);
 
@@ -121,7 +121,7 @@ class MailControllerE2EIT {
   }
 
   @Test
-  void sendMailsShouldShouldSendEmailAndRenderDataWithDefaultLanguageWhenLanguageDoesNotExist()
+  void sendMailsShouldSendEmailAndRenderDataWithDefaultLanguageWhenLanguageDoesNotExist()
       throws Exception {
     givenAnEmailList(LanguageCode.IO);
 
