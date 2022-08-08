@@ -35,7 +35,7 @@ public class TemplateService {
    * @param language the template language
    * @return if success, an optional with the html template, otherwise an empty optional
    */
-  public Optional<String> getProcessedHtmlTemplate(TemplateDescription desc, String name,
+  public Optional<String> render(TemplateDescription desc, String name,
       Map<String, Object> data, LanguageCode language) throws TemplateServiceException {
 
     data.put("urlimpressum", imprintUrl);
@@ -61,7 +61,7 @@ public class TemplateService {
    * @param templateData        the template data
    * @return the subject with replaced placeholders
    */
-  public String getProcessedSubject(TemplateDescription templateDescription,
+  public String getRenderedSubject(TemplateDescription templateDescription,
       Map<String, Object> templateData, LanguageCode languageCode) {
     StringSubstitutor stringSubstitutor = new StringSubstitutor(templateData, "${", "}");
     var subject = templateDescription.getSubjectOrFallback(languageCode);

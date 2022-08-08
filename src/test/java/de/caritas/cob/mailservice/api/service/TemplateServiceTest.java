@@ -60,7 +60,7 @@ public class TemplateServiceTest {
   @Test
   public void getProcessedSubject_Should_ReturnSubjectWithReplacedPlaceholders() {
 
-    var result = templateService.getProcessedSubject(
+    var result = templateService.getRenderedSubject(
         TEMPLATE_DESCRIPTION, TEMPLATE_DATA, LanguageCode.DE
     );
     assertEquals(SUBJECT_WITH_REPLACED_PLACEHOLDERS, result);
@@ -71,7 +71,7 @@ public class TemplateServiceTest {
   public void getProcessedHtmlTemplate_Should_ThrowServiceException_WhenTemplateDataIsMissing() {
 
     try {
-      templateService.getProcessedHtmlTemplate(TEMPLATE_DESCRIPTION, TEMPLATE_NAME,
+      templateService.render(TEMPLATE_DESCRIPTION, TEMPLATE_NAME,
           TEMPLATE_DATA_WITH_MISSING_FIELD, LanguageCode.DE);
       fail("Expected exception: ServiceException");
     } catch (TemplateServiceException serviceException) {
