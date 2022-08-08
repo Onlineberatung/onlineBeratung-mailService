@@ -3,7 +3,7 @@ name: Publish Docker image
 on:
   push:
     tags:
-      - 'dockerImage.v.*'
+      - "dockerImage.v.*"
 
 jobs:
   test:
@@ -38,8 +38,8 @@ jobs:
   push_to_registry:
     strategy:
       matrix:
-        registry: [ "docker.pkg.github.com", "ghcr.io" ]
-    needs: [ test ]
+        registry: ["docker.pkg.github.com", "ghcr.io"]
+    needs: [test]
     name: Push Docker image to GitHub Packages
     runs-on: ubuntu-latest
     steps:
@@ -48,6 +48,12 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: targetfiles
+      - name: Get current time
+        id: time
+        uses: nanzm/get-time-action@v1.1
+        with:
+          timeZone: 2
+          format: "YYYYMMDD[_]HHmmss"
       - name: Prepare Docker variables
         run: |
           echo "DOCKER_REGISTRY=$(echo "${{ matrix.registry }}/${{ github.repository }}" | awk '{print tolower($0)}')" >> $GITHUB_ENV
