@@ -12,6 +12,7 @@ import de.caritas.cob.mailservice.api.model.MailDTO;
 import de.caritas.cob.mailservice.api.model.MailsDTO;
 import de.caritas.cob.mailservice.api.model.TemplateDataDTO;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.Cookie;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
@@ -49,6 +50,7 @@ class MailControllerE2EIT {
   private ArgumentCaptor<MimeMessagePreparator> mimeMessagePrepCaptor;
 
   private MailsDTO mailsDTO;
+  private Map<String, List<Map<String, Object>>> mailsDTOMap;
 
   @Test
   void sendMailsShouldRespondWithOkWhenEmailListIsEmpty() throws Exception {
@@ -67,14 +69,14 @@ class MailControllerE2EIT {
   @Test
   void sendMailsShouldSendEmailAndRenderDataWithDefaultLanguageWhenLanguageNotGiven()
       throws Exception {
-    givenAnEmailList(LanguageCode.FALSE);
+    givenAnEmailListWithoutLanguage();
 
     mockMvc.perform(
         post("/mails/send")
             .cookie(CSRF_COOKIE)
             .header(CSRF_HEADER, CSRF_VALUE)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(mailsDTO))
+            .content(objectMapper.writeValueAsString(mailsDTOMap))
             .accept(MediaType.APPLICATION_JSON)
     ).andExpect(status().isOk());
 
@@ -167,11 +169,16 @@ class MailControllerE2EIT {
         .key("url")
         .value(RandomStringUtils.randomAlphanumeric(16));
     email.setTemplateData(List.of(nameRecipient, nameFromConsultant, url));
-    if (languageCode != LanguageCode.FALSE) {
-      email.setLanguage(languageCode);
-    }
+    email.setLanguage(languageCode);
 
     mailsDTO = new MailsDTO().mails(List.of(email));
+  }
+
+  @SuppressWarnings("unchecked")
+  private void givenAnEmailListWithoutLanguage() {
+    givenAnEmailList(null);
+    mailsDTOMap = objectMapper.convertValue(this.mailsDTO, Map.class);
+    mailsDTOMap.get("mails").get(0).remove("language");
   }
 
   private String valueOf(String key, List<TemplateDataDTO> templateDataDTOList) {

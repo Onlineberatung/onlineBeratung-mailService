@@ -1,6 +1,9 @@
 package de.caritas.cob.mailservice.api.controller;
 
+import static java.util.Objects.isNull;
+
 import de.caritas.cob.mailservice.api.model.ErrorMailDTO;
+import de.caritas.cob.mailservice.api.model.MailDTO;
 import de.caritas.cob.mailservice.api.model.MailsDTO;
 import de.caritas.cob.mailservice.api.service.MailService;
 import de.caritas.cob.mailservice.generated.api.controller.MailsApi;
@@ -28,7 +31,15 @@ public class MailController implements MailsApi {
    */
   @Override
   public ResponseEntity<Void> sendMails(@Valid @RequestBody MailsDTO mails) {
+    var defaultLanguage = new MailDTO().getLanguage();
+    mails.getMails().forEach(mail -> {
+      if (isNull(mail.getLanguage())) {
+        mail.setLanguage(defaultLanguage);
+      }
+    });
+
     this.mailService.sendHtmlMails(mails);
+
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
