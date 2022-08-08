@@ -287,7 +287,7 @@ class MailControllerE2EIT {
       throws NoSuchFieldException, IllegalAccessException {
     var text = getArg(prep, 5);
     var data = mailDTO.getTemplateData();
-    var salutation = "<b>Dear <span>" + valueOf("name_recipient", data) + "</span>,</b>";
+    var salutation = "<strong>Dear <span>" + valueOf("name_recipient", data) + "</span>,</strong>";
     assertTrue(text.contains(salutation));
 
     var message = "<span>"
