@@ -1,6 +1,8 @@
 {
 	"htmlTemplateFilename":"reassign-request-notification.html",
-	"subject":"Anfrage Neuzuweisung",
+	"subject": {
+		"de": "Anfrage Neuzuweisung"
+	},
 	"templateImages" : [
 		{
 			"filename":"caritas-logo.jpg",

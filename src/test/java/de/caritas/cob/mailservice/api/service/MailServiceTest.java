@@ -20,6 +20,7 @@ import de.caritas.cob.mailservice.api.exception.TemplateServiceException;
 import de.caritas.cob.mailservice.api.helper.TemplateDataConverter;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateDescription;
 import de.caritas.cob.mailservice.api.model.ErrorMailDTO;
+import de.caritas.cob.mailservice.api.model.LanguageCode;
 import de.caritas.cob.mailservice.api.model.MailDTO;
 import de.caritas.cob.mailservice.api.model.MailsDTO;
 import de.caritas.cob.mailservice.api.model.TemplateDataDTO;
@@ -210,7 +211,7 @@ public class MailServiceTest {
     expectedData.put("text", "<h2>test</h2>");
     verify(this.exchangeMailService, times(1)).prepareAndSendHtmlMail(any(), any(), any(), any());
     verify(this.templateService, times(1)).getProcessedSubject(eq(templateDescription),
-        eq(expectedData));
+        eq(expectedData), any(LanguageCode.class));
   }
 
   @Test(expected = InternalServerErrorException.class)

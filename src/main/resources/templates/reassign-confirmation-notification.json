@@ -1,6 +1,9 @@
 {
 	"htmlTemplateFilename":"reassign-confirmation-notification.html",
-	"subject":"Neuzuweisung erfolgt",
+	"subject": {
+		"de": "Neuzuweisung erfolgt",
+		"en": "Reassignment Done"
+	},
 	"templateImages" : [
 		{
 			"filename":"caritas-logo.jpg",

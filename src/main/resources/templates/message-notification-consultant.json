@@ -1,6 +1,8 @@
 {
 	"htmlTemplateFilename":"message-notification-consultant.html",
-	"subject":"Neue Nachricht [PLZ: ${plz}]",
+	"subject": {
+		"de": "Neue Nachricht [PLZ: ${plz}]"
+	},
 	"templateImages" : [
 		{
 			"filename":"caritas-logo.jpg",

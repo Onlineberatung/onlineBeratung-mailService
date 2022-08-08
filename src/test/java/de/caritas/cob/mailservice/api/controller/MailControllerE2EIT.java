@@ -150,6 +150,31 @@ class MailControllerE2EIT {
     assertTextIsGerman(prep, mailDTO);
   }
 
+  @Test
+  void sendMailsShouldSendEmailAndRenderDataWithSetLanguage() throws Exception {
+    givenAnEmailList(LanguageCode.EN);
+
+    mockMvc.perform(
+        post("/mails/send")
+            .cookie(CSRF_COOKIE)
+            .header(CSRF_HEADER, CSRF_VALUE)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(mailsDTO))
+            .accept(MediaType.APPLICATION_JSON)
+    ).andExpect(status().isOk());
+
+    verify(javaMailSender).send(mimeMessagePrepCaptor.capture());
+
+    var prep = mimeMessagePrepCaptor.getValue();
+    var mailDTO = mailsDTO.getMails().get(0);
+
+    var recipient = getArg(prep, 3);
+    assertEquals(mailDTO.getEmail(), recipient);
+
+    var subject = getArg(prep, 4);
+    assertEquals("Reassignment Done", subject);
+  }
+
   private void givenAnEmptyEmailList() {
     mailsDTO = new MailsDTO().mails(List.of());
   }

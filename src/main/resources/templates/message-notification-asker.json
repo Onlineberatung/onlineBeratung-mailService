@@ -1,6 +1,8 @@
 {
 	"htmlTemplateFilename":"message-notification-asker.html",
-	"subject":"Antwort von ${consultantName}",
+	"subject": {
+		"de": "Antwort von ${consultantName}"
+	},
 	"templateImages" : [
 		{
 			"filename":"caritas-logo.jpg",

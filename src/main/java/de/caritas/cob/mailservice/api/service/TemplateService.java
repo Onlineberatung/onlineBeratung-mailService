@@ -3,6 +3,7 @@ package de.caritas.cob.mailservice.api.service;
 import de.caritas.cob.mailservice.api.exception.TemplateServiceException;
 import de.caritas.cob.mailservice.api.helper.ThymeleafHelper;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateDescription;
+import de.caritas.cob.mailservice.api.model.LanguageCode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,9 +60,11 @@ public class TemplateService {
    * @return the subject with replaced placeholders
    */
   public String getProcessedSubject(TemplateDescription templateDescription,
-      Map<String, Object> templateData) {
+      Map<String, Object> templateData, LanguageCode languageCode) {
     StringSubstitutor stringSubstitutor = new StringSubstitutor(templateData, "${", "}");
-    return stringSubstitutor.replace(templateDescription.getSubject());
+    var subject = templateDescription.getSubjectOrFallback(languageCode);
+
+    return stringSubstitutor.replace(subject);
   }
 
   /**

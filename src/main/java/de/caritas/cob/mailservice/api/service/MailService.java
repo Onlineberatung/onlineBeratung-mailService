@@ -54,13 +54,10 @@ public class MailService {
   private Consumer<MailDTO> processAndSendHtmlMail() {
     return mailDTO -> {
       try {
-        Optional<TemplateDescription> optionalTemplateDescription =
-            templateDescriptionService.getTemplateDescription(mailDTO.getTemplate());
-        if (!optionalTemplateDescription.isPresent()) {
-          logAndSendErrorMessage(mailDTO);
-        } else {
-          loadRequiredMailDataAndSendMail(mailDTO, optionalTemplateDescription.get());
-        }
+        templateDescriptionService.getTemplateDescription(mailDTO.getTemplate()).ifPresentOrElse(
+            desc -> loadRequiredMailDataAndSendMail(mailDTO, desc),
+            () -> logAndSendErrorMessage(mailDTO)
+        );
       } catch (TemplateDescriptionServiceException ex) {
         handleMailSendFailure(mailDTO, ex);
       }
@@ -88,7 +85,9 @@ public class MailService {
           String.format("Could not load template: %s", e.getMessage()), e);
     }
 
-    String subject = templateService.getProcessedSubject(templateDescription, templateData);
+    var subject = templateService.getProcessedSubject(
+        templateDescription, templateData, mail.getLanguage()
+    );
 
     optionalProcessedHtmlTemplate
         .ifPresent(template -> sendHtmlMail(mail, templateDescription, template, subject));
@@ -168,7 +167,9 @@ public class MailService {
         .stream()
         .collect(Collectors.toMap(TemplateDataDTO::getKey, TemplateDataDTO::getValue));
 
-    String subject = templateService.getProcessedSubject(templateDescription, templateData);
+    var subject = templateService.getProcessedSubject(
+        templateDescription, templateData, mail.getLanguage()
+    );
     try {
       templateService
           .getProcessedHtmlTemplate(templateDescription, mail.getTemplate(), templateData)
@@ -177,7 +178,5 @@ public class MailService {
       throw new InternalServerErrorException(
           String.format("Could not load template: %s", e.getMessage()), e);
     }
-
   }
-
 }
