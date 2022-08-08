@@ -14,7 +14,7 @@
 	"templateDataFields": 
 		[
 			"name_recipient",
-			"name_sender",
+			"name_from_consultant",
 			"url"
 		]
 }

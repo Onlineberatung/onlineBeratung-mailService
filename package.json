@@ -1,5 +1,5 @@
 {
-  "name": "caritas-online-beratung-mailservice",
+  "name": "online-beratung-mailservice",
   "version": "1.8.0",
   "scripts": {
     "release": "standard-version"
