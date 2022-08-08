@@ -1,5 +1,8 @@
 {
-	"htmlTemplateFilename":"reassign-confirmation-notification.html",
+	"htmlTemplateFilename": {
+		"de": "reassign-confirmation-notification.html",
+		"en": "reassign-confirmation-notification.en.html"
+	},
 	"subject": {
 		"de": "Neuzuweisung erfolgt",
 		"en": "Reassignment Done"

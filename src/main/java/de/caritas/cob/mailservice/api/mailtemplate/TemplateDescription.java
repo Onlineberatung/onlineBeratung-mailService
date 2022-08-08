@@ -18,17 +18,24 @@ import lombok.Setter;
 @Setter
 public class TemplateDescription {
 
-  private String htmlTemplateFilename;
+  private Map<LanguageCode, String> htmlTemplateFilename;
   private Map<LanguageCode, String> subject;
   private List<String> templateDataFields;
   private List<TemplateImage> templateImages;
 
-  public String getSubjectOrFallback(LanguageCode language) {
-    var defaultLanguage = new MailDTO().getLanguage();
-
-    return subject.containsKey(language)
-        ? subject.get(language)
-        : subject.get(defaultLanguage);
+  private static LanguageCode defaultLanguage() {
+    return new MailDTO().getLanguage();
   }
 
+  public String getSubjectOrFallback(LanguageCode language) {
+    return subject.containsKey(language)
+        ? subject.get(language)
+        : subject.get(defaultLanguage());
+  }
+
+  public String getTemplateFilenameOrFallback(LanguageCode language) {
+    return htmlTemplateFilename.containsKey(language)
+        ? htmlTemplateFilename.get(language)
+        : htmlTemplateFilename.get(defaultLanguage());
+  }
 }

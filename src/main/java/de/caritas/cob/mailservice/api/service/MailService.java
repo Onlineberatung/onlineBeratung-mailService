@@ -78,8 +78,9 @@ public class MailService {
 
     Optional<String> optionalProcessedHtmlTemplate;
     try {
-      optionalProcessedHtmlTemplate = templateService
-          .getProcessedHtmlTemplate(templateDescription, mail.getTemplate(), templateData);
+      optionalProcessedHtmlTemplate = templateService.getProcessedHtmlTemplate(
+          templateDescription, mail.getTemplate(), templateData, mail.getLanguage()
+      );
     } catch (TemplateServiceException e) {
       throw new InternalServerErrorException(
           String.format("Could not load template: %s", e.getMessage()), e);
@@ -161,19 +162,16 @@ public class MailService {
     }
   }
 
-  private void loadUnescapedMailDataAndSendMail(MailDTO mail,
-      TemplateDescription templateDescription) {
+  private void loadUnescapedMailDataAndSendMail(MailDTO mail, TemplateDescription desc) {
     Map<String, Object> templateData = mail.getTemplateData()
         .stream()
         .collect(Collectors.toMap(TemplateDataDTO::getKey, TemplateDataDTO::getValue));
 
-    var subject = templateService.getProcessedSubject(
-        templateDescription, templateData, mail.getLanguage()
-    );
+    var subject = templateService.getProcessedSubject(desc, templateData, mail.getLanguage());
     try {
       templateService
-          .getProcessedHtmlTemplate(templateDescription, mail.getTemplate(), templateData)
-          .ifPresent(template -> sendHtmlMail(mail, templateDescription, template, subject));
+          .getProcessedHtmlTemplate(desc, mail.getTemplate(), templateData, mail.getLanguage())
+          .ifPresent(template -> sendHtmlMail(mail, desc, template, subject));
     } catch (TemplateServiceException e) {
       throw new InternalServerErrorException(
           String.format("Could not load template: %s", e.getMessage()), e);

@@ -100,7 +100,7 @@ public class MailServiceTest {
     ReflectionTestUtils.setField(mailService, FIELD_NAME_USE_SMTP, false);
     when(templateDescriptionService.getTemplateDescription(any()))
         .thenReturn(Optional.of(new TemplateDescription()));
-    when(templateService.getProcessedHtmlTemplate(any(), any(), any()))
+    when(templateService.getProcessedHtmlTemplate(any(), any(), any(), any()))
         .thenReturn(Optional.of("success"));
 
     MailsDTO mailsDTO = new MailsDTO().mails(singletonList(createMailDTO()));
@@ -121,7 +121,7 @@ public class MailServiceTest {
     ReflectionTestUtils.setField(mailService, FIELD_NAME_USE_SMTP, true);
     when(templateDescriptionService.getTemplateDescription(any()))
         .thenReturn(Optional.of(new TemplateDescription()));
-    when(templateService.getProcessedHtmlTemplate(any(), any(), any()))
+    when(templateService.getProcessedHtmlTemplate(any(), any(), any(), any()))
         .thenReturn(Optional.of("success"));
 
     MailsDTO mailsDTO = new MailsDTO().mails(singletonList(createMailDTO()));
@@ -147,7 +147,7 @@ public class MailServiceTest {
     ReflectionTestUtils.setField(mailService, FIELD_NAME_USE_SMTP, true);
     when(templateDescriptionService.getTemplateDescription(any()))
         .thenReturn(Optional.of(new TemplateDescription()));
-    when(templateService.getProcessedHtmlTemplate(any(), any(), any()))
+    when(templateService.getProcessedHtmlTemplate(any(), any(), any(), any()))
         .thenReturn(Optional.of("success"));
 
     MailsDTO mailsDTO = new MailsDTO()
@@ -178,7 +178,7 @@ public class MailServiceTest {
     ReflectionTestUtils.setField(mailService, FIELD_NAME_USE_SMTP, false);
     when(templateDescriptionService.getTemplateDescription(any()))
         .thenReturn(Optional.of(new TemplateDescription()));
-    when(templateService.getProcessedHtmlTemplate(any(), any(), any()))
+    when(templateService.getProcessedHtmlTemplate(any(), any(), any(), any()))
         .thenReturn(Optional.of("success"));
     ExchangeMailServiceException exception = mock(ExchangeMailServiceException.class);
     doThrow(exception).when(exchangeMailService)
@@ -197,7 +197,7 @@ public class MailServiceTest {
     TemplateDescription templateDescription = new TemplateDescription();
     when(templateDescriptionService.getTemplateDescription(any()))
         .thenReturn(Optional.of(templateDescription));
-    when(templateService.getProcessedHtmlTemplate(any(), any(), any()))
+    when(templateService.getProcessedHtmlTemplate(any(), any(), any(), any()))
         .thenReturn(Optional.of("success"));
     ErrorMailDTO errorMailDTO = new ErrorMailDTO()
         .template("free-text")
@@ -220,7 +220,7 @@ public class MailServiceTest {
     ReflectionTestUtils.setField(mailService, FIELD_NAME_USE_SMTP, false);
     when(templateDescriptionService.getTemplateDescription(any()))
         .thenReturn(Optional.of(new TemplateDescription()));
-    when(templateService.getProcessedHtmlTemplate(any(), any(), any()))
+    when(templateService.getProcessedHtmlTemplate(any(), any(), any(), any()))
         .thenThrow(new TemplateServiceException(""));
     ErrorMailDTO errorMailDTO = new ErrorMailDTO()
         .template("free-text")

@@ -1,5 +1,7 @@
 {
-	"htmlTemplateFilename":"free-text.html",
+	"htmlTemplateFilename": {
+		"de": "free-text.html"
+	},
 	"subject": {
 		"de": "${subject}"
 	},

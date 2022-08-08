@@ -1,5 +1,7 @@
 {
-	"htmlTemplateFilename":"message-notification-consultant.html",
+	"htmlTemplateFilename": {
+		"de": "message-notification-consultant.html"
+	},
 	"subject": {
 		"de": "Neue Nachricht [PLZ: ${plz}]"
 	},

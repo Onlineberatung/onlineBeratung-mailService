@@ -1,5 +1,7 @@
 {
-	"htmlTemplateFilename":"feedback-message-notification.html",
+	"htmlTemplateFilename": {
+		"de": "feedback-message-notification.html"
+	},
 	"subject": {
 		"de": "Neue Feedback-Nachricht"
 	},

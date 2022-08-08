@@ -1,5 +1,7 @@
 {
-	"htmlTemplateFilename":"enquiry-notification-consultant.html",
+	"htmlTemplateFilename": {
+		"de": "enquiry-notification-consultant.html"
+	},
 	"subject": {
 		"de": "Neue Erstanfrage [PLZ: ${plz}]"
 	},

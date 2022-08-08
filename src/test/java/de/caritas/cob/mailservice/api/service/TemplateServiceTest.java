@@ -30,7 +30,10 @@ public class TemplateServiceTest {
   private final String SUBJECT_WITH_REPLACED_PLACEHOLDERS =
       "Test " + PLACEHOLDER1_VALUE + " Test " + PLACEHOLDER2_VALUE;
   private final TemplateDescription TEMPLATE_DESCRIPTION = new TemplateDescription(
-      "test.html", Map.of(LanguageCode.DE, SUBJECT_WITH_PLACEHOLDERS), FIELDS, null
+      Map.of(LanguageCode.DE, "test.html"),
+      Map.of(LanguageCode.DE, SUBJECT_WITH_PLACEHOLDERS),
+      FIELDS,
+      null
   );
   @SuppressWarnings("serial")
   private final Map<String, Object> TEMPLATE_DATA = new HashMap<String, Object>() {
@@ -69,7 +72,7 @@ public class TemplateServiceTest {
 
     try {
       templateService.getProcessedHtmlTemplate(TEMPLATE_DESCRIPTION, TEMPLATE_NAME,
-          TEMPLATE_DATA_WITH_MISSING_FIELD);
+          TEMPLATE_DATA_WITH_MISSING_FIELD, LanguageCode.DE);
       fail("Expected exception: ServiceException");
     } catch (TemplateServiceException serviceException) {
       assertTrue("Excepted ServiceException thrown", true);

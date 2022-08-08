@@ -1,5 +1,7 @@
 {
-	"htmlTemplateFilename":"message-notification-asker.html",
+	"htmlTemplateFilename": {
+		"de": "message-notification-asker.html"
+	},
 	"subject": {
 		"de": "Diakonie Online-Beratung: Antwort von Berater_in erhalten"
 	},

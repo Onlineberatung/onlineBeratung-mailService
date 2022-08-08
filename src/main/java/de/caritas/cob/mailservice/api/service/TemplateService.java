@@ -28,35 +28,37 @@ public class TemplateService {
 
   /**
    * Get the processed html template with replaced placeholders
-   * 
-   * @param templateName the template name
-   * @param templateData the template data
+   *
+   * @param desc     the template description
+   * @param name     the template name
+   * @param data     the template data
+   * @param language the template language
    * @return if success, an optional with the html template, otherwise an empty optional
    */
-  public Optional<String> getProcessedHtmlTemplate(TemplateDescription templateDescription,
-      String templateName, Map<String, Object> templateData) throws TemplateServiceException {
+  public Optional<String> getProcessedHtmlTemplate(TemplateDescription desc, String name,
+      Map<String, Object> data, LanguageCode language) throws TemplateServiceException {
 
-    templateData.put("urlimpressum", imprintUrl);
-    templateData.put("urldatenschutz", dataPrivacyUrl);
+    data.put("urlimpressum", imprintUrl);
+    data.put("urldatenschutz", dataPrivacyUrl);
 
-    List<String> missingFieldList = getMissingTemplateFields(templateDescription, templateData);
+    List<String> missingFieldList = getMissingTemplateFields(desc, data);
 
     if (!CollectionUtils.isEmpty(missingFieldList)) {
       throw new TemplateServiceException(String.format(
           "Mail request for template %s could not be executed due to missing fields for template processing. Missing fields: %s",
-          templateName, String.join(",", missingFieldList)));
+          name, String.join(",", missingFieldList)));
     }
 
-    return ThymeleafHelper.getProcessedHtml(templateData,
-        templateDescription.getHtmlTemplateFilename());
+    var templateFilename = desc.getTemplateFilenameOrFallback(language);
 
+    return ThymeleafHelper.getProcessedHtml(data, templateFilename);
   }
 
   /**
    * Get the processed subject with replaced placeholders
-   * 
+   *
    * @param templateDescription the mail template
-   * @param templateData the template data
+   * @param templateData        the template data
    * @return the subject with replaced placeholders
    */
   public String getProcessedSubject(TemplateDescription templateDescription,
@@ -69,7 +71,7 @@ public class TemplateService {
 
   /**
    * Get the missing fields in the template data for a mail template
-   * 
+   *
    * @param mailTemplate The template description
    * @param templateData The template data
    * @return a list with the missing fields

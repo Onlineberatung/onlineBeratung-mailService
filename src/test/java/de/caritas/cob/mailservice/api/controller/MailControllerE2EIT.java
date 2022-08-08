@@ -91,6 +91,7 @@ class MailControllerE2EIT {
     var subject = getArg(prep, 4);
     assertEquals("Neuzuweisung erfolgt", subject);
 
+    assertTextIsHtml(prep);
     assertTextIsGerman(prep, mailDTO);
   }
 
@@ -119,6 +120,7 @@ class MailControllerE2EIT {
     var subject = getArg(prep, 4);
     assertEquals("Neuzuweisung erfolgt", subject);
 
+    assertTextIsHtml(prep);
     assertTextIsGerman(prep, mailDTO);
   }
 
@@ -147,6 +149,7 @@ class MailControllerE2EIT {
     var subject = getArg(prep, 4);
     assertEquals("Neuzuweisung erfolgt", subject);
 
+    assertTextIsHtml(prep);
     assertTextIsGerman(prep, mailDTO);
   }
 
@@ -173,6 +176,9 @@ class MailControllerE2EIT {
 
     var subject = getArg(prep, 4);
     assertEquals("Reassignment Done", subject);
+
+    assertTextIsHtml(prep);
+    assertTextIsEnglish(prep, mailDTO);
   }
 
   private void givenAnEmptyEmailList() {
@@ -222,11 +228,16 @@ class MailControllerE2EIT {
     return recipientField.get(prep).toString();
   }
 
+  private void assertTextIsHtml(MimeMessagePreparator prep)
+      throws NoSuchFieldException, IllegalAccessException {
+    var text = getArg(prep, 5).trim();
+    assertTrue(text.startsWith("<!DOCTYPE html>"));
+    assertTrue(text.endsWith("</html>"));
+  }
+
   private void assertTextIsGerman(MimeMessagePreparator prep, MailDTO mailDTO)
       throws NoSuchFieldException, IllegalAccessException {
     var text = getArg(prep, 5);
-    assertTrue(text.startsWith("<!DOCTYPE html>"));
-
     var data = mailDTO.getTemplateData();
     var salutation = "<b>Liebe(r) <span>" + valueOf("name_recipient", data) + "</span>,</b>";
     assertTrue(text.contains(salutation));
@@ -234,6 +245,22 @@ class MailControllerE2EIT {
     var message = "<span>"
         + valueOf("name_from_consultant", data)
         + "</span> hat Ihnen eine_n Ratsuchende_n übergeben.";
+    assertTrue(text.contains(message));
+
+    var anchorStart = "<a href=\"" + valueOf("url", data) + "\">";
+    assertTrue(text.contains(anchorStart));
+  }
+
+  private void assertTextIsEnglish(MimeMessagePreparator prep, MailDTO mailDTO)
+      throws NoSuchFieldException, IllegalAccessException {
+    var text = getArg(prep, 5);
+    var data = mailDTO.getTemplateData();
+    var salutation = "<b>Dear <span>" + valueOf("name_recipient", data) + "</span>,</b>";
+    assertTrue(text.contains(salutation));
+
+    var message = "<span>"
+        + valueOf("name_from_consultant", data)
+        + "</span> has assigned you an advice seeker.";
     assertTrue(text.contains(message));
 
     var anchorStart = "<a href=\"" + valueOf("url", data) + "\">";

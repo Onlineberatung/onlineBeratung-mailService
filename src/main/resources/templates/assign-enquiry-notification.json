@@ -1,5 +1,7 @@
 {
-	"htmlTemplateFilename":"assign-enquiry-notification.html",
+	"htmlTemplateFilename": {
+		"de": "assign-enquiry-notification.html"
+	},
 	"subject": {
 		"de": "Neue_r Ratsuchende_r"
 	},

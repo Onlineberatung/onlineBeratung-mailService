@@ -1,5 +1,7 @@
 {
-	"htmlTemplateFilename":"message-notification-consultant.html",
+	"htmlTemplateFilename": {
+		"de": "message-notification-consultant.html"
+	},
 	"subject": {
 		"de": "Diakonie Online-Beratung: Neue Nachricht [PLZ: ${plz}]"
 	},

@@ -1,5 +1,7 @@
 {
-	"htmlTemplateFilename":"reassign-request-notification.html",
+	"htmlTemplateFilename": {
+		"de": "reassign-request-notification.html"
+	},
 	"subject": {
 		"de": "Anfrage Neuzuweisung"
 	},
