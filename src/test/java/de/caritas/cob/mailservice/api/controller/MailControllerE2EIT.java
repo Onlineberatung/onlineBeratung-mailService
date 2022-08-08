@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.http.MediaType;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -42,6 +43,9 @@ class MailControllerE2EIT {
 
   @Autowired
   private ObjectMapper objectMapper;
+
+  @Autowired
+  ResourcePatternResolver resourceResolver;
 
   @MockBean
   private JavaMailSender javaMailSender;
@@ -128,6 +132,34 @@ class MailControllerE2EIT {
   void sendMailsShouldSendEmailAndRenderDataWithDefaultLanguageWhenLanguageDoesNotExist()
       throws Exception {
     givenAnEmailList(LanguageCode.IO);
+
+    mockMvc.perform(
+        post("/mails/send")
+            .cookie(CSRF_COOKIE)
+            .header(CSRF_HEADER, CSRF_VALUE)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(mailsDTO))
+            .accept(MediaType.APPLICATION_JSON)
+    ).andExpect(status().isOk());
+
+    verify(javaMailSender).send(mimeMessagePrepCaptor.capture());
+
+    var prep = mimeMessagePrepCaptor.getValue();
+    var mailDTO = mailsDTO.getMails().get(0);
+
+    var recipient = getArg(prep, 3);
+    assertEquals(mailDTO.getEmail(), recipient);
+
+    var subject = getArg(prep, 4);
+    assertEquals("Neuzuweisung erfolgt", subject);
+
+    assertTextIsHtml(prep);
+    assertTextIsGerman(prep, mailDTO);
+  }
+
+  @Test
+  void sendMailsShouldSendEmailAndRenderDataWhenLanguageIsDefaultLanguage() throws Exception {
+    givenAnEmailList(LanguageCode.DE);
 
     mockMvc.perform(
         post("/mails/send")
