@@ -1,6 +1,10 @@
 {
-	"htmlTemplateFilename":"enquiry-notification-consultant.html",
-	"subject":"Neue Erstanfrage [PLZ: ${plz}]",
+	"htmlTemplateFilename": {
+		"de": "enquiry-notification-consultant.html"
+	},
+	"subject": {
+		"de": "Neue Erstanfrage [PLZ: ${plz}]"
+	},
 	"templateImages" : [
 		{
 			"filename":"caritas-logo.jpg",

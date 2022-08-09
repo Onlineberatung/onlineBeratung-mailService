@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 
 import de.caritas.cob.mailservice.api.exception.TemplateServiceException;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateDescription;
+import de.caritas.cob.mailservice.api.model.LanguageCode;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -28,8 +29,12 @@ public class TemplateServiceTest {
       "Test ${" + PLACEHOLDER1 + "} Test ${" + PLACEHOLDER2 + "}";
   private final String SUBJECT_WITH_REPLACED_PLACEHOLDERS =
       "Test " + PLACEHOLDER1_VALUE + " Test " + PLACEHOLDER2_VALUE;
-  private final TemplateDescription TEMPLATE_DESCRIPTION =
-      new TemplateDescription("test.html", SUBJECT_WITH_PLACEHOLDERS, FIELDS, null);
+  private final TemplateDescription TEMPLATE_DESCRIPTION = new TemplateDescription(
+      Map.of(LanguageCode.DE, "test.html"),
+      Map.of(LanguageCode.DE, SUBJECT_WITH_PLACEHOLDERS),
+      FIELDS,
+      null
+  );
   @SuppressWarnings("serial")
   private final Map<String, Object> TEMPLATE_DATA = new HashMap<String, Object>() {
     {
@@ -55,7 +60,9 @@ public class TemplateServiceTest {
   @Test
   public void getProcessedSubject_Should_ReturnSubjectWithReplacedPlaceholders() {
 
-    String result = templateService.getProcessedSubject(TEMPLATE_DESCRIPTION, TEMPLATE_DATA);
+    var result = templateService.getRenderedSubject(
+        TEMPLATE_DESCRIPTION, TEMPLATE_DATA, LanguageCode.DE
+    );
     assertEquals(SUBJECT_WITH_REPLACED_PLACEHOLDERS, result);
 
   }
@@ -64,8 +71,8 @@ public class TemplateServiceTest {
   public void getProcessedHtmlTemplate_Should_ThrowServiceException_WhenTemplateDataIsMissing() {
 
     try {
-      templateService.getProcessedHtmlTemplate(TEMPLATE_DESCRIPTION, TEMPLATE_NAME,
-          TEMPLATE_DATA_WITH_MISSING_FIELD);
+      templateService.render(TEMPLATE_DESCRIPTION, TEMPLATE_NAME,
+          TEMPLATE_DATA_WITH_MISSING_FIELD, LanguageCode.DE);
       fail("Expected exception: ServiceException");
     } catch (TemplateServiceException serviceException) {
       assertTrue("Excepted ServiceException thrown", true);

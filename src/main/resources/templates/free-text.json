@@ -1,6 +1,10 @@
 {
-	"htmlTemplateFilename":"free-text.html",
-	"subject":"${subject}",
+	"htmlTemplateFilename": {
+		"de": "free-text.html"
+	},
+	"subject": {
+		"de": "${subject}"
+	},
 	"templateImages" : [
 		{
 			"filename":"caritas-logo.jpg",

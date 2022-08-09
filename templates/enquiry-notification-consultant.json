@@ -1,6 +1,10 @@
 {
-	"htmlTemplateFilename":"enquiry-notification-consultant.html",
-	"subject":"Diakonie Online-Beratung: Neue Erstanfrage [PLZ: ${plz}]",
+	"htmlTemplateFilename": {
+		"de": "enquiry-notification-consultant.html"
+	},
+	"subject": {
+		"de": "Diakonie Online-Beratung: Neue Erstanfrage [PLZ: ${plz}]"
+	},
 	"templateImages" : [
 		{
 			"filename":"illustration.png",

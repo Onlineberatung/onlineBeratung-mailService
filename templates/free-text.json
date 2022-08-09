@@ -1,6 +1,10 @@
 {
-	"htmlTemplateFilename":"free-text.html",
-	"subject":"Diakonie Online-Beratung: ${subject}",
+	"htmlTemplateFilename": {
+		"de": "free-text.html"
+	},
+	"subject": {
+		"de": "Diakonie Online-Beratung: ${subject}"
+	},
 	"templateImages" : [
 		{
 			"filename":"illustration.png",

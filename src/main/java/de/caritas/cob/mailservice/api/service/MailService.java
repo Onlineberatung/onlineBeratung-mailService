@@ -14,7 +14,6 @@ import de.caritas.cob.mailservice.api.model.MailDTO;
 import de.caritas.cob.mailservice.api.model.MailsDTO;
 import de.caritas.cob.mailservice.api.model.TemplateDataDTO;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import lombok.NonNull;
@@ -43,24 +42,21 @@ public class MailService {
   /**
    * sends all mails as html.
    *
-   * @param mailsDTO the mails to be send
+   * @param mailsDTO the mails to be sent
    */
   public void sendHtmlMails(MailsDTO mailsDTO) {
     if (!CollectionUtils.isEmpty(mailsDTO.getMails())) {
-      mailsDTO.getMails().forEach(processAndSendHtmlMail());
+      mailsDTO.getMails().forEach(renderAndSendHtmlMail());
     }
   }
 
-  private Consumer<MailDTO> processAndSendHtmlMail() {
+  private Consumer<MailDTO> renderAndSendHtmlMail() {
     return mailDTO -> {
       try {
-        Optional<TemplateDescription> optionalTemplateDescription =
-            templateDescriptionService.getTemplateDescription(mailDTO.getTemplate());
-        if (!optionalTemplateDescription.isPresent()) {
-          logAndSendErrorMessage(mailDTO);
-        } else {
-          loadRequiredMailDataAndSendMail(mailDTO, optionalTemplateDescription.get());
-        }
+        templateDescriptionService.getTemplateDescription(mailDTO.getTemplate()).ifPresentOrElse(
+            desc -> loadRequiredMailDataAndSendMail(mailDTO, desc),
+            () -> logAndSendErrorMessage(mailDTO)
+        );
       } catch (TemplateDescriptionServiceException ex) {
         handleMailSendFailure(mailDTO, ex);
       }
@@ -74,35 +70,33 @@ public class MailService {
     sendErrorMail(errorMessage);
   }
 
-  private void loadRequiredMailDataAndSendMail(MailDTO mail,
-      TemplateDescription templateDescription) {
-    Map<String, Object> templateData =
-        templateDataConverter.convertFromTemplateDataDTOList(mail.getTemplateData());
+  private void loadRequiredMailDataAndSendMail(MailDTO mail, TemplateDescription desc) {
+    var templateData = templateDataConverter.convertFromTemplateDataDTOList(mail.getTemplateData());
+    renderAndSend(mail, desc, templateData);
+  }
 
-    Optional<String> optionalProcessedHtmlTemplate;
+  private void renderAndSend(MailDTO mail, TemplateDescription desc, Map<String, Object> data) {
+    var subject = templateService.getRenderedSubject(desc, data, mail.getLanguage());
+
     try {
-      optionalProcessedHtmlTemplate = templateService
-          .getProcessedHtmlTemplate(templateDescription, mail.getTemplate(), templateData);
+      templateService
+          .render(desc, mail.getTemplate(), data, mail.getLanguage())
+          .ifPresent(text -> sendHtmlMail(mail, desc, text, subject));
     } catch (TemplateServiceException e) {
-      throw new InternalServerErrorException(
-          String.format("Could not load template: %s", e.getMessage()), e);
+      var message = String.format("Could not load template: %s", e.getMessage());
+      throw new InternalServerErrorException(message, e);
     }
-
-    String subject = templateService.getProcessedSubject(templateDescription, templateData);
-
-    optionalProcessedHtmlTemplate
-        .ifPresent(template -> sendHtmlMail(mail, templateDescription, template, subject));
   }
 
   private void sendHtmlMail(MailDTO mail, TemplateDescription templateDescription,
-      String processedHtmlTemplate, String subject) {
+      String renderedText, String subject) {
     try {
       if (useSmtp) {
-        smtpMailService.prepareAndSendHtmlMail(mail.getEmail(), subject,
-            processedHtmlTemplate, templateDescription.getTemplateImages());
+        smtpMailService.prepareAndSendHtmlMail(mail.getEmail(), subject, renderedText,
+            templateDescription.getTemplateImages());
       } else {
-        exchangeMailService.prepareAndSendHtmlMail(mail.getEmail(), subject,
-            processedHtmlTemplate, templateDescription.getTemplateImages());
+        exchangeMailService.prepareAndSendHtmlMail(mail.getEmail(), subject, renderedText,
+            templateDescription.getTemplateImages());
       }
     } catch (SmtpMailServiceException | ExchangeMailServiceException e) {
       throw new InternalServerErrorException(
@@ -162,22 +156,11 @@ public class MailService {
     }
   }
 
-  private void loadUnescapedMailDataAndSendMail(MailDTO mail,
-      TemplateDescription templateDescription) {
+  private void loadUnescapedMailDataAndSendMail(MailDTO mail, TemplateDescription desc) {
     Map<String, Object> templateData = mail.getTemplateData()
         .stream()
         .collect(Collectors.toMap(TemplateDataDTO::getKey, TemplateDataDTO::getValue));
 
-    String subject = templateService.getProcessedSubject(templateDescription, templateData);
-    try {
-      templateService
-          .getProcessedHtmlTemplate(templateDescription, mail.getTemplate(), templateData)
-          .ifPresent(template -> sendHtmlMail(mail, templateDescription, template, subject));
-    } catch (TemplateServiceException e) {
-      throw new InternalServerErrorException(
-          String.format("Could not load template: %s", e.getMessage()), e);
-    }
-
+    renderAndSend(mail, desc, templateData);
   }
-
 }

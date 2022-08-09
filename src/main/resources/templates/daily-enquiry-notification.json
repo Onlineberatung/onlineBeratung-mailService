@@ -1,6 +1,10 @@
 {
-	"htmlTemplateFilename":"daily-enquiry-notification.html",
-	"subject":"${subject}",
+	"htmlTemplateFilename": {
+		"de": "daily-enquiry-notification.html"
+	},
+	"subject": {
+		"de": "${subject}"
+	},
 	"templateImages" : [
 		{
 			"filename":"caritas-logo.jpg",
