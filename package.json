@@ -1,6 +1,6 @@
 {
   "name": "online-beratung-mailservice",
-  "version": "1.11.1",
+  "version": "1.12.0",
   "scripts": {
     "release": "standard-version"
   },
