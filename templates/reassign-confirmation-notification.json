@@ -1,6 +1,6 @@
 {
 	"htmlTemplateFilename": {
-		"de": "reassign-request-notification.html",
+		"de": "reassign-confirmation-notification.html",
 		"en": "reassign-confirmation-notification.en.html"
 	},
 	"subject": {
