@@ -5,7 +5,6 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import de.caritas.cob.mailservice.api.mailtemplate.TemplateDescription;
 import de.caritas.cob.mailservice.api.service.MailService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +27,6 @@ public class MailControllerTestExchangeIT {
   private final String PATH_SEND_MAIL = "/mails/send";
   private final String PATH_SEND_ERROR_MAIL = "/mails/error/send";
   private final String TEMPLATE = "test";
-  private final String HTML_TEMPLATE = "<html></html>";
   private final String VALID_REQUEST_BODY =
       "{\"mails\":[{" + "\"template\":\"" + TEMPLATE + "\",\"email\":\"dah@o4b.de\","
           + "\"templateData\":[" + "{\"key\":\"name\"," + "\"value\":\"Max Mustermann\"},"
@@ -37,8 +35,6 @@ public class MailControllerTestExchangeIT {
       "{" + "\"template\":\"" + TEMPLATE + "\",\"email\":\"dah@o4b.de\","
           + "\"templateData\":[" + "{\"key\":\"name\"," + "\"value\":\"Max Mustermann\"},"
           + "{\"key\":\"text\"," + "\"value\":\"hello, world!\"}" + "]}";
-  private final TemplateDescription TEMPLATE_DESCRIPTION =
-      new TemplateDescription("test.html", "subject", null, null);
 
   @Autowired
   private MockMvc mvc;

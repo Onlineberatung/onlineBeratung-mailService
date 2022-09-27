@@ -1,6 +1,10 @@
 {
-	"htmlTemplateFilename":"assign-enquiry-notification.html",
-	"subject":"Diakonie Online-Beratung: Neue_r Ratsuchende_r",
+	"htmlTemplateFilename": {
+		"de": "assign-enquiry-notification.html"
+	},
+	"subject": {
+		"de": "Diakonie Online-Beratung: Neue_r Ratsuchende_r"
+	},
 	"templateImages" : [
 		{
 			"filename":"illustration.png",

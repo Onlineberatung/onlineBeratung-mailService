@@ -1,6 +1,10 @@
 {
-	"htmlTemplateFilename":"feedback-message-notification.html",
-	"subject":"Diakonie Online-Beratung: Neue Feedback-Nachricht",
+	"htmlTemplateFilename": {
+		"de": "feedback-message-notification.html"
+	},
+	"subject": {
+		"de": "Diakonie Online-Beratung: Neue Feedback-Nachricht"
+	},
 	"templateImages" : [
 		{
 			"filename":"illustration.png",

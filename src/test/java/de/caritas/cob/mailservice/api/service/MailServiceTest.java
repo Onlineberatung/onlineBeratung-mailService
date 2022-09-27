@@ -20,6 +20,7 @@ import de.caritas.cob.mailservice.api.exception.TemplateServiceException;
 import de.caritas.cob.mailservice.api.helper.TemplateDataConverter;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateDescription;
 import de.caritas.cob.mailservice.api.model.ErrorMailDTO;
+import de.caritas.cob.mailservice.api.model.LanguageCode;
 import de.caritas.cob.mailservice.api.model.MailDTO;
 import de.caritas.cob.mailservice.api.model.MailsDTO;
 import de.caritas.cob.mailservice.api.model.TemplateDataDTO;
@@ -99,7 +100,7 @@ public class MailServiceTest {
     ReflectionTestUtils.setField(mailService, FIELD_NAME_USE_SMTP, false);
     when(templateDescriptionService.getTemplateDescription(any()))
         .thenReturn(Optional.of(new TemplateDescription()));
-    when(templateService.getProcessedHtmlTemplate(any(), any(), any()))
+    when(templateService.render(any(), any(), any(), any()))
         .thenReturn(Optional.of("success"));
 
     MailsDTO mailsDTO = new MailsDTO().mails(singletonList(createMailDTO()));
@@ -120,7 +121,7 @@ public class MailServiceTest {
     ReflectionTestUtils.setField(mailService, FIELD_NAME_USE_SMTP, true);
     when(templateDescriptionService.getTemplateDescription(any()))
         .thenReturn(Optional.of(new TemplateDescription()));
-    when(templateService.getProcessedHtmlTemplate(any(), any(), any()))
+    when(templateService.render(any(), any(), any(), any()))
         .thenReturn(Optional.of("success"));
 
     MailsDTO mailsDTO = new MailsDTO().mails(singletonList(createMailDTO()));
@@ -146,7 +147,7 @@ public class MailServiceTest {
     ReflectionTestUtils.setField(mailService, FIELD_NAME_USE_SMTP, true);
     when(templateDescriptionService.getTemplateDescription(any()))
         .thenReturn(Optional.of(new TemplateDescription()));
-    when(templateService.getProcessedHtmlTemplate(any(), any(), any()))
+    when(templateService.render(any(), any(), any(), any()))
         .thenReturn(Optional.of("success"));
 
     MailsDTO mailsDTO = new MailsDTO()
@@ -177,7 +178,7 @@ public class MailServiceTest {
     ReflectionTestUtils.setField(mailService, FIELD_NAME_USE_SMTP, false);
     when(templateDescriptionService.getTemplateDescription(any()))
         .thenReturn(Optional.of(new TemplateDescription()));
-    when(templateService.getProcessedHtmlTemplate(any(), any(), any()))
+    when(templateService.render(any(), any(), any(), any()))
         .thenReturn(Optional.of("success"));
     ExchangeMailServiceException exception = mock(ExchangeMailServiceException.class);
     doThrow(exception).when(exchangeMailService)
@@ -196,7 +197,7 @@ public class MailServiceTest {
     TemplateDescription templateDescription = new TemplateDescription();
     when(templateDescriptionService.getTemplateDescription(any()))
         .thenReturn(Optional.of(templateDescription));
-    when(templateService.getProcessedHtmlTemplate(any(), any(), any()))
+    when(templateService.render(any(), any(), any(), any()))
         .thenReturn(Optional.of("success"));
     ErrorMailDTO errorMailDTO = new ErrorMailDTO()
         .template("free-text")
@@ -209,8 +210,8 @@ public class MailServiceTest {
     Map<String, Object> expectedData = new HashMap<>();
     expectedData.put("text", "<h2>test</h2>");
     verify(this.exchangeMailService, times(1)).prepareAndSendHtmlMail(any(), any(), any(), any());
-    verify(this.templateService, times(1)).getProcessedSubject(eq(templateDescription),
-        eq(expectedData));
+    verify(this.templateService, times(1)).getRenderedSubject(eq(templateDescription),
+        eq(expectedData), any(LanguageCode.class));
   }
 
   @Test(expected = InternalServerErrorException.class)
@@ -219,7 +220,7 @@ public class MailServiceTest {
     ReflectionTestUtils.setField(mailService, FIELD_NAME_USE_SMTP, false);
     when(templateDescriptionService.getTemplateDescription(any()))
         .thenReturn(Optional.of(new TemplateDescription()));
-    when(templateService.getProcessedHtmlTemplate(any(), any(), any()))
+    when(templateService.render(any(), any(), any(), any()))
         .thenThrow(new TemplateServiceException(""));
     ErrorMailDTO errorMailDTO = new ErrorMailDTO()
         .template("free-text")

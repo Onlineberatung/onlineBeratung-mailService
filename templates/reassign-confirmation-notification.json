@@ -1,6 +1,12 @@
 {
-	"htmlTemplateFilename":"reassign-request-notification.html",
-	"subject":"Diakonie Online-Beratung: Neue_r Ratsuchende_r",
+	"htmlTemplateFilename": {
+		"de": "reassign-confirmation-notification.html",
+		"en": "reassign-confirmation-notification.en.html"
+	},
+	"subject": {
+		"de": "Diakonie Online-Beratung: Neue_r Ratsuchende_r",
+		"en": "Reassignment Done"
+	},
 	"templateImages" : [
 		{
 			"filename":"illustration.png",

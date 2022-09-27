@@ -1,6 +1,10 @@
 {
-	"htmlTemplateFilename":"feedback-message-notification.html",
-	"subject":"Neue Feedback-Nachricht",
+	"htmlTemplateFilename": {
+		"de": "feedback-message-notification.html"
+	},
+	"subject": {
+		"de": "Neue Feedback-Nachricht"
+	},
 	"templateImages" : [
 		{
 			"filename":"caritas-logo.jpg",
