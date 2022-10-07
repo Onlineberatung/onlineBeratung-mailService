@@ -1,9 +1,11 @@
 {
 	"htmlTemplateFilename": {
-		"de": "message-notification-consultant.html"
+		"de": "message-notification-consultant.html",
+		"en": "message-notification-consultant.en.html"
 	},
 	"subject": {
-		"de": "Diakonie Online-Beratung: Neue Nachricht [PLZ: ${plz}]"
+		"de": "Diakonie Online-Beratung: Neue Nachricht [PLZ: ${plz}]",
+		"en": "Diakonie Online-Counseling: New Message [PLZ: ${plz}]"
 	},
 	"templateImages" : [
 		{

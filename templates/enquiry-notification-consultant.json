@@ -1,9 +1,11 @@
 {
 	"htmlTemplateFilename": {
-		"de": "enquiry-notification-consultant.html"
+		"de": "enquiry-notification-consultant.html",
+		"en": "enquiry-notification-consultant.en.html"
 	},
 	"subject": {
-		"de": "Diakonie Online-Beratung: Neue Erstanfrage [PLZ: ${plz}]"
+		"de": "Diakonie Online-Beratung: Neue Erstanfrage [PLZ: ${plz}]",
+		"em": "Diakonie Online-Counseling: New Initial Request [PLZ: ${plz}]"
 	},
 	"templateImages" : [
 		{
