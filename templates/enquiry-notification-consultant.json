@@ -5,7 +5,7 @@
 	},
 	"subject": {
 		"de": "Diakonie Online-Beratung: Neue Erstanfrage [PLZ: ${plz}]",
-		"em": "Diakonie Online-Counseling: New Initial Request [PLZ: ${plz}]"
+		"en": "Diakonie Online-Counseling: New Initial Request [PLZ: ${plz}]"
 	},
 	"templateImages" : [
 		{
