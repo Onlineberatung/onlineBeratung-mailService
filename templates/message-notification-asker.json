@@ -1,9 +1,11 @@
 {
 	"htmlTemplateFilename": {
-		"de": "message-notification-asker.html"
+		"de": "message-notification-asker.html",
+		"en": "message-notification-asker.en.html"
 	},
 	"subject": {
-		"de": "Diakonie Online-Beratung: Antwort von Berater_in erhalten"
+		"de": "Diakonie Online-Beratung: Antwort von Berater_in erhalten",
+		"en": "Diakonie Online-Counseling: Response From Counselor"
 	},
 	"templateImages" : [
 		{
