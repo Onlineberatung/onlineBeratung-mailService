@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
    <meta http-equiv='Content-Type' content='text/html charset=UTF-8' />
@@ -21,10 +21,8 @@
          <tr>
             <td style="padding: 24px 36px; text-align: left;">
                <!-- claim -->
-               <h1
-                  style="color: #3F373F; font-size: 20px; font-weight: bold; line-height: 26px; padding-bottom: 0; margin-bottom: 0;">
-                  Beratung</h1>
-               <div style="color: #3F373F; font-size: 14px; line-height: 20px;">Online. Anonym. Sicher.</div>
+               <h1 style='color: #FFFFFF; font-size: 26px; font-weight: bold; line-height: 26px; padding-bottom: 0; margin-bottom: 0;'>Counseling & Help</h1>
+               <div style='color: #FFFFFF; font-size: 12px; line-height: 19px;'>Online. Anonymous. Safe.</div>
             </td>
          </tr>
 
@@ -41,10 +39,9 @@
                      <td cellspacing="0" cellpadding="0" colspan="2"
                         style="text-align: left; padding: 36px; color: #3F373F;font-size: 16px; line-height: 24px; font-family: 'Open Sans', 'OpenSans', 'Arial', 'sans-serif';">
                         <!-- message -->
-                        <b>Liebe(r) Ratsuchende(r),</b><br />
+                        <b>Dear <span data-th-text="${name_recipient}"></span>,</b>
                         <br /><br />
-                        Ihr(e) Berater(in) möchte Sie an eine(n) neue(n)
-                        Berater(in) übergeben. Dafür brauchen wir Ihre Zustimmung.
+                        <span data-th-text="${name_sender}"></span> has assigned a new advice seeker to you.
                      </td>
                   </tr>
                   <tr>
@@ -56,8 +53,8 @@
                                  <!-- button -->
                                  <div style="background-color: #5a2572; width: 227px; padding: 12px 24px;">
                                     <a data-th-href="${url} + '/login'"
-                                       style="color: #fff; text-transform: uppercase; font-weight: bold; text-decoration: none;">Nachricht
-                                       ansehen</a>
+                                       style="color: #fff; text-transform: uppercase; font-weight: bold; text-decoration: none;">View
+                                       message</a>
                                  </div>
                               </td>
                            </tr>
@@ -72,11 +69,11 @@
             <!-- legal links -->
             <td style="padding: 24px 36px; text-align: left;">
                <a data-th-href="${urlimpressum}"
-                  style="color: #5A2572; text-decoration: none; font-size: 14px; line-height: 20px;">Impressum</a>
+                  style="color: #5A2572; text-decoration: none; font-size: 14px; line-height: 20px;">Imprint</a>
                <span style="color: #5A2572; text-decoration: none; font-size: 14px; line-height: 20px;">&nbsp; |
                   &nbsp;</span>
                <a data-th-href="${urldatenschutz}"
-                  style="color: #5A2572; text-decoration: none; font-size: 14px; line-height: 20px;">Datenschutz</a>
+                  style="color: #5A2572; text-decoration: none; font-size: 14px; line-height: 20px;">Privacy</a>
             </td>
          </tr>
       </tbody>

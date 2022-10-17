@@ -1,9 +1,11 @@
 {
 	"htmlTemplateFilename": {
-		"de": "free-text.html"
+		"de": "free-text.html",
+		"en": "free-text.en.html"
 	},
 	"subject": {
-		"de": "Diakonie Online-Beratung: ${subject}"
+		"de": "Diakonie Online-Beratung: ${subject}",
+		"en": "Diakonie Online-Counseling: ${subject}"
 	},
 	"templateImages" : [
 		{

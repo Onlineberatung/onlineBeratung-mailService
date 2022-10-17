@@ -1,9 +1,11 @@
 {
 	"htmlTemplateFilename": {
-		"de": "assign-enquiry-notification.html"
+		"de": "assign-enquiry-notification.html",
+		"en": "assign-enquiry-notification.en.html"
 	},
 	"subject": {
-		"de": "Diakonie Online-Beratung: Neue_r Ratsuchende_r"
+		"de": "Diakonie Online-Beratung: Neue_r Ratsuchende_r",
+		"en": "Diakonie Online-Counseling: New Advice Seeker"
 	},
 	"templateImages" : [
 		{
