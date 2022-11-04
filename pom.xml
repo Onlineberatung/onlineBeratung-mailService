@@ -29,6 +29,7 @@
 		<openapi-generator-maven-plugin.version>5.1.1</openapi-generator-maven-plugin.version>
 		<springfox-swagger2.version>3.0.0</springfox-swagger2.version>
 		<jackson-databind-nullable.version>0.2.3</jackson-databind-nullable.version>
+		<spring.security>5.7.3</spring.security>
 	</properties>
 
 	<dependencies>
@@ -91,6 +92,12 @@
 			<artifactId>jaxws-api</artifactId>
 			<version>2.3.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${spring.security}</version>
+		</dependency>
+
 
 		<!-- Mail -->
 		<dependency>
@@ -114,7 +121,7 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-text</artifactId>
-			<version>1.9</version>
+			<version>1.10.0</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
