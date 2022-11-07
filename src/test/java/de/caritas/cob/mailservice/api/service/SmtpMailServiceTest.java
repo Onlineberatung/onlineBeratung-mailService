@@ -10,11 +10,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.test.util.ReflectionTestUtils;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SmtpMailServiceTest {
@@ -52,8 +52,7 @@ public class SmtpMailServiceTest {
   public void prepareAndSendHtmlMail_Should_ThrowServiceException_WhenMailCouldNotBeSend()
       throws NoSuchFieldException, SecurityException {
 
-    FieldSetter.setField(mailService, mailService.getClass().getDeclaredField("mailSender"),
-        String.valueOf(SENDER));
+    ReflectionTestUtils.setField(mailService, "mailSender", String.valueOf(SENDER));
 
     @SuppressWarnings("serial")
     MailException mailException = new MailException("reason") {};
@@ -84,8 +83,7 @@ public class SmtpMailServiceTest {
   public void prepareAndSendTextMail_Should_ThrowServiceException_WhenMailCouldNotBeSend()
       throws NoSuchFieldException, SecurityException {
 
-    FieldSetter.setField(mailService, mailService.getClass().getDeclaredField("mailSender"),
-        String.valueOf(SENDER));
+    ReflectionTestUtils.setField(mailService, "mailSender", String.valueOf(SENDER));
 
     @SuppressWarnings("serial")
     MailException mailException = new MailException("reason") {};
