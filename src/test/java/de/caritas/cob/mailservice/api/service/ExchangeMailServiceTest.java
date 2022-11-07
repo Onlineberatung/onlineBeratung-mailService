@@ -8,8 +8,8 @@ import de.caritas.cob.mailservice.api.exception.ExchangeMailServiceException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ExchangeMailServiceTest {
@@ -34,17 +34,10 @@ public class ExchangeMailServiceTest {
   @Before
   public void setup() throws Exception {
     this.mailService = new ExchangeMailService();
-    FieldSetter.setField(this.mailService,
-        this.mailService.getClass().getDeclaredField(EXCHANGE_USER_FIELD_NAME),
-        EXCHANGE_USER_VALUE);
-    FieldSetter.setField(this.mailService,
-        this.mailService.getClass().getDeclaredField(EXCHANGE_PASSWORD_FIELD_NAME),
-        EXCHANGE_PASSWORD_VALUE);
-    FieldSetter.setField(this.mailService,
-        this.mailService.getClass().getDeclaredField(EXCHANGE_URL_FIELD_NAME), EXCHANGE_URL_VALUE);
-    FieldSetter.setField(this.mailService,
-        this.mailService.getClass().getDeclaredField(EXCHANGE_VERSION_FIELD_NAME),
-        EXCHANGE_VERSION_VALUE);
+    ReflectionTestUtils.setField(mailService, EXCHANGE_USER_FIELD_NAME, EXCHANGE_USER_VALUE);
+    ReflectionTestUtils.setField(mailService, EXCHANGE_PASSWORD_FIELD_NAME, EXCHANGE_PASSWORD_VALUE);
+    ReflectionTestUtils.setField(mailService, EXCHANGE_URL_FIELD_NAME, EXCHANGE_URL_VALUE);
+    ReflectionTestUtils.setField(mailService, EXCHANGE_VERSION_FIELD_NAME, EXCHANGE_VERSION_VALUE);
   }
 
   @Test
@@ -62,8 +55,7 @@ public class ExchangeMailServiceTest {
   public void prepareAndSendHtmlMail_Should_ThrowServiceException_When_MailCouldNotBeSend()
       throws NoSuchFieldException, SecurityException, ExchangeMailServiceException {
 
-    FieldSetter
-        .setField(mailService, mailService.getClass().getDeclaredField("mailSender"), SENDER);
+    ReflectionTestUtils.setField(mailService, "mailSender", SENDER);
 
     mailService.prepareAndSendHtmlMail(RECIPIENT, SUBJECT, TEMPLATE, null);
   }
@@ -83,25 +75,21 @@ public class ExchangeMailServiceTest {
   public void prepareAndSendTextMail_Should_ThrowServiceException_When_MailCouldNotBeSend()
       throws NoSuchFieldException, SecurityException, ExchangeMailServiceException {
 
-    FieldSetter
-        .setField(mailService, mailService.getClass().getDeclaredField("mailSender"), SENDER);
-
+    ReflectionTestUtils.setField(mailService, "mailSender", SENDER);
     mailService.prepareAndSendTextMail(RECIPIENT, SUBJECT, BODY);
   }
 
   @Test(expected = ExchangeMailServiceException.class)
   public void prepareAndSendTextMail_Should_ThrowExchangeMailServiceException_When_MailUrlIsInvalid()
       throws NoSuchFieldException, ExchangeMailServiceException {
-    FieldSetter.setField(this.mailService,
-        this.mailService.getClass().getDeclaredField(EXCHANGE_URL_FIELD_NAME), "Invalid");
+    ReflectionTestUtils.setField(mailService, EXCHANGE_URL_FIELD_NAME, "Invalid");
     mailService.prepareAndSendTextMail(RECIPIENT, SUBJECT, BODY);
   }
 
   @Test(expected = ExchangeMailServiceException.class)
   public void prepareAndSendTextMail_Should_ThrowExchangeMailServiceException_When_ParametersAreNull()
       throws ExchangeMailServiceException, NoSuchFieldException {
-    FieldSetter.setField(mailService, mailService.getClass().getDeclaredField("mailSender"),
-        SENDER);
+    ReflectionTestUtils.setField(mailService, "mailSender", SENDER);
     mailService.prepareAndSendTextMail(null, null, null);
   }
 
