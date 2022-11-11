@@ -19,7 +19,6 @@
 	],
 	"templateDataFields": 
 		[
-			"beratungsstelle",
 			"plz",
 			"url",
 			"name"
