@@ -1,0 +1,26 @@
+{
+	"htmlTemplateFilename": {
+		"de": "direct-enquiry-notification-consultant.html",
+		"en": "direct-enquiry-notification-consultant.en.html"
+	},
+	"subject": {
+		"de": "Diakonie Online-Beratung: Neue Erstanfrage über Kontaktlink [PLZ: ${plz}]",
+		"en": "Diakonie Online-Counseling: New Initial Request Via Contact Link [PLZ: ${plz}]"
+	},
+	"templateImages" : [
+		{
+			"filename":"illustration.png",
+			"filetype":"image/png"
+		},
+		{
+			"filename":"logo.png",
+			"filetype":"image/png"
+		}
+	],
+	"templateDataFields": 
+		[
+			"plz",
+			"url",
+			"name"
+		]
+}
