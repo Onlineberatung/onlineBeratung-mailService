@@ -192,6 +192,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.github.jknack</groupId>
+			<artifactId>handlebars</artifactId>
+			<version>4.3.1</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.sonatype.plexus</groupId>
 			<artifactId>plexus-build-api</artifactId>
 			<version>0.0.7</version>
