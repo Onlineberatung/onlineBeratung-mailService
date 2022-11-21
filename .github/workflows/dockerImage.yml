@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - "develop"
+      - "tsys-release"
     tags:
       - "dockerImage.v.*"
       - "v*"
@@ -41,8 +42,8 @@ jobs:
   push_to_registry:
     strategy:
       matrix:
-        registry: ["docker.pkg.github.com", "ghcr.io"]
-    needs: [test]
+        registry: [ "docker.pkg.github.com", "ghcr.io" ]
+    needs: [ test ]
     name: Push Docker image to GitHub Packages
     runs-on: ubuntu-latest
     steps:
@@ -80,17 +81,11 @@ jobs:
           password: ${{ secrets.GH_PACKAGE_RELEASE_TOKEN }}
           registry: ${{ env.DOCKER_REGISTRY }}
           repository: ${{ env.DOCKER_IMAGE }}
-          tags: ${{ env.DOCKER_IMAGE_TAG}}
-      - name: Hint about the Docker Image Tag if successfull
-        if: ${{ success() }}
-        run: |
-          echo "### Publish Docker image :white_check_mark:" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- Image name: ${{ env.DOCKER_IMAGE }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Version: ${{ env.DOCKER_IMAGE_TAG }}" >> $GITHUB_STEP_SUMMARY
-      - name: Hint about the Docker Image Tag if not successfull
-        if: ${{ failure() || cancelled() }}
-        run: |
-          echo "### Publish Docker image :x:" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- It seems that something has gone wrong" >> $GITHUB_STEP_SUMMARY
+          tag_with_ref: true
+      - name: Publish to T-sys if T-sys release
+        if: ${{ (github.ref == 'refs/heads/tsys-release') && (matrix.registry == 'ghcr.io') }}
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: 'https://git.mms-support.de/api/v4/projects/${{ secrets.TSYS_SERVICE_ID }}/repository/tags?ref=master&tag_name=${{ env.DOCKER_IMAGE_TAG }}'
+          method: 'POST'
+          customHeaders: '{"PRIVATE-TOKEN": "${{ secrets.TSYS_ACCESS_TOKEN }}"}'
