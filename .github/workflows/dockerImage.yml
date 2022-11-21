@@ -52,10 +52,27 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: targetfiles
-      - name: Prepare Docker variables
+      - name: Get current time
+        id: time
+        uses: nanzm/get-time-action@v1.1
+        with:
+          timeZone: 2
+          format: "YYYYMMDD[_]HHmmss"
+      - name: Prepare environment variables
         run: |
           echo "DOCKER_REGISTRY=$(echo "${{ matrix.registry }}/${{ github.repository }}" | awk '{print tolower($0)}')" >> $GITHUB_ENV
           echo "DOCKER_IMAGE=$(echo "${{ github.repository }}" | awk -F / '{print tolower($2)}')" >> $GITHUB_ENV
+          echo CLEAN_REF=$(echo "${GITHUB_REF_NAME#refs/heads/}") >> $GITHUB_ENV
+          echo TYPE=$(echo -n "${GITHUB_REF_TYPE}") >> $GITHUB_ENV
+          echo TIME_STAMP=$(echo -n "${{ steps.time.outputs.time }}") >> $GITHUB_ENV
+        shell: bash
+      - name: Set branch_timestamp for image from branch
+        if: ${{ env.TYPE == 'branch' }}
+        run: echo DOCKER_IMAGE_TAG=$(echo "${{ env.CLEAN_REF }}_${{ env.TIME_STAMP }}") >> $GITHUB_ENV
+        shell: bash
+      - name: Set tag for image from tag
+        if: ${{ env.TYPE == 'tag' }}
+        run: echo DOCKER_IMAGE_TAG=$(echo "${{ env.CLEAN_REF }}") >> $GITHUB_ENV
         shell: bash
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v1.1.1
@@ -69,6 +86,6 @@ jobs:
         if: ${{ (github.ref == 'refs/heads/tsys-release') && (matrix.registry == 'ghcr.io') }}
         uses: fjogeleit/http-request-action@v1
         with:
-          url: 'https://git.mms-support.de/api/v4/projects/${{ secrets.TSYS_SERVICE_ID }}/repository/tags?ref=master&tag_name=${{ env.DOCKER_IMAGE }}'
+          url: 'https://git.mms-support.de/api/v4/projects/${{ secrets.TSYS_SERVICE_ID }}/repository/tags?ref=master&tag_name=${{ env.DOCKER_IMAGE_TAG }}'
           method: 'POST'
           customHeaders: '{"PRIVATE-TOKEN": "${{ secrets.TSYS_ACCESS_TOKEN }}"}'
