@@ -3,7 +3,9 @@ name: Publish Docker image
 on:
   push:
     branches:
-      - "develop"
+      - 'release'
+      - 'staging'
+      - 'develop'
       - "*"
       - "tsys-release"
     tags:
@@ -43,8 +45,8 @@ jobs:
   push_to_registry:
     strategy:
       matrix:
-        registry: [ "docker.pkg.github.com", "ghcr.io" ]
-    needs: [ test ]
+        registry: ["docker.pkg.github.com", "ghcr.io"]
+    needs: [test]
     name: Push Docker image to GitHub Packages
     runs-on: ubuntu-latest
     steps:
