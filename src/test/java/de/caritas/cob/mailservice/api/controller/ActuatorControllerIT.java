@@ -41,7 +41,7 @@ class ActuatorControllerIT {
   }
 
   @Test
-  void getHealtcheck_Should_return403ByCsrfRulesForEndpointsNotExposed() throws Exception {
+  void getActuatorEndpoints_Should_return403ByCsrfRulesForEndpointsNotExposed() throws Exception {
     mockMvc
         .perform(get("/actuator/env").contentType(APPLICATION_JSON))
         .andExpect(status().isForbidden());
