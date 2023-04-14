@@ -14,7 +14,6 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * Provides the SpringFox (API documentation generation) configuration.
@@ -47,7 +46,7 @@ public class SpringFoxConfig {
   // without authorization
   public static final String[] WHITE_LIST =
       new String[] {"/mails/docs", "/mails/docs/**", "/v2/api-docs", "/configuration/ui",
-          "/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**"};
+          "/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/actuator/health", "/actuator/health/**"};
 
   @Bean
   public Docket apiDocket() {
