@@ -35,7 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             CsrfFilter.class)
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .sessionAuthenticationStrategy(new NullAuthenticatedSessionStrategy()).and()
-        .authorizeRequests().anyRequest().permitAll();
+        .authorizeRequests()
+        .anyRequest().permitAll();
   }
 
 }
