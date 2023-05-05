@@ -29,7 +29,7 @@
 		<openapi-generator-maven-plugin.version>6.2.1</openapi-generator-maven-plugin.version>
 		<springfox-swagger2.version>3.0.0</springfox-swagger2.version>
 		<jackson-databind-nullable.version>0.2.3</jackson-databind-nullable.version>
-		<spring.security>5.7.5</spring.security>
+		<spring.security>5.7.8</spring.security>
 	</properties>
 
 	<dependencies>
