@@ -2,23 +2,20 @@ package de.caritas.cob.mailservice.api.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.caritas.cob.mailservice.config.apiclient.TranlationMangementServiceApiClient;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 import springfox.documentation.annotations.Cacheable;
 
 @Service
@@ -37,10 +34,10 @@ public class TranslationService {
   @Value("${weblate.component}")
   private String component;
 
-  private final RestTemplate restTemplate;
+  private final  @NonNull TranlationMangementServiceApiClient tranlationMangementServiceApiClient;
 
-  public TranslationService(RestTemplate restTemplate) {
-    this.restTemplate = restTemplate;
+  public TranslationService(TranlationMangementServiceApiClient tranlationMangementServiceApiClient) {
+    this.tranlationMangementServiceApiClient = tranlationMangementServiceApiClient;
   }
 
   @Cacheable(value = "translations")
@@ -79,7 +76,7 @@ public class TranslationService {
 
   private String fetchTranslationsAsString(String languageCode) {
     try {
-      return tryFetchTranslationsFromTranslationManagementService(project, component,
+      return tranlationMangementServiceApiClient.tryFetchTranslationsFromTranslationManagementService(project, component,
           languageCode);
     } catch (HttpClientErrorException e) {
       if (HttpStatus.NOT_FOUND.equals(e.getStatusCode())) {
@@ -93,17 +90,7 @@ public class TranslationService {
     }
   }
 
-  private String tryFetchTranslationsFromTranslationManagementService(String project,
-      String component, String languageCode) {
-    HttpHeaders headers = new HttpHeaders();
-    headers.set("Authorization", "Token " + apiKey);
-    String url = apiUrl + "translations/" + project + "/" + component + "/test" + "/" + languageCode
-        + "/file.json";
 
-    ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET,
-        new HttpEntity<>(headers), String.class);
-    return response.getBody();
-  }
 
   private String fetchDefaultTranslations(String translationComponentName, String languageCode) {
     var inputStream = TranslationService.class.getResourceAsStream(
@@ -116,7 +103,7 @@ public class TranslationService {
           .readLines(inputStream, StandardCharsets.UTF_8.displayName());
       return String.join("", fileLines);
     } catch (IOException ex) {
-      throw new RuntimeException(String.format(
+      throw new IllegalStateException(String.format(
           "Json file with translations could not be loaded, translation component name: %s",
           translationComponentName), ex);
     }

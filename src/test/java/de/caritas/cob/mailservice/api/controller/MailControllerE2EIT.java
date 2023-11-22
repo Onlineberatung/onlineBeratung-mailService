@@ -2,7 +2,9 @@ package de.caritas.cob.mailservice.api.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -11,23 +13,28 @@ import de.caritas.cob.mailservice.api.model.LanguageCode;
 import de.caritas.cob.mailservice.api.model.MailDTO;
 import de.caritas.cob.mailservice.api.model.MailsDTO;
 import de.caritas.cob.mailservice.api.model.TemplateDataDTO;
+import de.caritas.cob.mailservice.config.apiclient.TranlationMangementServiceApiClient;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.Cookie;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.HttpClientErrorException;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -48,11 +55,21 @@ class MailControllerE2EIT {
   @Qualifier("emailsender")
   private JavaMailSender javaMailSender;
 
+  @MockBean
+  private TranlationMangementServiceApiClient tranlationMangementServiceApiClient;
+
   @Captor
   private ArgumentCaptor<MimeMessagePreparator> mimeMessagePrepCaptor;
 
   private MailsDTO mailsDTO;
   private Map<String, List<Map<String, Object>>> mailsDTOMap;
+
+  @BeforeEach
+  void setUp() {
+    Mockito.doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND)).when(
+        tranlationMangementServiceApiClient).tryFetchTranslationsFromTranslationManagementService(
+        anyString(), anyString(), anyString());
+  }
 
   @Test
   void sendMailsShouldRespondWithOkWhenEmailListIsEmpty() throws Exception {
