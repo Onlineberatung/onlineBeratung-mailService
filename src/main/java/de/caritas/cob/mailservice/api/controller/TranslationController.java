@@ -4,10 +4,11 @@ import de.caritas.cob.mailservice.api.service.TranslationService;
 import java.util.Map;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
@@ -22,10 +23,17 @@ public class TranslationController {
     return new ResponseEntity<>(result, org.springframework.http.HttpStatus.OK);
   }
 
+  @RequestMapping(value = "/translations/{lang}")
+  public ResponseEntity<Map<String, String>> getTranslations(@PathVariable("lang") String languageCode) {
+    var result = translationService.fetchTranslations(languageCode);
+    return new ResponseEntity<>(result, org.springframework.http.HttpStatus.OK);
+  }
+
   @RequestMapping(value = "/translations/evict")
-  public ResponseEntity<Void> evictTranslationCache() {
+  @ResponseBody
+  public String evictTranslationCache() {
     translationService.evictCache();
-    return new ResponseEntity<>(HttpStatus.OK);
+    return "Cache evicted";
   }
 
 }
