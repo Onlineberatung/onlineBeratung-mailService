@@ -14,6 +14,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -52,9 +53,12 @@ public class TemplateServiceTest {
 
   private TemplateService templateService;
 
+  @Mock
+  private TranslationService translationService;
+
   @Before
   public void setup() {
-    this.templateService = new TemplateService();
+    this.templateService = new TemplateService(translationService);
   }
 
   @Test

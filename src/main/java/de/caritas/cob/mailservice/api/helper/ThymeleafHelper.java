@@ -1,5 +1,7 @@
 package de.caritas.cob.mailservice.api.helper;
 
+import de.caritas.cob.mailservice.api.model.LanguageCode;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
@@ -21,9 +23,11 @@ public class ThymeleafHelper {
     templateEngine = tempTemplateEngine;
   }
 
-  public static Optional<String> getProcessedHtml(Map<String, Object> data, String templateName) {
+  public static Optional<String> getProcessedHtml(Map<String, Object> data, LanguageCode languageCode, String templateName) {
 
     Context context = new Context();
+    Locale locale = Locale.forLanguageTag(languageCode.getValue());
+    context.setLocale(locale);
 
     if (data != null) {
       data.forEach(context::setVariable);

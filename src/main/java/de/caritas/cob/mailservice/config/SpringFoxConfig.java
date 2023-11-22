@@ -46,7 +46,7 @@ public class SpringFoxConfig {
   // without authorization
   public static final String[] WHITE_LIST =
       new String[] {"/mails/docs", "/mails/docs/**", "/v2/api-docs", "/configuration/ui",
-          "/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/actuator/health", "/actuator/health/**"};
+          "/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/actuator/health", "/actuator/health/**", "/translations", "/translations/**"};
 
   @Bean
   public Docket apiDocket() {
@@ -64,7 +64,6 @@ public class SpringFoxConfig {
    */
   private Set<String> protocols() {
     Set<String> protocols = new HashSet<>();
-    protocols.add("http"); // TODO remove for production mode
     protocols.add("https");
     return protocols;
   }

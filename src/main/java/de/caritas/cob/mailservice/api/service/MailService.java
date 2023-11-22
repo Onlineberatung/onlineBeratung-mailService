@@ -77,7 +77,6 @@ public class MailService {
 
   private void renderAndSend(MailDTO mail, TemplateDescription desc, Map<String, Object> data) {
     var subject = templateService.getRenderedSubject(desc, data, mail.getLanguage());
-
     try {
       templateService
           .render(desc, mail.getTemplate(), data, mail.getLanguage())

@@ -269,12 +269,12 @@ class MailControllerE2EIT {
       throws NoSuchFieldException, IllegalAccessException {
     var text = getArg(prep, 5);
     var data = mailDTO.getTemplateData();
-    var salutation = "<b>Liebe(r) <span>" + valueOf("name_recipient", data) + "</span>,</b>";
+    var salutation = "<b><span>Liebe(r)</span> <span>" + valueOf("name_recipient", data) + "</span>,</b>";
     assertTrue(text.contains(salutation));
 
     var message = "<span>"
         + valueOf("name_from_consultant", data)
-        + "</span> hat Ihnen eine_n Ratsuchende_n übergeben.";
+        + "</span> <span>hat Ihnen eine(n) Ratsuchende(n) übergeben.</span>";
     assertTrue(text.contains(message));
 
     var anchorStart = "<a href=\"" + valueOf("url", data) + "\">";
@@ -288,10 +288,8 @@ class MailControllerE2EIT {
     var salutation = "<strong>Dear <span>" + valueOf("name_recipient", data) + "</span>,</strong>";
     assertTrue(text.contains(salutation));
 
-    var message = "<span>"
-        + valueOf("name_from_consultant", data)
-        + "</span> has assigned you an advice seeker.";
-    assertTrue(text.contains(message));
+    assertTrue(text.contains(valueOf("name_from_consultant", data)));
+    assertTrue(text.contains("has assigned you an advice seeker."));
 
     var anchorStart = "<a href=\"" + valueOf("url", data) + "\">";
     assertTrue(text.contains(anchorStart));

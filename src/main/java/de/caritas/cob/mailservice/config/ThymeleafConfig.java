@@ -1,7 +1,10 @@
 package de.caritas.cob.mailservice.config;
 
+import de.caritas.cob.mailservice.api.RestApiMessageSource;
+import de.caritas.cob.mailservice.api.service.TranslationService;
 import java.nio.charset.StandardCharsets;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -50,4 +53,10 @@ public class ThymeleafConfig {
     emailClassLoaderTemplateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
     return emailClassLoaderTemplateResolver;
   }
+
+  @Bean
+  public MessageSource messageSource(TranslationService translationService) {
+    return new RestApiMessageSource(translationService);
+  }
+
 }
