@@ -6,5 +6,8 @@
   "mail.label.dear": "Dear",
   "mail.label.view.message": "View message",
   "mail.label.best.regards": "Best regards",
-  "mail.label.your.team": "Your onlinecounseling Team"
+  "mail.label.your.team": "Your onlinecounseling Team",
+  "mail.label.in.the.agency": "in the agency",
+  "mail.label.is.a.new.enquiry.received": "is a new enquiry received.",
+  "mail.label.view.enquiry": "View enquiry"
 }

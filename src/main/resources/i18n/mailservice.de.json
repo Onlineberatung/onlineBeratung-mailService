@@ -6,5 +6,8 @@
   "mail.label.dear": "Liebe(r)",
   "mail.label.view.message": "Nachricht ansehen",
   "mail.label.best.regards": "Liebe Grüße",
-  "mail.label.your.team": "Ihr Team von der Onlineberatung"
+  "mail.label.your.team": "Ihr Team von der Onlineberatung",
+  "mail.label.in.the.agency": "in der Beratungsstelle",
+  "mail.label.is.a.new.enquiry.received": "ist eine neue Erstanfrage eingegangen.",
+  "mail.label.view.enquiry": "Anfrage ansehen"
 }
