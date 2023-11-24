@@ -23,5 +23,7 @@
   "mail.label.please.login.to.read.it": "Please login to read your message",
   "mail.label.read.the.response": "Read the response",
   "mail.label.you.have.a.new.message.in.your.counselings" : "You have a new message in your counselings",
-  "mail.label.your.consultant.wants.to.assign.you.to.new.consultant": "Your advisor would like to hand you over to a new advisor. We need your consent for this."
+  "mail.label.your.consultant.wants.to.assign.you.to.new.consultant": "Your advisor would like to hand you over to a new advisor. We need your consent for this.",
+  "mail.label.imprint": "Imprint",
+  "mail.label.privacy": "Privacy"
 }

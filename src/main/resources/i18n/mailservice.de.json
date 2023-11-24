@@ -23,5 +23,7 @@
   "mail.label.please.login.to.read.it": "Bitte melden Sie sich an, um Ihre Antwort zu lesen!",
   "mail.label.read.the.response": "Antwort lesen",
   "mail.label.you.have.a.new.message.in.your.counselings" : "Sie haben eine neue Nachricht in Ihren Beratungen",
-  "mail.label.your.consultant.wants.to.assign.you.to.new.consultant": "Ihr(e) Berater(in) möchte Sie an eine(n) neue(n)\n Berater(in) übergeben. Dafür brauchen wir Ihre Zustimmung."
+  "mail.label.your.consultant.wants.to.assign.you.to.new.consultant": "Ihr(e) Berater(in) möchte Sie an eine(n) neue(n)\n Berater(in) übergeben. Dafür brauchen wir Ihre Zustimmung.",
+  "mail.label.imprint": "Impressum",
+  "mail.label.privacy": "Datenschutz"
 }
