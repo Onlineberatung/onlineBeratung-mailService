@@ -13,10 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import springfox.documentation.annotations.Cacheable;
 
 @Service
 @Slf4j
@@ -43,6 +43,7 @@ public class TranslationService {
   @Cacheable(value = "translations")
   public Map<String, String> fetchTranslations(String languageCode) {
     try {
+
       return fetchTranslationAsMap(languageCode);
     } catch (JsonProcessingException ex) {
       throw new TranslationServiceException(String.format(
