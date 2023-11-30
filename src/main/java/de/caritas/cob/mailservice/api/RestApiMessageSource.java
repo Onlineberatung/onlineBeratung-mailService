@@ -34,6 +34,10 @@ public class RestApiMessageSource implements MessageSource {
   @Override
   public String getMessage(MessageSourceResolvable resolvable, Locale locale)
       throws NoSuchMessageException {
+    if (resolvable == null) {
+      log.warn("getMessage called with null resolvable");
+      return null;
+    }
     return getMessage(resolvable.getCodes()[0], null, locale);
   }
 }
