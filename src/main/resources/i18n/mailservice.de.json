@@ -1,7 +1,7 @@
 {
   "mail.label.header": "Beratung",
   "mail.label.slogan": "Online. Anonym. Sicher.",
-  "mail.label.has.assigned.you.new.adviceseeker": "hat Ihnen einen neuen Ratsuchenden zugewiesen.",
+  "mail.label.has.assigned.you.new.adviceseeker": "hat Ihnen {0} als neuen Ratsuchenden zugewiesen.",
   "mail.label.has.given.you.new.adviceseeker": "hat Ihnen eine(n) Ratsuchende(n) übergeben.",
   "mail.label.dear": "Liebe(r)",
   "mail.label.view.message": "Nachricht ansehen",
