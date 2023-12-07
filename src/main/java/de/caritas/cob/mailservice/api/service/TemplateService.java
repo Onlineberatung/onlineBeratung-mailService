@@ -1,7 +1,8 @@
 package de.caritas.cob.mailservice.api.service;
 
+import static de.caritas.cob.mailservice.api.helper.ThymeleafHelper.getProcessedHtml;
+
 import de.caritas.cob.mailservice.api.exception.TemplateServiceException;
-import de.caritas.cob.mailservice.api.helper.ThymeleafHelper;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateDescription;
 import de.caritas.cob.mailservice.api.model.LanguageCode;
 import java.util.ArrayList;
@@ -9,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.StringSubstitutor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,7 @@ import org.springframework.util.CollectionUtils;
  * Service for template processing
  **/
 @Service
+@RequiredArgsConstructor
 public class TemplateService {
 
   @Value("${app.imprint.url}")
@@ -25,6 +29,9 @@ public class TemplateService {
 
   @Value("${app.dataprivacy.url}")
   private String dataPrivacyUrl;
+
+  @NonNull
+  private final TranslationService translationService;
 
   /**
    * Get the processed html template with replaced placeholders
@@ -41,6 +48,7 @@ public class TemplateService {
     data.put("urlimpressum", imprintUrl);
     data.put("urldatenschutz", dataPrivacyUrl);
 
+    data.putAll(getTranslationMapAndDefaultToGermanIfNotFound(language));
     List<String> missingFieldList = getMissingTemplateFields(desc, data);
 
     if (!CollectionUtils.isEmpty(missingFieldList)) {
@@ -51,7 +59,20 @@ public class TemplateService {
 
     var templateFilename = desc.getTemplateFilenameOrFallback(language);
 
-    return ThymeleafHelper.getProcessedHtml(data, templateFilename);
+    return translationsArePresentAndNotEmpty(language) ? getProcessedHtml(data, language, templateFilename) :
+        getProcessedHtml(data, LanguageCode.DE, templateFilename);
+  }
+
+  private boolean translationsArePresentAndNotEmpty(LanguageCode language) {
+    var translations = translationService.tryFetchTranslations(
+        language.getValue());
+    return translations.isPresent() && !translations.get().isEmpty();
+  }
+
+  private Map<String, String> getTranslationMapAndDefaultToGermanIfNotFound(LanguageCode language) {
+    return translationService.tryFetchTranslations(language.getValue()).orElse(
+        translationService.tryFetchTranslations(LanguageCode.DE.getValue())
+            .orElse(new HashMap<>()));
   }
 
   /**

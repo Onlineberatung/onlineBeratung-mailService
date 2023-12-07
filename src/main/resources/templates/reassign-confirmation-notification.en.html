@@ -22,8 +22,8 @@
                   <!-- logo -->
 
                   <!-- claim -->
-                  <h1 style='color: #FFFFFF; font-size: 26px; font-weight: bold; line-height: 26px; padding-bottom: 0; margin-bottom: 0;'>Consulting & Help</h1>
-                  <div style='color: #FFFFFF; font-size: 12px; line-height: 19px;'>Online. Anonymous. Safe.</div>
+                  <h1 style='color: #FFFFFF; font-size: 26px; font-weight: bold; line-height: 26px; padding-bottom: 0; margin-bottom: 0;'><span data-th-text="#{mail.label.header}"/></h1>
+                  <div style='color: #FFFFFF; font-size: 12px; line-height: 19px;'><span data-th-text="#{mail.label.slogan}"/></div>
                </td>
             </thead>
 
@@ -45,7 +45,7 @@
                     <div style="color: #3F373F; margin: 16px; font-size: 16px; line-height: 21px; font-family: 'Open Sans', OpenSans, Arial, Sans-Serif, sans-serif;">
                      <strong>Dear <span data-th-text="${name_recipient}"></span>,</strong>
                      <br/><br/>
-                       <span data-th-text="${name_from_consultant}"></span> has assigned you an advice seeker.
+                       <span data-th-text="${name_from_consultant}"></span> <span data-th-text="#{mail.label.has.given.you.new.adviceseeker}"/>
                     </div>
                   </td>
                </tr>
@@ -69,10 +69,10 @@
 <table style="width: 100%" role="presentation">
    <tr>
       <td style='text-align: center; padding: 0;'>
-         <div style="text-align: center; padding-top: 8px;">
-            <a data-th-href="${urlimpressum}" style="color: #8C878C; text-decoration: none; font-size: 14px; line-height: 19px;">Impressum</a>
+         <div style="text-align: center; padding-top: 8px;">4
+            <a data-th-href="${urlimpressum}" style="color: #8C878C; text-decoration: none; font-size: 14px; line-height: 19px;"><span data-th-text="#{mail.label.imprint}"/></a>
             <span style="color: #8C878C; text-decoration: none; font-size: 14px; line-height: 19px;">&nbsp; | &nbsp;</span>
-            <a data-th-href="${urldatenschutz}" style="color: #8C878C; text-decoration: none; font-size: 14px; line-height: 19px;">Datenschutz</a>
+            <a data-th-href="${urldatenschutz}" style="color: #8C878C; text-decoration: none; font-size: 14px; line-height: 19px;"><span data-th-text="#{mail.label.privacy}"/></a>
          </div>
       </td>
    </tr>
