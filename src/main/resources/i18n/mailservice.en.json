@@ -25,5 +25,13 @@
   "mail.label.you.have.a.new.message.in.your.counselings" : "You have a new message in your counselings",
   "mail.label.your.consultant.wants.to.assign.you.to.new.consultant": "Your advisor would like to hand you over to a new advisor. We need your consent for this.",
   "mail.label.imprint": "Imprint",
-  "mail.label.privacy": "Privacy"
+  "mail.label.privacy": "Privacy",
+  "mail.subject.assign.enquiry.notification": "New adviceseeker",
+  "mail.subject.daily.enquiry.notification": "${subject}",
+  "mail.subject.enquiry.notification.consultant": "New enquiry [Postcode: ${plz}]",
+  "mail.subject.feedback.message.notification": "New feedback message",
+  "mail.subject.free.text": "${subject}",
+  "mail.subject.message.notification.asker": "Answear from ${consultantName}",
+  "mail.subject.message.notification.consultant": "New message [Postcode: ${plz}]",
+  "mail.subject.reassign.notification.consultant": "Reassignment Done"
 }

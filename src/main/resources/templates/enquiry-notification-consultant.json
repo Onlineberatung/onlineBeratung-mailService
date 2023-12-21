@@ -3,7 +3,7 @@
 		"de": "enquiry-notification-consultant.html"
 	},
 	"subject": {
-		"de": "Neue Erstanfrage [PLZ: ${plz}]"
+		"key": "mail.subject.enquiry.notification.consultant"
 	},
 	"templateImages" : [
 		{

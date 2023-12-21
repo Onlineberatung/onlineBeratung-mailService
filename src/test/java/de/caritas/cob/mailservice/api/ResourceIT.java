@@ -101,7 +101,7 @@ class ResourceIT {
   }
 
   @Test
-  void descriptionShouldHaveDefaultSubject() throws IOException {
+  void descriptionShouldHaveSubjectKey() throws IOException {
     var jsonFiles = resourceResolver.getResources(TEMPLATES_DIR + DESC_FILE_PATTERN);
     var defaultLanguage = new MailDTO().getLanguage();
     assertTrue(jsonFiles.length > 8);
@@ -109,23 +109,10 @@ class ResourceIT {
     for (Resource jsonFile : jsonFiles) {
       var json = Files.readString(jsonFile.getFile().toPath());
       var desc = objectMapper.readValue(json, TemplateDescription.class);
-      var subjects = desc.getSubject();
-      assertNotNull(subjects.get(defaultLanguage));
-    }
-  }
-
-  @Test
-  void descriptionSubjectsAndTemplateFilesShouldBeCorresponding() throws IOException {
-    var jsonFiles = resourceResolver.getResources(TEMPLATES_DIR + DESC_FILE_PATTERN);
-    assertTrue(jsonFiles.length > 8);
-
-    for (Resource jsonFile : jsonFiles) {
-      var json = Files.readString(jsonFile.getFile().toPath());
-      var desc = objectMapper.readValue(json, TemplateDescription.class);
-      var templateLanguages = desc.getHtmlTemplateFilename().keySet();
-      var subjectLanguages = desc.getSubject().keySet();
-
-      assertEquals(templateLanguages, subjectLanguages);
+      var subjectKey = desc.getSubject();
+      assertNotNull(subjectKey, String.format(
+          "Json file with resource description does not contain subject key: %s",
+          jsonFile.getFilename()));
     }
   }
 }

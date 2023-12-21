@@ -3,7 +3,7 @@
 		"de": "feedback-message-notification.html"
 	},
 	"subject": {
-		"de": "Neue Feedback-Nachricht"
+		"key": "mail.subject.feedback.message.notification"
 	},
 	"templateImages" : [
 		{

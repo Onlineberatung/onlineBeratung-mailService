@@ -5,6 +5,16 @@
             http://www.ehcache.org/v3
             http://www.ehcache.org/schema/ehcache-core-3.7.xsd">
 
+  <cache alias="optionalTranslations">
+    <expiry>
+      <ttl unit="seconds">60</ttl>
+    </expiry>
+
+    <resources>
+      <offheap unit="MB">10</offheap>
+    </resources>
+  </cache>
+
   <cache alias="translations">
     <expiry>
       <ttl unit="seconds">60</ttl>
