@@ -3,7 +3,7 @@
 		"de": "reassign-request-notification.html"
 	},
 	"subject": {
-		"de": "Anfrage Neuzuweisung"
+		"key": "mail.subject.reassign.request.notification"
 	},
 	"templateImages" : [
 		{

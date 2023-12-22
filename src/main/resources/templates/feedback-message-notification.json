@@ -2,9 +2,9 @@
 	"htmlTemplateFilename": {
 		"de": "feedback-message-notification.html"
 	},
-	"subject": {
-		"key": "mail.subject.feedback.message.notification"
-	},
+		"subject": {
+			"key": "mail.subject.feedback.message.notification"
+		},
 	"templateImages" : [
 		{
 			"filename":"caritas-logo.jpg",

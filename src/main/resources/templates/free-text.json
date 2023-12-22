@@ -3,7 +3,7 @@
 		"de": "free-text.html"
 	},
 	"subject": {
-		"de": "${subject}"
+		"key": "mail.subject.free.text"
 	},
 	"templateImages" : [
 		{
