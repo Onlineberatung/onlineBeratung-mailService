@@ -3,7 +3,7 @@
 		"de": "assign-enquiry-notification.html"
 	},
 	"subject": {
-		"de": "Neue_r Ratsuchende_r"
+		"key": "mail.subject.assign.enquiry.notification"
 	},
 	"templateImages" : [
 		{

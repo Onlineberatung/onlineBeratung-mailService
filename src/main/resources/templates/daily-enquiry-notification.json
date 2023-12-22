@@ -3,7 +3,7 @@
 		"de": "daily-enquiry-notification.html"
 	},
 	"subject": {
-		"de": "${subject}"
+		"key": "mail.subject.daily.enquiry.notification"
 	},
 	"templateImages" : [
 		{

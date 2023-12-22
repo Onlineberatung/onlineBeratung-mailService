@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.StringSubstitutor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import org.springframework.util.CollectionUtils;
  **/
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TemplateService {
 
   @Value("${app.imprint.url}")
@@ -85,9 +87,28 @@ public class TemplateService {
   public String getRenderedSubject(TemplateDescription templateDescription,
       Map<String, Object> templateData, LanguageCode languageCode) {
     StringSubstitutor stringSubstitutor = new StringSubstitutor(templateData, "${", "}");
-    var subject = templateDescription.getSubjectOrFallback(languageCode);
+    var subjectKey = templateDescription.getSubject().getKey();
+    if (subjectKey == null) {
+      log.warn("Subject key is null for template {}", templateDescription.getHtmlTemplateFilename().get(LanguageCode.DE));
+      return tryRenderDefaultSubject(stringSubstitutor);
+    }
+    return getRenderedSubjectForSubjectKeyNotNull(languageCode, stringSubstitutor, subjectKey);
+  }
 
-    return stringSubstitutor.replace(subject);
+  private String tryRenderDefaultSubject(StringSubstitutor stringSubstitutor) {
+    return stringSubstitutor.replace("${subject}");
+  }
+
+  private String getRenderedSubjectForSubjectKeyNotNull(LanguageCode languageCode, StringSubstitutor stringSubstitutor,
+      String subjectKey) {
+    var translationKeys = getTranslationMapAndDefaultToGermanIfNotFound(languageCode);
+    String subject = translationKeys.get(subjectKey);
+    if (subject != null) {
+      return stringSubstitutor.replace(subject);
+    } else {
+      log.warn("Subject key {} not found in translations keys", subjectKey);
+      return tryRenderDefaultSubject(stringSubstitutor);
+    }
   }
 
   /**

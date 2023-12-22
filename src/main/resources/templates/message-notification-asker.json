@@ -3,7 +3,7 @@
 		"de": "message-notification-asker.html"
 	},
 	"subject": {
-		"de": "Antwort von ${consultantName}"
+		"key": "mail.subject.message.notification.asker"
 	},
 	"templateImages" : [
 		{

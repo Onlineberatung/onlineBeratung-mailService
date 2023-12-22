@@ -19,18 +19,12 @@ import lombok.Setter;
 public class TemplateDescription {
 
   private Map<LanguageCode, String> htmlTemplateFilename;
-  private Map<LanguageCode, String> subject;
+  private SubjectDescription subject;
   private List<String> templateDataFields;
   private List<TemplateImage> templateImages;
 
   private static LanguageCode defaultLanguage() {
     return new MailDTO().getLanguage();
-  }
-
-  public String getSubjectOrFallback(LanguageCode language) {
-    return subject.containsKey(language)
-        ? subject.get(language)
-        : subject.get(defaultLanguage());
   }
 
   public String getTemplateFilenameOrFallback(LanguageCode language) {

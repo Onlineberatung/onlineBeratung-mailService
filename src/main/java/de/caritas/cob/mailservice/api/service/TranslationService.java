@@ -63,16 +63,16 @@ public class TranslationService {
     return mapper.readValue(translations, Map.class);
   }
 
+  @Cacheable(value = "optionalTranslations")
   public Optional<Map<String, String>> tryFetchTranslations(String languageCode) {
 
     try {
       var result = fetchTranslationAsMap(languageCode);
-      return Optional.of(result);
+      return result.isEmpty() ? Optional.empty() : Optional.of(result);
     } catch (JsonProcessingException e) {
       log.warn("Error while processing json file with translations. Returning empty translations", e);
       return Optional.empty();
     }
-
   }
 
   private String fetchTranslationsAsString(String languageCode) {
@@ -90,8 +90,6 @@ public class TranslationService {
       }
     }
   }
-
-
 
   private String fetchDefaultTranslations(String translationComponentName, String languageCode) {
     var inputStream = TranslationService.class.getResourceAsStream(

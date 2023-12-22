@@ -25,5 +25,15 @@
   "mail.label.you.have.a.new.message.in.your.counselings" : "Sie haben eine neue Nachricht in Ihren Beratungen",
   "mail.label.your.consultant.wants.to.assign.you.to.new.consultant": "Ihr(e) Berater(in) möchte Sie an eine(n) neue(n)\n Berater(in) übergeben. Dafür brauchen wir Ihre Zustimmung.",
   "mail.label.imprint": "Impressum",
-  "mail.label.privacy": "Datenschutz"
+  "mail.label.privacy": "Datenschutz",
+  "mail.subject.assign.enquiry.notification": "Neue_r Ratsuchende_r",
+  "mail.subject.daily.enquiry.notification": "${subject}",
+  "mail.subject.enquiry.notification.consultant": "Neue Erstanfrage [PLZ: ${plz}]",
+  "mail.subject.feedback.message.notification": "Neue Feedback-Nachricht",
+  "mail.subject.free.text": "${subject}",
+  "mail.subject.message.notification.asker": "Antwort von ${consultantName}",
+  "mail.subject.message.notification.consultant": "Neue Nachricht [PLZ: ${plz}]",
+  "mail.subject.reassign.notification.consultant": "Neuzuweisung erfolgt",
+  "mail.subject.reassign.request.notification": "Anfrage Neuzuweisung",
+  "mail.subject.direct.enquiry.notification": "Neue_r Ratsuchende_r: Neue Erstanfrage über Kontaktlink [PLZ: ${plz}]"
 }

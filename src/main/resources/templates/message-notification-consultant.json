@@ -3,7 +3,7 @@
 		"de": "message-notification-consultant.html"
 	},
 	"subject": {
-		"de": "Neue Nachricht [PLZ: ${plz}]"
+		"key": "mail.subject.message.notification.consultant"
 	},
 	"templateImages" : [
 		{

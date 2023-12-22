@@ -4,8 +4,7 @@
 		"en": "reassign-confirmation-notification.en.html"
 	},
 	"subject": {
-		"de": "Neuzuweisung erfolgt",
-		"en": "Reassignment Done"
+		"key": "mail.subject.reassign.notification.consultant"
 	},
 	"templateImages" : [
 		{
