@@ -34,5 +34,6 @@
   "mail.subject.message.notification.asker": "Answear from ${consultantName}",
   "mail.subject.message.notification.consultant": "New message [Postcode: ${plz}]",
   "mail.subject.reassign.notification.consultant": "Reassignment Done",
-  "mail.subject.reassign.request.notification": "Reassignment request"
+  "mail.subject.reassign.request.notification": "Reassignment request",
+  "mail.subject.direct.enquiry.notification": "New adviceseeker: New enquiry via contact-link [PLZ: ${plz}]"
 }

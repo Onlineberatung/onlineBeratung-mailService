@@ -34,5 +34,6 @@
   "mail.subject.message.notification.asker": "Antwort von ${consultantName}",
   "mail.subject.message.notification.consultant": "Neue Nachricht [PLZ: ${plz}]",
   "mail.subject.reassign.notification.consultant": "Neuzuweisung erfolgt",
-  "mail.subject.reassign.request.notification": "Anfrage Neuzuweisung"
+  "mail.subject.reassign.request.notification": "Anfrage Neuzuweisung",
+  "mail.subject.direct.enquiry.notification": "Neue_r Ratsuchende_r: Neue Erstanfrage über Kontaktlink [PLZ: ${plz}]"
 }
