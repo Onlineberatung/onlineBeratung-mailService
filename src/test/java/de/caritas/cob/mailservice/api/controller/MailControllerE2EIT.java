@@ -2,12 +2,14 @@ package de.caritas.cob.mailservice.api.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.caritas.cob.mailservice.api.model.Dialect;
 import de.caritas.cob.mailservice.api.model.LanguageCode;
 import de.caritas.cob.mailservice.api.model.MailDTO;
 import de.caritas.cob.mailservice.api.model.MailsDTO;
@@ -67,7 +69,7 @@ class MailControllerE2EIT {
   void setUp() {
     Mockito.doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND)).when(
         tranlationMangementServiceApiClient).tryFetchTranslationsFromTranslationManagementService(
-        anyString(), anyString(), anyString());
+        anyString(), anyString(), anyString(), any(Dialect.class));
   }
 
   @Test
@@ -235,6 +237,7 @@ class MailControllerE2EIT {
     var email = new MailDTO();
     email.setEmail(RandomStringUtils.randomAlphanumeric(32));
     email.setTemplate("reassign-confirmation-notification");
+    email.setDialect(Dialect.INFORMAL);
 
     var nameRecipient = new TemplateDataDTO()
         .key("name_recipient")

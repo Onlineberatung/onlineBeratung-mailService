@@ -76,10 +76,10 @@ public class MailService {
   }
 
   private void renderAndSend(MailDTO mail, TemplateDescription desc, Map<String, Object> data) {
-    var subject = templateService.getRenderedSubject(desc, data, mail.getLanguage());
+    var subject = templateService.getRenderedSubject(desc, data, mail);
     try {
       templateService
-          .render(desc, mail.getTemplate(), data, mail.getLanguage())
+          .render(desc, mail, data)
           .ifPresent(text -> sendHtmlMail(mail, desc, text, subject));
     } catch (TemplateServiceException e) {
       var message = String.format("Could not load template: %s", e.getMessage());
