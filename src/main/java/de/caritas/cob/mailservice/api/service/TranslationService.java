@@ -18,6 +18,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 
 @Service
 @Slf4j
@@ -35,15 +36,11 @@ public class TranslationService {
   @Value("${weblate.component}")
   private String component;
 
-  private final  @NonNull TranlationMangementServiceApiClient tranlationMangementServiceApiClient;
+  private final @NonNull TranlationMangementServiceApiClient tranlationMangementServiceApiClient;
 
-  public TranslationService(TranlationMangementServiceApiClient tranlationMangementServiceApiClient) {
+  public TranslationService(
+      TranlationMangementServiceApiClient tranlationMangementServiceApiClient) {
     this.tranlationMangementServiceApiClient = tranlationMangementServiceApiClient;
-  }
-
-  @Cacheable(value = "translations")
-  public Map<String, String> fetchTranslations(String languageCode) {
-    return this.fetchTranslations(languageCode, Dialect.FORMAL);
   }
 
   @Cacheable(value = "translations")
@@ -63,7 +60,8 @@ public class TranslationService {
     log.info("Evicting translations cache");
   }
 
-  private Map<String, String> fetchTranslationAsMap(String languageCode, Dialect dialect) throws JsonProcessingException {
+  private Map<String, String> fetchTranslationAsMap(String languageCode, Dialect dialect)
+      throws JsonProcessingException {
     String translations = fetchTranslationsAsString(languageCode, dialect);
     ObjectMapper mapper = new ObjectMapper();
     return mapper.readValue(translations, Map.class);
@@ -76,30 +74,38 @@ public class TranslationService {
       var result = fetchTranslationAsMap(languageCode, dialect);
       return result.isEmpty() ? Optional.empty() : Optional.of(result);
     } catch (JsonProcessingException e) {
-      log.warn("Error while processing json file with translations. Returning empty translations", e);
+      log.warn("Error while processing json file with translations. Returning empty translations",
+          e);
       return Optional.empty();
     }
   }
 
   private String fetchTranslationsAsString(String languageCode, Dialect dialect) {
     try {
-      return tranlationMangementServiceApiClient.tryFetchTranslationsFromTranslationManagementService(project, component,
+      return tranlationMangementServiceApiClient.tryFetchTranslationsFromTranslationManagementService(
+          project, component,
           languageCode, dialect);
     } catch (HttpClientErrorException e) {
       if (HttpStatus.NOT_FOUND.equals(e.getStatusCode())) {
-        log.warn("Translations for component {}, language {} not found in weblate, returning default translations", component,
+        log.warn(
+            "Translations for component {}, language {} not found in weblate, returning default translations",
+            component,
             languageCode);
-        return fetchDefaultTranslations(component, languageCode);
+        return fetchDefaultTranslations(component, languageCode, dialect);
       } else {
         log.error("Error while fetching translations from translation management service", e);
         throw e;
       }
+    } catch (ResourceAccessException ex) {
+      log.error("ResourceAccessException error while fetching translations from translation management service. Will fallback to resolve default translations.");
+      log.debug("Exception details: ", ex);
+      return fetchDefaultTranslations(component, languageCode, dialect);
     }
   }
 
-  private String fetchDefaultTranslations(String translationComponentName, String languageCode) {
+  private String fetchDefaultTranslations(String translationComponentName, String languageCode, Dialect dialect) {
     var inputStream = TranslationService.class.getResourceAsStream(
-        getTranslationFilename(translationComponentName + "." + languageCode));
+        getTranslationFilename(translationComponentName + "." + languageCode + tranlationMangementServiceApiClient.getDialectSuffix(dialect)));
     if (inputStream == null) {
       return "{}";
     }

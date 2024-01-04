@@ -1,6 +1,6 @@
 package de.caritas.cob.mailservice.config;
 
-import de.caritas.cob.mailservice.api.RestApiMessageSource;
+import de.caritas.cob.mailservice.api.TranslationMessageSource;
 import de.caritas.cob.mailservice.api.service.TranslationService;
 import java.nio.charset.StandardCharsets;
 import org.springframework.beans.factory.annotation.Value;
@@ -56,7 +56,7 @@ public class ThymeleafConfig {
 
   @Bean
   public MessageSource messageSource(TranslationService translationService) {
-    return new RestApiMessageSource(translationService);
+    return new TranslationMessageSource(translationService);
   }
 
 }

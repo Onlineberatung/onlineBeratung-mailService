@@ -41,7 +41,7 @@ public class TranlationMangementServiceApiClient {
     return response.getBody();
   }
 
-  private String getDialectSuffix(Dialect dialect) {
+  public String getDialectSuffix(Dialect dialect) {
     if (dialect == null) {
       return StringUtils.EMPTY;
     }
