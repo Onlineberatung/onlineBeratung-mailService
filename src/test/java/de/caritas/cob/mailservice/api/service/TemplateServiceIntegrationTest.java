@@ -46,7 +46,7 @@ class TemplateServiceIntegrationTest {
             .dialect(Dialect.INFORMAL),
         new HashMap<>());
     assertThat(renderedHtml).isPresent();
-    assertThat(renderedHtml.get()).contains("Dein Team von ");
+    assertThat(renderedHtml.get()).contains("Du hast eine neue Nachricht in Deinen Beratungen");
   }
 
   @Test
@@ -64,7 +64,7 @@ class TemplateServiceIntegrationTest {
             .dialect(Dialect.FORMAL),
         new HashMap<>());
     assertThat(renderedHtml).isPresent();
-    assertThat(renderedHtml.get()).contains("Ihr Team von ");
+    assertThat(renderedHtml.get()).contains("Sie haben eine neue Nachricht in Ihren Beratungen");
   }
 
 }
