@@ -4,7 +4,9 @@ import static de.caritas.cob.mailservice.api.helper.ThymeleafHelper.getProcessed
 
 import de.caritas.cob.mailservice.api.exception.TemplateServiceException;
 import de.caritas.cob.mailservice.api.mailtemplate.TemplateDescription;
+import de.caritas.cob.mailservice.api.model.Dialect;
 import de.caritas.cob.mailservice.api.model.LanguageCode;
+import de.caritas.cob.mailservice.api.model.MailDTO;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,41 +41,38 @@ public class TemplateService {
    * Get the processed html template with replaced placeholders
    *
    * @param desc     the template description
-   * @param name     the template name
    * @param data     the template data
-   * @param language the template language
    * @return if success, an optional with the html template, otherwise an empty optional
    */
-  public Optional<String> render(TemplateDescription desc, String name,
-      Map<String, Object> data, LanguageCode language) throws TemplateServiceException {
+  public Optional<String> render(TemplateDescription desc, MailDTO mail, Map<String, Object> data) throws TemplateServiceException {
 
     data.put("urlimpressum", imprintUrl);
     data.put("urldatenschutz", dataPrivacyUrl);
 
-    data.putAll(getTranslationMapAndDefaultToGermanIfNotFound(language));
+    data.putAll(getTranslationMapAndDefaultToGermanIfNotFound(mail.getLanguage(), mail.getDialect()));
     List<String> missingFieldList = getMissingTemplateFields(desc, data);
 
     if (!CollectionUtils.isEmpty(missingFieldList)) {
       throw new TemplateServiceException(String.format(
           "Mail request for template %s could not be executed due to missing fields for template processing. Missing fields: %s",
-          name, String.join(",", missingFieldList)));
+          mail.getTemplate(), String.join(",", missingFieldList)));
     }
 
-    var templateFilename = desc.getTemplateFilenameOrFallback(language);
+    var templateFilename = desc.getTemplateFilenameOrFallback(mail.getLanguage());
 
-    return translationsArePresentAndNotEmpty(language) ? getProcessedHtml(data, language, templateFilename) :
+    return translationsArePresentAndNotEmpty(mail) ? getProcessedHtml(data, mail.getLanguage(), templateFilename) :
         getProcessedHtml(data, LanguageCode.DE, templateFilename);
   }
 
-  private boolean translationsArePresentAndNotEmpty(LanguageCode language) {
+  private boolean translationsArePresentAndNotEmpty(MailDTO mailDTO) {
     var translations = translationService.tryFetchTranslations(
-        language.getValue());
+        mailDTO.getLanguage().getValue(), mailDTO.getDialect());
     return translations.isPresent() && !translations.get().isEmpty();
   }
 
-  private Map<String, String> getTranslationMapAndDefaultToGermanIfNotFound(LanguageCode language) {
-    return translationService.tryFetchTranslations(language.getValue()).orElse(
-        translationService.tryFetchTranslations(LanguageCode.DE.getValue())
+  private Map<String, String> getTranslationMapAndDefaultToGermanIfNotFound(LanguageCode language, Dialect dialect) {
+    return translationService.tryFetchTranslations(language.getValue(), dialect).orElse(
+        translationService.tryFetchTranslations(LanguageCode.DE.getValue(), dialect)
             .orElse(new HashMap<>()));
   }
 
@@ -85,23 +84,24 @@ public class TemplateService {
    * @return the subject with replaced placeholders
    */
   public String getRenderedSubject(TemplateDescription templateDescription,
-      Map<String, Object> templateData, LanguageCode languageCode) {
+      Map<String, Object> templateData, MailDTO mailDTO) {
     StringSubstitutor stringSubstitutor = new StringSubstitutor(templateData, "${", "}");
     var subjectKey = templateDescription.getSubject().getKey();
     if (subjectKey == null) {
       log.warn("Subject key is null for template {}", templateDescription.getHtmlTemplateFilename().get(LanguageCode.DE));
       return tryRenderDefaultSubject(stringSubstitutor);
     }
-    return getRenderedSubjectForSubjectKeyNotNull(languageCode, stringSubstitutor, subjectKey);
+    return getRenderedSubjectForSubjectKeyNotNull(mailDTO, stringSubstitutor, subjectKey);
   }
 
   private String tryRenderDefaultSubject(StringSubstitutor stringSubstitutor) {
     return stringSubstitutor.replace("${subject}");
   }
 
-  private String getRenderedSubjectForSubjectKeyNotNull(LanguageCode languageCode, StringSubstitutor stringSubstitutor,
+  private String getRenderedSubjectForSubjectKeyNotNull(MailDTO mailDTO, StringSubstitutor stringSubstitutor,
       String subjectKey) {
-    var translationKeys = getTranslationMapAndDefaultToGermanIfNotFound(languageCode);
+    var translationKeys = getTranslationMapAndDefaultToGermanIfNotFound(mailDTO.getLanguage(),
+        mailDTO.getDialect());
     String subject = translationKeys.get(subjectKey);
     if (subject != null) {
       return stringSubstitutor.replace(subject);
@@ -133,5 +133,4 @@ public class TemplateService {
     }
     return missingFieldList;
   }
-
 }

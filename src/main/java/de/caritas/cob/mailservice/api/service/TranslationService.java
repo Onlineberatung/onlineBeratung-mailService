@@ -2,6 +2,7 @@ package de.caritas.cob.mailservice.api.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.caritas.cob.mailservice.api.model.Dialect;
 import de.caritas.cob.mailservice.config.apiclient.TranlationMangementServiceApiClient;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -42,9 +43,14 @@ public class TranslationService {
 
   @Cacheable(value = "translations")
   public Map<String, String> fetchTranslations(String languageCode) {
+    return this.fetchTranslations(languageCode, Dialect.FORMAL);
+  }
+
+  @Cacheable(value = "translations")
+  public Map<String, String> fetchTranslations(String languageCode, Dialect dialect) {
     try {
 
-      return fetchTranslationAsMap(languageCode);
+      return fetchTranslationAsMap(languageCode, dialect);
     } catch (JsonProcessingException ex) {
       throw new TranslationServiceException(String.format(
           "Json file with translations could not be parsed, translation component name: %s",
@@ -57,17 +63,17 @@ public class TranslationService {
     log.info("Evicting translations cache");
   }
 
-  private Map<String, String> fetchTranslationAsMap(String languageCode) throws JsonProcessingException {
-    String translations = fetchTranslationsAsString(languageCode);
+  private Map<String, String> fetchTranslationAsMap(String languageCode, Dialect dialect) throws JsonProcessingException {
+    String translations = fetchTranslationsAsString(languageCode, dialect);
     ObjectMapper mapper = new ObjectMapper();
     return mapper.readValue(translations, Map.class);
   }
 
   @Cacheable(value = "optionalTranslations")
-  public Optional<Map<String, String>> tryFetchTranslations(String languageCode) {
+  public Optional<Map<String, String>> tryFetchTranslations(String languageCode, Dialect dialect) {
 
     try {
-      var result = fetchTranslationAsMap(languageCode);
+      var result = fetchTranslationAsMap(languageCode, dialect);
       return result.isEmpty() ? Optional.empty() : Optional.of(result);
     } catch (JsonProcessingException e) {
       log.warn("Error while processing json file with translations. Returning empty translations", e);
@@ -75,10 +81,10 @@ public class TranslationService {
     }
   }
 
-  private String fetchTranslationsAsString(String languageCode) {
+  private String fetchTranslationsAsString(String languageCode, Dialect dialect) {
     try {
       return tranlationMangementServiceApiClient.tryFetchTranslationsFromTranslationManagementService(project, component,
-          languageCode);
+          languageCode, dialect);
     } catch (HttpClientErrorException e) {
       if (HttpStatus.NOT_FOUND.equals(e.getStatusCode())) {
         log.warn("Translations for component {}, language {} not found in weblate, returning default translations", component,
