@@ -104,8 +104,11 @@ public class TranslationService {
   }
 
   private String fetchDefaultTranslations(String translationComponentName, String languageCode, Dialect dialect) {
+    String translationFilename = getTranslationFilename(
+        translationComponentName + "." + languageCode
+            + TranlationMangementServiceApiClient.getDialectSuffix(dialect));
     var inputStream = TranslationService.class.getResourceAsStream(
-        getTranslationFilename(translationComponentName + "." + languageCode + tranlationMangementServiceApiClient.getDialectSuffix(dialect)));
+        translationFilename);
     if (inputStream == null) {
       return "{}";
     }

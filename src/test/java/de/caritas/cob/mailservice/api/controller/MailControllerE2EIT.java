@@ -237,7 +237,7 @@ class MailControllerE2EIT {
     var email = new MailDTO();
     email.setEmail(RandomStringUtils.randomAlphanumeric(32));
     email.setTemplate("reassign-confirmation-notification");
-    email.setDialect(Dialect.INFORMAL);
+    email.setDialect(Dialect.FORMAL);
 
     var nameRecipient = new TemplateDataDTO()
         .key("name_recipient")
