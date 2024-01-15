@@ -16,15 +16,13 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class TranlationMangementServiceApiClient {
+public class TranslationManagementServiceApiClient {
 
   @Value("${weblate.api.url}")
   private String apiUrl;
 
   @Value("${weblate.api.key}")
   private String apiKey;
-
-
 
   private final  @NonNull RestTemplate restTemplate;
 

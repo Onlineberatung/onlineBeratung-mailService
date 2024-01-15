@@ -1,7 +1,7 @@
 package de.caritas.cob.mailservice.api.service;
 
 import de.caritas.cob.mailservice.api.model.Dialect;
-import de.caritas.cob.mailservice.config.apiclient.TranlationMangementServiceApiClient;
+import de.caritas.cob.mailservice.config.apiclient.TranslationManagementServiceApiClient;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -50,7 +50,7 @@ public class DefaultTranslationsService {
 
   private FileInputStream buildStreamForExternalPath(String translationComponentName, String languageCode, Dialect dialect) {
     try {
-      String filename = String.format("%s/%s.%s%s.json", customTranslationsPath, translationComponentName.toLowerCase(), languageCode, TranlationMangementServiceApiClient.getDialectSuffix(dialect));
+      String filename = String.format("%s/%s.%s%s.json", customTranslationsPath, translationComponentName.toLowerCase(), languageCode, TranslationManagementServiceApiClient.getDialectSuffix(dialect));
       return new FileInputStream(filename);
     } catch (FileNotFoundException e) {
       log.warn("Default translations for component {}, language {} not found in external path {}", translationComponentName,
@@ -85,7 +85,7 @@ public class DefaultTranslationsService {
       Dialect dialect) {
     String translationFilename = getTranslationFilename(
         translationComponentName + "." + languageCode
-            + TranlationMangementServiceApiClient.getDialectSuffix(dialect));
+            + TranslationManagementServiceApiClient.getDialectSuffix(dialect));
     return TranslationService.class.getResourceAsStream(translationFilename);
   }
 

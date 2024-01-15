@@ -3,7 +3,7 @@ package de.caritas.cob.mailservice.api.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.caritas.cob.mailservice.api.model.Dialect;
-import de.caritas.cob.mailservice.config.apiclient.TranlationMangementServiceApiClient;
+import de.caritas.cob.mailservice.config.apiclient.TranslationManagementServiceApiClient;
 import java.util.Map;
 import java.util.Optional;
 import lombok.NonNull;
@@ -32,13 +32,16 @@ public class TranslationService {
   @Value("${weblate.component}")
   private String component;
 
-  private final @NonNull TranlationMangementServiceApiClient tranlationMangementServiceApiClient;
+  @Value("${translation.management.system.enabled}")
+  private boolean translationManagementSystemEnabled;
+
+  private final @NonNull TranslationManagementServiceApiClient translationManagementServiceApiClient;
 
   private final @NonNull DefaultTranslationsService defaultTranslationsService;
 
   public TranslationService(
-      TranlationMangementServiceApiClient tranlationMangementServiceApiClient, DefaultTranslationsService defaultTranslationsService) {
-    this.tranlationMangementServiceApiClient = tranlationMangementServiceApiClient;
+      TranslationManagementServiceApiClient translationManagementServiceApiClient, DefaultTranslationsService defaultTranslationsService) {
+    this.translationManagementServiceApiClient = translationManagementServiceApiClient;
     this.defaultTranslationsService = defaultTranslationsService;
   }
 
@@ -85,9 +88,12 @@ public class TranslationService {
 
   private String fetchDefaultTranslationsFromTranslationsManagementSystem(String languageCode, Dialect dialect) {
     try {
-      return tranlationMangementServiceApiClient.tryFetchTranslationsFromTranslationManagementService(
+      log.info("Fetching translations. Translation management system enabled value: {}",
+          translationManagementSystemEnabled);
+      return translationManagementSystemEnabled ? translationManagementServiceApiClient.tryFetchTranslationsFromTranslationManagementService(
           project, component,
-          languageCode, dialect);
+          languageCode, dialect) : defaultTranslationsService.fetchDefaultTranslations(component, languageCode,
+              dialect);
     } catch (HttpClientErrorException e) {
       if (HttpStatus.NOT_FOUND.equals(e.getStatusCode())) {
         log.warn(
