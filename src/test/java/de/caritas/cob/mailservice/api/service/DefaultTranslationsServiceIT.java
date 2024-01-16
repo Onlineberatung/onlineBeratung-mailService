@@ -10,10 +10,10 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("testing")
-class DefaultTranslationsServiceTest {
+class DefaultTranslationsServiceIT {
 
   @Autowired
-  DefaultTranslationsService defaultTranslationsService;
+  private DefaultTranslationsService defaultTranslationsService;
 
   @Test
   void fetchDefaultTranslations_Should_FetchTranlsationsForInformalGerman() {
