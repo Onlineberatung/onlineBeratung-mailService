@@ -60,8 +60,8 @@ public class TemplateService {
 
     var templateFilename = desc.getTemplateFilenameOrFallback(mail.getLanguage());
 
-    return translationsArePresentAndNotEmpty(mail) ? getProcessedHtml(data, mail.getLanguage(), templateFilename) :
-        getProcessedHtml(data, LanguageCode.DE, templateFilename);
+    return translationsArePresentAndNotEmpty(mail) ? getProcessedHtml(data, mail.getLanguage(), templateFilename, mail.getDialect()) :
+        getProcessedHtml(data, LanguageCode.DE, templateFilename, mail.getDialect());
   }
 
   private boolean translationsArePresentAndNotEmpty(MailDTO mailDTO) {

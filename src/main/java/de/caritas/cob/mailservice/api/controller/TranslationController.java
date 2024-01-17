@@ -21,7 +21,7 @@ public class TranslationController {
 
   @GetMapping(value = "/translations")
   public ResponseEntity<Map<String, String>> getTranslations() {
-    var result = translationService.fetchTranslations("de");
+    var result = translationService.fetchTranslations("de", Dialect.FORMAL);
     return new ResponseEntity<>(result, org.springframework.http.HttpStatus.OK);
   }
 
