@@ -14,7 +14,7 @@ import org.thymeleaf.context.Context;
 @Component
 public class ThymeleafHelper {
 
-  private static final String INFORMAL_GERMAL_LANGUAGE_TAG = "de-DE-u-va-posix";
+  private static final String INFORMAL_GERMAN_LANGUAGE_TAG = "de-DE-u-va-posix";
 
   @Autowired
   private TemplateEngine tempTemplateEngine;
@@ -41,7 +41,7 @@ public class ThymeleafHelper {
 
   private static String getLanguageTag(LanguageCode languageCode, Dialect dialect) {
     if (languageCode == LanguageCode.DE && dialect == Dialect.INFORMAL) {
-      return INFORMAL_GERMAL_LANGUAGE_TAG;
+      return INFORMAL_GERMAN_LANGUAGE_TAG;
     }
     return languageCode.getValue();
   }
