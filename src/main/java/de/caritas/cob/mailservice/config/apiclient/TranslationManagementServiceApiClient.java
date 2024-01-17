@@ -30,7 +30,7 @@ public class TranslationManagementServiceApiClient {
       String component, String languageCode, Dialect dialect) {
     HttpHeaders headers = new HttpHeaders();
     headers.set("Authorization", "Token " + apiKey);
-    String url = apiUrl + "translations/" + project + "/" + component + "/" + languageCode + getWeblateDialectSuffix(dialect)
+    String url = apiUrl + "translations/" + project + "/" + component + "/" + languageCode + getTranslationManagementServiceDialectSuffix(dialect)
         + "/file.json";
 
     log.info("Calling url to fetch translations: {}", url);
@@ -39,22 +39,12 @@ public class TranslationManagementServiceApiClient {
     return response.getBody();
   }
 
-  public static String getWeblateDialectSuffix(Dialect dialect) {
+  public static String getTranslationManagementServiceDialectSuffix(Dialect dialect) {
     if (dialect == null) {
       return StringUtils.EMPTY;
     }
     if (dialect == Dialect.INFORMAL) {
       return "@informal";
-    }
-    return StringUtils.EMPTY;
-  }
-
-  public static String getDialectSuffix(Dialect dialect) {
-    if (dialect == null) {
-      return StringUtils.EMPTY;
-    }
-    if (dialect == Dialect.INFORMAL) {
-      return "_informal";
     }
     return StringUtils.EMPTY;
   }
