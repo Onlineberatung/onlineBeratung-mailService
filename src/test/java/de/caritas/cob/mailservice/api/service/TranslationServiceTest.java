@@ -97,5 +97,4 @@ class TranslationServiceTest {
     verify(defaultTranslationsService).fetchDefaultTranslations(any(), any(), any());
 
   }
-
 }
