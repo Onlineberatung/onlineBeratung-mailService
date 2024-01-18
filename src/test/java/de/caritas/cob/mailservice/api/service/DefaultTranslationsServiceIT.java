@@ -64,7 +64,7 @@ class DefaultTranslationsServiceIT {
   }
 
   @Test
-  void fetchDefaultTranslations_Should_fetchExternalTranslationsForFormalIfDialectNullGerman_When_useCustomResourcesPath_is_true(){
+  void fetchDefaultTranslations_Should_fetchExternalTranslationsForFormalIfDialectNullGerman_When_useCustomResourcesPath_is_true() {
 
     ReflectionTestUtils.setField(defaultTranslationsService, USE_CUSTOM_RESOURCES_PATH_FIELD_NAME, true);
 
@@ -77,7 +77,7 @@ class DefaultTranslationsServiceIT {
   }
 
   @Test
-  void fetchDefaultTranslations_Should_fetchExternalTranslationsForEnglish_When_useCustomResourcesPath_is_true(){
+  void fetchDefaultTranslations_Should_fetchExternalTranslationsForEnglish_When_useCustomResourcesPath_is_true() {
 
     ReflectionTestUtils.setField(defaultTranslationsService, USE_CUSTOM_RESOURCES_PATH_FIELD_NAME, true);
 
@@ -90,7 +90,7 @@ class DefaultTranslationsServiceIT {
   }
 
   @Test
-  void fetchDefaultTranslations_Should_fetchExternalTranslationsForInformalGerman_When_useCustomResourcesPath_is_true(){
+  void fetchDefaultTranslations_Should_fetchExternalTranslationsForInformalGerman_When_useCustomResourcesPath_is_true() {
 
     ReflectionTestUtils.setField(defaultTranslationsService, USE_CUSTOM_RESOURCES_PATH_FIELD_NAME, true);
 
