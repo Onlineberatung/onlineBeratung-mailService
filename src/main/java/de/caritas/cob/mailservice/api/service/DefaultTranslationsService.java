@@ -1,22 +1,34 @@
 package de.caritas.cob.mailservice.api.service;
 
-import de.caritas.cob.mailservice.api.model.Dialect;
-import de.caritas.cob.mailservice.config.apiclient.TranlationMangementServiceApiClient;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import de.caritas.cob.mailservice.api.model.Dialect;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class DefaultTranslationsService {
 
+  @Value("${template.custom.default.translations.path}")
+  private String customTranslationsPath;
+
+  @Value("${template.use.custom.resources.path}")
+  private boolean useCustomResourcesPath;
+
   public String fetchDefaultTranslations(String translationComponentName, String languageCode,
       Dialect dialect) {
-    InputStream inputStream = tryFetchDefaultTranslationWithFallbackToEmptyDialect(translationComponentName, languageCode, dialect);
+    InputStream inputStream = useCustomResourcesPath ? tryFetchExternalTranslationWithFallbackToEmptyDialect(translationComponentName, languageCode, dialect) :
+            tryFetchDefaultTranslationWithFallbackToEmptyDialect(translationComponentName, languageCode, dialect);
     if (inputStream == null) {
       return "{}";
     }
@@ -28,6 +40,23 @@ public class DefaultTranslationsService {
       throw new IllegalStateException(String.format(
           "Json file with translations could not be loaded, translation component name: %s",
           translationComponentName), ex);
+    }
+  }
+
+  private InputStream tryFetchExternalTranslationWithFallbackToEmptyDialect(String translationComponentName, String languageCode,
+          Dialect dialect) {
+    InputStream inputStream = buildStreamForExternalPath(translationComponentName, languageCode, dialect);
+    return inputStream != null ? inputStream : buildStreamForExternalPath(translationComponentName, languageCode, null);
+  }
+
+  private FileInputStream buildStreamForExternalPath(String translationComponentName, String languageCode, Dialect dialect) {
+    try {
+      String filename = String.format("%s/%s.%s%s.json", customTranslationsPath, translationComponentName.toLowerCase(), languageCode, getDialectSuffix(dialect));
+      return new FileInputStream(filename);
+    } catch (FileNotFoundException e) {
+      log.warn("Default translations for component {}, language {} not found in external path {}", translationComponentName,
+              languageCode, customTranslationsPath);
+      return null;
     }
   }
 
@@ -57,8 +86,18 @@ public class DefaultTranslationsService {
       Dialect dialect) {
     String translationFilename = getTranslationFilename(
         translationComponentName + "." + languageCode
-            + TranlationMangementServiceApiClient.getDialectSuffix(dialect));
+            + getDialectSuffix(dialect));
     return TranslationService.class.getResourceAsStream(translationFilename);
+  }
+
+  public static String getDialectSuffix(Dialect dialect) {
+    if (dialect == null) {
+      return StringUtils.EMPTY;
+    }
+    if (dialect == Dialect.INFORMAL) {
+      return "_informal";
+    }
+    return StringUtils.EMPTY;
   }
 
   private String getTranslationFilename(String templateName) {
