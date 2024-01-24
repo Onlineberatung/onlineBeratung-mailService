@@ -36,7 +36,7 @@ class DefaultTranslationsServiceIT {
   @Test
   void fetchDefaultTranslations_Should_FetchTranlsationsForInformalGerman() {
 
-    String translations = defaultTranslationsService.fetchDefaultTranslations("mailservice", "de",
+    String translations = defaultTranslationsService.fetchDefaultTranslations("mailing", "de",
         Dialect.INFORMAL);
 
     assertThat(translations).isNotNull();
@@ -46,7 +46,7 @@ class DefaultTranslationsServiceIT {
   @Test
   void fetchDefaultTranslations_Should_FetchTranlsationsForFormalIfDialectNullGerman() {
 
-    String translations = defaultTranslationsService.fetchDefaultTranslations("mailservice", "de",
+    String translations = defaultTranslationsService.fetchDefaultTranslations("mailing", "de",
         null);
 
     assertThat(translations).isNotNull();
@@ -56,7 +56,7 @@ class DefaultTranslationsServiceIT {
   @Test
   void fetchDefaultTranslations_Should_FetchTranlsationsForEnglish() {
 
-    String translations = defaultTranslationsService.fetchDefaultTranslations("mailservice", "en",
+    String translations = defaultTranslationsService.fetchDefaultTranslations("mailing", "en",
         null);
 
     assertThat(translations).isNotNull();
@@ -68,7 +68,7 @@ class DefaultTranslationsServiceIT {
 
     ReflectionTestUtils.setField(defaultTranslationsService, USE_CUSTOM_RESOURCES_PATH_FIELD_NAME, true);
 
-    String translations = defaultTranslationsService.fetchDefaultTranslations("mailservice", "de",
+    String translations = defaultTranslationsService.fetchDefaultTranslations("mailing", "de",
         null);
 
     assertThat(translations).isNotNull();
@@ -81,7 +81,7 @@ class DefaultTranslationsServiceIT {
 
     ReflectionTestUtils.setField(defaultTranslationsService, USE_CUSTOM_RESOURCES_PATH_FIELD_NAME, true);
 
-    String translations = defaultTranslationsService.fetchDefaultTranslations("mailservice", "en",
+    String translations = defaultTranslationsService.fetchDefaultTranslations("mailing", "en",
         null);
 
     assertThat(translations).isNotNull();
@@ -94,7 +94,7 @@ class DefaultTranslationsServiceIT {
 
     ReflectionTestUtils.setField(defaultTranslationsService, USE_CUSTOM_RESOURCES_PATH_FIELD_NAME, true);
 
-    String translations = defaultTranslationsService.fetchDefaultTranslations("mailservice", "de",
+    String translations = defaultTranslationsService.fetchDefaultTranslations("mailing", "de",
         Dialect.INFORMAL);
 
     assertThat(translations).isNotNull();
